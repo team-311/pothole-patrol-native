@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux'
 import { Platform, Text, View, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 const { Marker } = MapView;
@@ -14,7 +15,7 @@ const dummyData = [
   { latitude: 41.89525, longitude: -87.63905 },
 ];
 
-export default class AddPotholeLocation extends React.Component {
+class AddPotholeLocation extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -126,3 +127,17 @@ const styles = StyleSheet.create({
     left: 80
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+    localPotholes: state.potholes.localPotholes
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getLocalPotholes: (lat, lon, latDelt, lonDelt) => dispatch(fetchLocalPotholes(lat, lon, latDelt, lonDelt))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddPotholeLocation)
