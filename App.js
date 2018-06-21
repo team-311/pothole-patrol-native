@@ -40,7 +40,9 @@ const BottomLinks = createBottomTabNavigator(
 export default class App extends React.Component {
   render() {
     return (
-      <BottomLinks />
-    )
+      <Provider store={store}>
+        <BottomLinks />
+      </Provider>
+    );
   }
 }
