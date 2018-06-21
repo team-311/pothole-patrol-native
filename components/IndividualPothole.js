@@ -1,20 +1,28 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
+import { connect } from 'react-redux'
+import { getSinglePotholeServer } from '../store/potholes'
 
 
+export class IndividualPothole extends React.Component {
+  constructor(props) {
+    super(props)
+    this.props.getSinglePothole(1)
+  }
 
-export default class IndividualPothole extends React.Component {
+
   static navigationOptions = { title: 'Potholes' }
   render() {
-    const { navigate } = this.props.navigation
-    //const pothole = this.props.selectedPothole
+    //const { navigate } = this.props.navigation
+    const pothole = this.props.potholes
+    console.log(pothole)
     return (
       <View style={styles.container}>
-        <Text>pothole.id, pothole.status</Text>
-        <Text>Map Here</Text>
-        <Text>pothole.address</Text>
-        <Text>pothole.upvotes</Text>
-        <Text>pothole.description</Text>
+        <Text>ID: {pothole.id} || STATUS:{pothole.status}</Text>
+        <Text>MAP HERE</Text>
+        <Text>ADDRESS: {pothole.streetAddress}</Text>
+        <Text>ZIP: {pothole.zip}</Text>
+        <Text>DESCRIPTION HERE</Text>
       </View>
     );
   }
@@ -35,10 +43,17 @@ const styles = StyleSheet.create({
   }
 });
 
-// const mapDispatch = (dispatch) => {
-//   return {
-//     selectedPothole: () => dispatch(getSelectedPothole())
-//   }
-// }
 
-// export default connect(null, mapDispatch)(IndividualPothole)
+const mapState = state => {
+  return {
+    potholes: state.potholes,
+  }
+}
+
+const mapDispatch = (dispatch) => {
+  return {
+    getSinglePothole: (id) => dispatch(getSinglePotholeServer(id))
+  }
+}
+
+export default connect(mapState, mapDispatch)(IndividualPothole)
