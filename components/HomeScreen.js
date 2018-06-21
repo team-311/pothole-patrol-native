@@ -1,19 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = { title: 'Welcome' }
+  static navigationOptions = { title: 'HOME' }
   render() {
     const { navigate } = this.props.navigation
     return (
       <View style={styles.container}>
         <Text>Welcome to the home screen!</Text>
         <Text>Let's see if this works</Text>
-        <Button
-          title="Report a Pothole"
-          onPress={() => navigate('ReportPhoto')}
-        />
+        <TouchableOpacity onPress={() => navigate('ReportPhoto')} color="blue">
+          <Image source={require('../customStyling/butReportAPothole.png')} style={styles.button} />
+        </TouchableOpacity>
+        <Text>Here are your active potholes:</Text>
+        <Text>------------------------</Text>
+        <Text>------------------------</Text>
+        <Text>------------------------</Text>
+        <Text>------------------------</Text>
       </View>
     );
   }
@@ -26,4 +30,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button: {
+    backgroundColor: '#B3DDF2',
+    width: 200,
+    height: 93,
+    resizeMode: Image.resizeMode.contain
+  }
 });
