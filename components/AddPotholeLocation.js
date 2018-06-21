@@ -5,14 +5,16 @@ const { Marker } = MapView;
 
 const ScreenHeight = Dimensions.get('window').height;
 
-const location = {
-  latitude: 37.78825,
-  longitude: -122.4324,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
-};
+//to figure out: how do I get only the closest potholes and report those back...
 
-export default class AddLocation2 extends React.Component {
+const dummyData = [
+  { latitude: 41.895, longitude: -87.63903 },
+  { latitude: 41.89526, longitude: -87.6390 },
+  { latitude: 41.895265, longitude: -87.63902 },
+  { latitude: 41.89525, longitude: -87.63905 },
+];
+
+export default class AddPotholeLocation extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -23,6 +25,7 @@ export default class AddLocation2 extends React.Component {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       },
+      region: {},
     };
   }
 
@@ -57,24 +60,45 @@ export default class AddLocation2 extends React.Component {
   render() {
     let text = 'Waiting..';
     if (this.state.errorMessage) {
-      text = this.state.errorMessage
+      text = this.state.errorMessage;
     } else if (this.state.initialRegion) {
-      text = JSON.stringify(this.state.initialRegion)
+      text = JSON.stringify(this.state.initialRegion);
     }
     return (
-        <MapView
-          style={styles.backgroundMap}
-          region={this.state.initialRegion}
-          provider={MapView.PROVIDER_GOOGLE}
-        >
-          <Marker
-            coordinate={{
-              latitude: this.state.initialRegion.latitude,
-              longitude: this.state.initialRegion.longitude,
-            }}
-            title={text}
-          />
-        </MapView>
+      <MapView
+        style={styles.backgroundMap}
+        region={this.state.initialRegion}
+        provider={MapView.PROVIDER_GOOGLE}
+      >
+      <Text style={styles.text}>Do You See Your Pothole?</Text>
+        {dummyData.map(marker => {
+          return (
+            <Marker
+              key={marker.latitude}
+              coordinate={{
+                latitude: marker.latitude,
+                longitude: marker.longitude,
+              }}
+              title="dummymarker"
+              description="dummymarker"
+              image='https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png'
+            />
+          );
+        })}
+
+        <Marker
+          draggable
+          coordinate={this.state.x}
+          onDragEnd={(e) => this.setState({
+            x: e.nativeEvent.coordinate
+          })}
+          coordinate={{
+            latitude: this.state.initialRegion.latitude,
+            longitude: this.state.initialRegion.longitude,
+          }}
+          title={text}
+        />
+      </MapView>
     );
   }
 }
@@ -92,6 +116,13 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight
+    height: ScreenHeight,
   },
+  text: {
+    backgroundColor: '#fff',
+    height: 20,
+    width: 170,
+    top: 200,
+    left: 80
+  }
 });
