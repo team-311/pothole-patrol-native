@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import { createBottomTabNavigator, createStackNavigator } from 'react-navigation'
 import ReportPhoto from './components/ReportPhoto.js'
 import HomeScreen from './components/HomeScreen.js'
+import IndividualPothole from './components/IndividualPothole.js'
 
 const BottomLinks = createBottomTabNavigator(
   {
@@ -13,22 +14,28 @@ const BottomLinks = createBottomTabNavigator(
         labelStyle: {
           fontSize: 12,
         }
+      },
+      style: {
+        backgroundColor: 'blue'
       }
     },
     ReportPothole: {
       screen: ReportPhoto,
     },
-  })
-
-const NavLinks = createStackNavigator(
-  {
-    Home: {
-      screen: HomeScreen,
-    },
-    ReportPothole: {
-      screen: ReportPhoto,
+    IndividualPothole: {
+      screen: IndividualPothole
     }
   })
+
+// const NavLinks = createStackNavigator(
+//   {
+//     Home: {
+//       screen: HomeScreen,
+//     },
+//     ReportPothole: {
+//       screen: ReportPhoto,
+//     }
+//   })
 
 export default class App extends React.Component {
   render() {
