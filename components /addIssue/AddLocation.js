@@ -9,8 +9,8 @@ const AddLocation = props => {
   const { Marker } = MapView;
 
   const location = {
-    latitude: lat,
-    longitude: lng,
+    latitude: 41.895266,
+    longitude: -87.639035,
     latitudeDelta: 0,
     longitudeDelta: 0.0221,
   };
