@@ -8,20 +8,35 @@ import ReportPhoto from './components/ReportPhoto.js';
 import HomeScreen from './components/HomeScreen.js';
 import ReportDescription from './components/ReportDescription'
 import IndividualPothole from './components/IndividualPothole'
+import AddPotholeLocation from './components/AddPotholeLocation'
 import { Provider } from 'react-redux';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import store from './store';
 if (process.env.NODE_ENV !== 'production') require('./secrets');
+
+const ReportStack = createStackNavigator(
+  {
+    Location: {
+      screen: AddPotholeLocation,
+    },
+    Camera: {
+      screen: ReportPhoto,
+    },
+    ReportDescription: {
+      screen: ReportDescription,
+    },
+  },
+  {
+    initialRouteName: 'Location'
+  }
+);
 
 const BottomLinks = createDrawerNavigator({
   Home: {
     screen: HomeScreen
   },
   ReportPothole: {
-    screen: ReportPhoto,
-  },
-  ReportDescription: {
-    screen: ReportDescription,
+    screen: ReportStack,
   },
   ViewSinglePothole: {
     screen: IndividualPothole

@@ -1,11 +1,14 @@
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions } from 'expo';
+import { getPicture } from '../store/report';
+import { connect } from 'react-redux';
 
-export default class CameraExample extends React.Component {
+class CameraView extends React.Component {
   state = {
     hasCameraPermission: null,
     type: Camera.Constants.Type.back,
+    showCamera: true,
   };
 
   async componentWillMount() {
@@ -13,8 +16,22 @@ export default class CameraExample extends React.Component {
     this.setState({ hasCameraPermission: status === 'granted' });
   }
 
+  snap = async () => {
+    if (this.camera) {
+      console.log(this.camera);
+      let photo = await this.camera.takePictureAsync({
+        quality: 0.25,
+        base64: true,
+      });
+      this.props.getPicture(`data:image/jpg;base64,${photo.base64}`);
+    }
+    const { replace } = this.props.navigation;
+    replace('ReportDescription');
+  };
+
   render() {
     const { hasCameraPermission } = this.state;
+
     if (hasCameraPermission === null) {
       return <View />;
     } else if (hasCameraPermission === false) {
@@ -22,7 +39,13 @@ export default class CameraExample extends React.Component {
     } else {
       return (
         <View style={{ flex: 1 }}>
-          <Camera style={{ flex: 1 }} type={this.state.type}>
+          <Camera
+            ref={ref => {
+              this.camera = ref;
+            }}
+            style={{ flex: 1 }}
+            type={this.state.type}
+          >
             <View
               style={{
                 flex: 1,
@@ -37,12 +60,7 @@ export default class CameraExample extends React.Component {
                   alignItems: 'center',
                 }}
                 onPress={() => {
-                  this.setState({
-                    type:
-                      this.state.type === Camera.Constants.Type.back
-                        ? Camera.Constants.Type.front
-                        : Camera.Constants.Type.back,
-                  });
+                  this.snap();
                 }}
               >
                 <Text
@@ -52,6 +70,17 @@ export default class CameraExample extends React.Component {
                   Flip{' '}
                 </Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  this.snap();
+                }}
+              >
+                <Text
+                  style={{ fontSize: 18, marginBottom: 10, color: 'white' }}
+                >
+                  Take Picture
+                </Text>
+              </TouchableOpacity>
             </View>
           </Camera>
         </View>
@@ -59,3 +88,16 @@ export default class CameraExample extends React.Component {
     }
   }
 }
+
+const mapDispatch = dispatch => {
+  return {
+    getPicture(picture) {
+      dispatch(getPicture(picture));
+    },
+  };
+};
+
+export default connect(
+  null,
+  mapDispatch
+)(CameraView);
