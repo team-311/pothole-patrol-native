@@ -4,7 +4,6 @@ import axios from 'axios';
 const GET_POTHOLES = 'GET_POTHOLES'
 const GEOCODE_ADDRESS = 'GEOCODE_ADDRESS'
 
-
 //ACTION CREATORS
 
 const getPotholes = (potholes) => {
@@ -36,10 +35,8 @@ export const getGeocodedAddress = (lat, lon) => {
     const dataResults = results.data.results[0].address_components
     const streetNumber = dataResults[0].long_name
     const streetName = dataResults[1].short_name
-    const city = dataResults[3].long_name
-    const state = dataResults[5].short_name
     const zipcode = dataResults[7].long_name
-    const fullAddressArray = [streetNumber, streetName, city, state, zipcode]
+    const fullAddressArray = [streetNumber, streetName, zipcode]
     dispatch(geocodeAddress(fullAddressArray))
   }
 }

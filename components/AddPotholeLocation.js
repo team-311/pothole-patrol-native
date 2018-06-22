@@ -2,18 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
-const { Marker } = MapView;
 import { getGeocodedAddress, fetchPotholes } from '../store/potholes';
-import {
-  Container,
-  Content,
-  Text,
-  Card,
-  Form,
-  Item,
+import { Container, Content, Text, Card, Form, Item,
   Input,
   Button,
 } from 'native-base';
+const { Marker } = MapView;
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -21,7 +15,8 @@ class AddPotholeLocation extends React.Component {
   constructor() {
     super();
     this.state = {
-      errorMessage: null,
+      streetAddress: '',
+      zipcode: '',
       potholes: [],
       initialRegion: {
         latitude: 41.895266,
@@ -43,45 +38,48 @@ class AddPotholeLocation extends React.Component {
   }
 
   _getLocationAsync = async () => {
+    //ask for permissions
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
       this.setState({
         errorMessage: 'Permission to access location was denied',
       });
     }
+    //get current location
     let location = await Location.getCurrentPositionAsync({});
     let { latitude, longitude } = location.coords;
+
+    //create region based on user location
     const initialRegion = {
       latitude,
       longitude,
       latitudeDelta: 0.002,
       longitudeDelta: 0.001,
     };
+
+    //get geocoded address and fetch potholes
     this.setState({ initialRegion }, () => {
-      this.props.geocodeLocation(
+      this.props.getAddress(
         this.state.initialRegion.latitude,
         this.state.initialRegion.longitude
       );
+      this._getPotholesAsync(latitude, longitude)
     });
+  };
+
+  _getPotholesAsync = async (lat, lon) => {
+    await this.props.getPotholes(lat, lon);
   };
 
   submitAddress = () => {
     console.log('thanks for submitting your address!');
   };
 
-  _getPotholesAsync = async (lat, lon) => {
-    await this.props.getPotholes(lat, lon)
-  }
 
   render() {
+    const potholes = this.props.potholes ? this.props.potholes : []
     const streetAddress = this.props.address.slice(0, 2).join(' ');
-    const zipcode = this.props.address[4];
-    let text = 'Waiting..';
-    if (this.state.errorMessage) {
-      text = this.state.errorMessage;
-    } else if (this.state.initialRegion) {
-      text = JSON.stringify(this.state.initialRegion);
-    }
+    const zipcode = this.props.address[2];
     return (
       <Container>
         <Content>
@@ -90,33 +88,26 @@ class AddPotholeLocation extends React.Component {
             region={this.state.initialRegion}
             provider={MapView.PROVIDER_GOOGLE}
           >
-            {this.props.potholes.map(marker => {
+            {potholes.map(marker => {
               return (
                 <Marker
-                  key={marker.latitude}
+                  key={marker.id}
                   coordinate={{
                     latitude: Number(marker.latitude),
                     longitude: Number(marker.longitude),
                   }}
                   title="Open pothole"
                   description="It's already on the map! If this is the one you were going to report, click on it to upvote so it gets to your rep's attention faster. (Maybe)."
-                  image='https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png'
+                  image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
                 />
               );
             })}
             <Marker
-              draggable
-              coordinate={this.state.x}
-              onDragEnd={e =>
-                this.setState({
-                  x: e.nativeEvent.coordinate,
-                })
-              }
               coordinate={{
                 latitude: this.state.initialRegion.latitude,
                 longitude: this.state.initialRegion.longitude,
               }}
-              title={text}
+              title='Your current location'
             />
           </MapView>
           <Text style={styles.text}>Confirm Pothole Address</Text>
@@ -180,9 +171,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getPotholes: (lat, lon) =>
-      dispatch(fetchLocalPotholes(lat, lon)),
-    geocodeLocation: (lat, lon) => dispatch(getGeocodedAddress(lat, lon)),
+    getPotholes: (lat, lon) => dispatch(fetchPotholes(lat, lon)),
+    getAddress: (lat, lon) => dispatch(getGeocodedAddress(lat, lon)),
   };
 };
 
