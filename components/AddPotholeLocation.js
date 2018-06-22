@@ -1,18 +1,22 @@
 import React from 'react';
-import {connect} from 'react-redux'
-import { Platform, Text, StyleSheet, Dimensions } from 'react-native';
+import { connect } from 'react-redux';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
+import { getGeocodedAddress, fetchPotholes } from '../store/potholes';
+import { Container, Content, Text, Card, Form, Item,
+  Input,
+  Button,
+} from 'native-base';
 const { Marker } = MapView;
-import {fetchPotholes} from '../store'
 
 const ScreenHeight = Dimensions.get('window').height;
-
 
 class AddPotholeLocation extends React.Component {
   constructor() {
     super();
     this.state = {
-      errorMessage: null,
+      streetAddress: '',
+      zipcode: '',
       potholes: [],
       initialRegion: {
         latitude: 41.895266,
@@ -34,109 +38,145 @@ class AddPotholeLocation extends React.Component {
   }
 
   _getLocationAsync = async () => {
+    //ask for permissions
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
       this.setState({
         errorMessage: 'Permission to access location was denied',
       });
     }
+    //get current location
     let location = await Location.getCurrentPositionAsync({});
     let { latitude, longitude } = location.coords;
+
+    //create region based on user location
     const initialRegion = {
       latitude,
       longitude,
       latitudeDelta: 0.002,
       longitudeDelta: 0.001,
     };
-    this.setState({ initialRegion });
-    this._getPotholesAsync(latitude, longitude)
+
+    //get geocoded address and fetch potholes
+    this.setState({ initialRegion }, () => {
+      this.props.getAddress(
+        this.state.initialRegion.latitude,
+        this.state.initialRegion.longitude
+      );
+      this._getPotholesAsync(latitude, longitude)
+    });
   };
 
   _getPotholesAsync = async (lat, lon) => {
-    await this.props.getPotholes(lat, lon)
-  }
+    await this.props.getPotholes(lat, lon);
+  };
+
+  submitAddress = () => {
+    console.log('thanks for submitting your address!');
+  };
+
 
   render() {
-    let text = 'Waiting..';
-    if (this.state.errorMessage) {
-      text = this.state.errorMessage;
-    } else if (this.state.initialRegion) {
-      text = JSON.stringify(this.state.initialRegion);
-    }
+    const potholes = this.props.potholes ? this.props.potholes : []
+    const streetAddress = this.props.address.slice(0, 2).join(' ');
+    const zipcode = this.props.address[2];
     return (
-      <MapView
-        style={styles.backgroundMap}
-        region={this.state.initialRegion}
-        provider={MapView.PROVIDER_GOOGLE}
-      >
-      <Text style={styles.text}>Do You See Your Pothole?</Text>
-        {this.props.potholes.map(marker => {
-          const lat = Number(marker.latitude)
-          const lon = Number(marker.longitude)
-          return (
+      <Container>
+        <Content>
+          <MapView
+            style={styles.map}
+            region={this.state.initialRegion}
+            provider={MapView.PROVIDER_GOOGLE}
+          >
+            {potholes.map(marker => {
+              return (
+                <Marker
+                  key={marker.id}
+                  coordinate={{
+                    latitude: Number(marker.latitude),
+                    longitude: Number(marker.longitude),
+                  }}
+                  title="Open pothole"
+                  description="It's already on the map! If this is the one you were going to report, click on it to upvote so it gets to your rep's attention faster. (Maybe)."
+                  image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
+                />
+              );
+            })}
             <Marker
-              key={marker.id}
               coordinate={{
-                latitude: lat,
-                longitude: lon,
+                latitude: this.state.initialRegion.latitude,
+                longitude: this.state.initialRegion.longitude,
               }}
-              title="Open pothole"
-              description="It's already on the map! If this is the one you were going to report, click on it to upvote so it gets to your rep's attention faster. (Maybe)."
-              image='https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png'
+              title='Your current location'
             />
-          );
-        })}
-        <Marker
-          draggable
-          coordinate={this.state.x}
-          onDragEnd={(e) => this.setState({
-            x: e.nativeEvent.coordinate
-          })}
-          coordinate={{
-            latitude: this.state.initialRegion.latitude,
-            longitude: this.state.initialRegion.longitude,
-          }}
-          title={text}
-        />
-      </MapView>
+          </MapView>
+          <Text style={styles.text}>Confirm Pothole Address</Text>
+          <Container>
+            <Card>
+              <Form>
+                <Item>
+                  <Input
+                    placeholder="Street Address"
+                    defaultValue={`${streetAddress}`}
+                    onChangeText={text => {
+                      this.setState({ streetAddress: text });
+                    }}
+                  />
+                </Item>
+                <Item last>
+                  <Input
+                    placeholder="Zipcode"
+                    defaultValue={`${zipcode}`}
+                    onChangeText={text => this.setState({ zipCode: text })}
+                  />
+                </Item>
+                <Button
+                  style={styles.button}
+                  primary
+                  onPress={this.submitAddress}
+                >
+                  <Text> Next </Text>
+                </Button>
+              </Form>
+            </Card>
+          </Container>
+        </Content>
+      </Container>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backgroundMap: {
-    position: 'absolute',
+  map: {
     top: 0,
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight,
+    height: ScreenHeight / 1.75,
   },
   text: {
-    backgroundColor: '#fff',
-    height: 20,
-    width: 170,
-    top: 200,
-    left: 80
-  }
+    padding: 10,
+  },
+  button: {
+    left: 105,
+  },
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    potholes: state.potholes.potholes
-  }
-}
+    potholes: state.potholes.potholes,
+    address: state.potholes.address,
+  };
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    getPotholes: (lat, lon) => dispatch(fetchPotholes(lat, lon))
-  }
-}
+    getPotholes: (lat, lon) => dispatch(fetchPotholes(lat, lon)),
+    getAddress: (lat, lon) => dispatch(getGeocodedAddress(lat, lon)),
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddPotholeLocation)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddPotholeLocation);
