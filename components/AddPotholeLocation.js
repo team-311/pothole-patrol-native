@@ -6,7 +6,18 @@ const { Marker } = MapView;
 import { getGeocodedAddress } from '../store/potholes';
 import axios from 'axios';
 import ConfirmAddress from './ConfirmAddress';
-import { Container, Content, Header, Text } from 'native-base';
+import {
+  Container,
+  Content,
+  Header,
+  Text,
+  Card,
+  Form,
+  Item,
+  Input,
+  Button,
+  CardItem,
+} from 'native-base';
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -68,7 +79,13 @@ class AddPotholeLocation extends React.Component {
     });
   };
 
+  submitAddress = () => {
+    console.log('thanks for submitting your address!');
+  };
+
   render() {
+    const streetAddress = this.props.address.slice(0, 2).join(' ');
+    const zipcode = this.props.address[4];
     let text = 'Waiting..';
     if (this.state.errorMessage) {
       text = this.state.errorMessage;
@@ -77,43 +94,71 @@ class AddPotholeLocation extends React.Component {
     }
     return (
       <Container>
-         <Content>
-        <MapView
-          style={styles.map}
-          region={this.state.initialRegion}
-          provider={MapView.PROVIDER_GOOGLE}
-        >
-          {dummyData.map(marker => {
-            return (
-              <Marker
-                key={marker.latitude}
-                coordinate={{
-                  latitude: marker.latitude,
-                  longitude: marker.longitude,
-                }}
-                title="dummymarker"
-                description="dummymarker"
-                image="https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png"
-              />
-            );
-          })}
-          <Marker
-            draggable
-            coordinate={this.state.x}
-            onDragEnd={e =>
-              this.setState({
-                x: e.nativeEvent.coordinate,
-              })
-            }
-            coordinate={{
-              latitude: this.state.initialRegion.latitude,
-              longitude: this.state.initialRegion.longitude,
-            }}
-            title={text}
-          />
-          <ConfirmAddress address={this.props.address} />
-        </MapView>
-        <Text>Confirm Your Address</Text>
+        <Content>
+          <MapView
+            style={styles.map}
+            region={this.state.initialRegion}
+            provider={MapView.PROVIDER_GOOGLE}
+          >
+            {dummyData.map(marker => {
+              return (
+                <Marker
+                  key={marker.latitude}
+                  coordinate={{
+                    latitude: marker.latitude,
+                    longitude: marker.longitude,
+                  }}
+                  title="dummymarker"
+                  description="dummymarker"
+                  image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
+                />
+              );
+            })}
+            <Marker
+              draggable
+              coordinate={this.state.x}
+              onDragEnd={e =>
+                this.setState({
+                  x: e.nativeEvent.coordinate,
+                })
+              }
+              coordinate={{
+                latitude: this.state.initialRegion.latitude,
+                longitude: this.state.initialRegion.longitude,
+              }}
+              title={text}
+            />
+          </MapView>
+          <Text style={styles.text}>Confirm Pothole Address</Text>
+          <Container>
+            <Card>
+              <Form>
+                <Item>
+                  <Input
+                    placeholder="Street Address"
+                    defaultValue={`${streetAddress}`}
+                    onChangeText={text => {
+                      this.setState({ streetAddress: text });
+                    }}
+                  />
+                </Item>
+                <Item last>
+                  <Input
+                    placeholder="Zipcode"
+                    defaultValue={`${zipcode}`}
+                    onChangeText={text => this.setState({ zipCode: text })}
+                  />
+                </Item>
+                <Button
+                  style={styles.button}
+                  primary
+                  onPress={this.submitAddress}
+                >
+                  <Text> Submit </Text>
+                </Button>
+              </Form>
+            </Card>
+          </Container>
         </Content>
       </Container>
     );
@@ -122,13 +167,17 @@ class AddPotholeLocation extends React.Component {
 
 const styles = StyleSheet.create({
   map: {
-    position: 'absolute',
     top: 0,
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight,
-    borderWidth: 2,
+    height: ScreenHeight / 1.75,
+  },
+  text: {
+    padding: 10,
+  },
+  button: {
+    left: 105,
   },
 });
 

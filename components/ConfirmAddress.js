@@ -8,6 +8,8 @@ import {
   Input,
   Button,
   Text,
+  Card,
+  CardItem
 } from 'native-base';
 import { Dimensions } from 'react-native';
 
@@ -27,11 +29,10 @@ export default class ConfirmAddress extends Component {
   };
 
   render() {
-    const streetAddress = this.props.address.slice(0, 2).join(' ');
-    const zipcode = this.props.address[4];
 
     return (
       <Container>
+        <Card>
         <Form>
           <Item>
             <Input
@@ -51,6 +52,7 @@ export default class ConfirmAddress extends Component {
           </Item>
           <Button primary onPress={this.submitAddress}><Text> Primary </Text></Button>
         </Form>
+        </Card>
       </Container>
     );
   }
