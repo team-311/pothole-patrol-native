@@ -11,7 +11,6 @@ import IndividualPothole from './components/IndividualPothole'
 import { Provider } from 'react-redux';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import store from './store';
-import AddPotholeLocation from './components/AddPotholeLocation'
 if (process.env.NODE_ENV !== 'production') require('./secrets');
 
 const BottomLinks = createDrawerNavigator({
