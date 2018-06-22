@@ -36,7 +36,7 @@ const BaseNavigator = createStackNavigator({
     headerMode: 'float',
     navigationOptions: ({ navigation }) => ({
       headerStyle: { backgroundColor: '#B3DDF2' },
-      headerTintColor: 'white',
+      headerTintColor: '#FF0000',
       title: 'Pothole Patrol',
       headerLeft: <Text onPress={() => navigation.toggleDrawer()}>     MENU</Text>
     })
