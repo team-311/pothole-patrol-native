@@ -1,9 +1,12 @@
 import React from 'react';
-import {connect} from 'react-redux'
-import { Platform, Text, View, StyleSheet, Dimensions } from 'react-native';
+import { connect } from 'react-redux';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 const { Marker } = MapView;
-import {getGeocodedAddress} from '../store/potholes'
+import { getGeocodedAddress } from '../store/potholes';
+import axios from 'axios';
+import ConfirmAddress from './ConfirmAddress';
+import {Container, Content} from 'native-base'
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -12,7 +15,7 @@ const ScreenHeight = Dimensions.get('window').height;
 
 const dummyData = [
   { latitude: 41.895, longitude: -87.63903 },
-  { latitude: 41.89526, longitude: -87.6390 },
+  { latitude: 41.89526, longitude: -87.639 },
   { latitude: 41.895265, longitude: -87.63902 },
   { latitude: 41.89525, longitude: -87.63905 },
 ];
@@ -40,11 +43,6 @@ class AddPotholeLocation extends React.Component {
     } else {
       this._getLocationAsync();
     }
-    this.getUserAddress()
-  }
-
-  getUserAddress = () => {
-    this.props.geocodeLocation(this.state.initialRegion.latitude, this.state.initialRegion.longitude)
   }
 
   _getLocationAsync = async () => {
@@ -62,7 +60,12 @@ class AddPotholeLocation extends React.Component {
       latitudeDelta: 0.002,
       longitudeDelta: 0.001,
     };
-    this.setState({ initialRegion });
+    this.setState({ initialRegion }, () => {
+      this.props.geocodeLocation(
+        this.state.initialRegion.latitude,
+        this.state.initialRegion.longitude
+      );
+    });
   };
 
   render() {
@@ -74,11 +77,10 @@ class AddPotholeLocation extends React.Component {
     }
     return (
       <MapView
-        style={styles.backgroundMap}
+        style={styles.map}
         region={this.state.initialRegion}
         provider={MapView.PROVIDER_GOOGLE}
       >
-      <Text style={styles.text}>Do You See Your Pothole?</Text>
         {dummyData.map(marker => {
           return (
             <Marker
@@ -89,63 +91,59 @@ class AddPotholeLocation extends React.Component {
               }}
               title="dummymarker"
               description="dummymarker"
-              image='https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png'
+              image="https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png"
             />
           );
         })}
-
         <Marker
           draggable
           coordinate={this.state.x}
-          onDragEnd={(e) => this.setState({
-            x: e.nativeEvent.coordinate
-          })}
+          onDragEnd={e =>
+            this.setState({
+              x: e.nativeEvent.coordinate,
+            })
+          }
           coordinate={{
             latitude: this.state.initialRegion.latitude,
             longitude: this.state.initialRegion.longitude,
           }}
           title={text}
         />
+
+      <ConfirmAddress address={this.props.address} />
       </MapView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backgroundMap: {
+  map: {
     position: 'absolute',
     top: 0,
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight,
+    height: ScreenHeight / 1.75,
+    borderWidth: 2
   },
-  text: {
-    backgroundColor: '#fff',
-    height: 20,
-    width: 170,
-    top: 200,
-    left: 80
-  }
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    localPotholes: state.potholes.localPotholes
-  }
-}
+    localPotholes: state.potholes.localPotholes,
+    address: state.potholes.address,
+  };
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    getLocalPotholes: (lat, lon, latDelt, lonDelt) => dispatch(fetchLocalPotholes(lat, lon, latDelt, lonDelt)),
-    geocodeLocation: (lat, lon) => dispatch(getGeocodedAddress(lat,lon))
-  }
-}
+    getLocalPotholes: (lat, lon, latDelt, lonDelt) =>
+      dispatch(fetchLocalPotholes(lat, lon, latDelt, lonDelt)),
+    geocodeLocation: (lat, lon) => dispatch(getGeocodedAddress(lat, lon)),
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddPotholeLocation)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddPotholeLocation);

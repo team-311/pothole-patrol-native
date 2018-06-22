@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-//geocoding is where Google finds the address based on the lat and long
 const GEOCODE_ADDRESS = 'GEOCODE_ADDRESS'
 
 const geocodeAddress = (address) => {
@@ -10,18 +9,23 @@ const geocodeAddress = (address) => {
   }
 }
 
-export const getGeocodedAddress = async (lat, lon) => {
+export const getGeocodedAddress = (lat, lon) => {
   return async dispatch => {
-    const {results} = await axios(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyCDyhK7JGy-x8idR46N4pHd89LtxKzbuq8`)
-    const someDetails = results[0]
-    console.log('someDetails', someDetails)
-    console.log('getting geocoded address')
-    // dispatch(geocodeAddress(someDetails))
+    const results = await axios(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lon}&key=AIzaSyCDyhK7JGy-x8idR46N4pHd89LtxKzbuq8`)
+    const dataResults = results.data.results[0].address_components
+    const streetNumber = dataResults[0].long_name
+    const streetName = dataResults[1].short_name
+    const city = dataResults[3].long_name
+    const state = dataResults[5].short_name
+    const zipcode = dataResults[7].long_name
+    const fullAddressArray = [streetNumber, streetName, city, state, zipcode]
+    dispatch(geocodeAddress(fullAddressArray))
   }
 }
 
 const defaultPotholes = {
-  localPotholes: []
+  localPotholes: [],
+  address: []
 }
 
 export default function(state = defaultPotholes, action) {
