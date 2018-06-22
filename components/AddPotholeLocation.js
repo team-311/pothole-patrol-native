@@ -40,6 +40,20 @@ class AddPotholeLocation extends React.Component {
     }
   }
 
+  predictAddress = async text => {
+    const dummyText = '405';
+    const dummylat = 41.89526;
+    const dummylon = -87.639;
+    const results = await axios(
+      `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${dummyText}&offset=3&radius=500&location=${dummylat},${dummylon}&key=AIzaSyCDyhK7JGy-x8idR46N4pHd89LtxKzbuq8`
+    );
+    console.log('results', results.data.predictions);
+    const mappedResults = results.data.predictions.map(prediction => {
+      return prediction.description;
+    });
+    console.log('mappedResults', mappedResults);
+  };
+
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
