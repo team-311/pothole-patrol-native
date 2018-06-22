@@ -8,6 +8,7 @@ import HomeScreen from './components/HomeScreen.js';
 import ReportDescription from './components/ReportDescription';
 import { Provider } from 'react-redux';
 import store from './store';
+if (process.env.NODE_ENV !== 'production') require('./secrets');
 
 const BottomLinks = createBottomTabNavigator({
   Home: {
