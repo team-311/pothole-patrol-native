@@ -1,32 +1,26 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import { Platform, Text, View, StyleSheet, Dimensions } from 'react-native';
+import { Platform, Text, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 const { Marker } = MapView;
+import {fetchPotholes} from '../store'
 
 const ScreenHeight = Dimensions.get('window').height;
-
-//to figure out: how do I get only the closest potholes and report those back...
-
-const dummyData = [
-  { latitude: 41.895, longitude: -87.63903 },
-  { latitude: 41.89526, longitude: -87.6390 },
-  { latitude: 41.895265, longitude: -87.63902 },
-  { latitude: 41.89525, longitude: -87.63905 },
-];
+const ScreenWidth = Dimensions.get('window').width;
+console.log('ScreenWidth', ScreenWidth)
 
 class AddPotholeLocation extends React.Component {
   constructor() {
     super();
     this.state = {
       errorMessage: null,
+      potholes: [],
       initialRegion: {
         latitude: 41.895266,
         longitude: -87.639035,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
       },
-      region: {},
     };
   }
 
@@ -38,6 +32,12 @@ class AddPotholeLocation extends React.Component {
     } else {
       this._getLocationAsync();
     }
+  }
+
+  componentDidMount = async () => {
+    this.setState({
+      potholes: this.props.potholes
+    })
   }
 
   _getLocationAsync = async () => {
@@ -56,7 +56,13 @@ class AddPotholeLocation extends React.Component {
       longitudeDelta: 0.001,
     };
     this.setState({ initialRegion });
+    this._getPotholesAsync(latitude, longitude)
   };
+
+  _getPotholesAsync = async (lat, lon) => {
+    await this.props.getPotholes(lat, lon)
+    this.setState({potholes: this.props.potholes})
+  }
 
   render() {
     let text = 'Waiting..';
@@ -72,21 +78,22 @@ class AddPotholeLocation extends React.Component {
         provider={MapView.PROVIDER_GOOGLE}
       >
       <Text style={styles.text}>Do You See Your Pothole?</Text>
-        {dummyData.map(marker => {
+        {this.state.potholes.map(marker => {
+          const lat = Number(marker.latitude)
+          const lon = Number(marker.longitude)
           return (
             <Marker
-              key={marker.latitude}
+              key={marker.id}
               coordinate={{
-                latitude: marker.latitude,
-                longitude: marker.longitude,
+                latitude: lat,
+                longitude: lon,
               }}
-              title="dummymarker"
-              description="dummymarker"
+              title="Open pothole"
+              description="It's already on the map! If this is the one you were going to report, click on it to upvote so it gets to your rep's attention faster. (Maybe)."
               image='https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png'
             />
           );
         })}
-
         <Marker
           draggable
           coordinate={this.state.x}
@@ -117,7 +124,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight,
+    height: ScreenHeight / 1.75,
   },
   text: {
     backgroundColor: '#fff',
@@ -130,13 +137,13 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   return {
-    localPotholes: state.potholes.localPotholes
+    potholes: state.potholes.potholes
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getLocalPotholes: (lat, lon, latDelt, lonDelt) => dispatch(fetchLocalPotholes(lat, lon, latDelt, lonDelt))
+    getPotholes: (lat, lon) => dispatch(fetchPotholes(lat, lon))
   }
 }
 

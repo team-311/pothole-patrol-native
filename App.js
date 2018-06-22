@@ -9,6 +9,7 @@ import HomeScreen from './components/HomeScreen.js';
 import { Provider } from 'react-redux';
 import store from './store';
 
+
 const BottomLinks = createBottomTabNavigator({
   Home: {
     screen: HomeScreen,
@@ -37,7 +38,7 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <BottomLinks />
+        <AddPotholeLocation />
       </Provider>
     );
   }
