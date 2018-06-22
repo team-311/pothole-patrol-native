@@ -154,7 +154,7 @@ class AddPotholeLocation extends React.Component {
                   primary
                   onPress={this.submitAddress}
                 >
-                  <Text> Submit </Text>
+                  <Text> Next </Text>
                 </Button>
               </Form>
             </Card>
