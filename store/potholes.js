@@ -16,12 +16,19 @@ const getSinglePothole = (pothole) => {
 export const getSinglePotholeServer = (id) => {
   console.log('here')
   return async (dispatch) => {
-    const { data } = await axios.get(`http://169.254.79.192:8080/api/potholes/1`)
+    const { data } = await axios.get(`http://172.17.21.27:8080/api/potholes/1`)
     dispatch(getSinglePothole(data))
   }
 }
 
-export default function (state = defaultPotholes, action) {
+export function potholesReducer(state = defaultPotholes, action) {
+  switch (action.type) {
+    default:
+      return state;
+  }
+}
+
+export function singlePotholeReducer(state = {}, action) {
   switch (action.type) {
     case GET_SINGLE_POTHOLE:
       return action.pothole

@@ -6,6 +6,7 @@ import {
 import ReportPhoto from './components/ReportPhoto.js';
 import HomeScreen from './components/HomeScreen.js';
 import ReportDescription from './components/ReportDescription'
+import IndividualPothole from './components/IndividualPothole'
 import { Provider } from 'react-redux';
 import store from './store';
 
@@ -19,6 +20,9 @@ const BottomLinks = createBottomTabNavigator(
     },
     ReportDescription: {
       screen: ReportDescription,
+    },
+    ViewSinglePothole: {
+      screen: IndividualPothole
     }
   });
 
