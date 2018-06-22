@@ -1,43 +1,35 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import { createBottomTabNavigator, createStackNavigator } from 'react-navigation'
-import { Provider } from 'react-redux'
-import store from './store'
-import ReportPhoto from './components/ReportPhoto.js'
-import HomeScreen from './components/HomeScreen.js'
-import IndividualPothole from './components/IndividualPothole.js'
+import {
+  createBottomTabNavigator,
+  createStackNavigator,
+} from 'react-navigation';
+import ReportPhoto from './components/ReportPhoto.js';
+import HomeScreen from './components/HomeScreen.js';
+import ReportDescription from './components/ReportDescription'
+import { Provider } from 'react-redux';
+import store from './store';
 
 const BottomLinks = createBottomTabNavigator(
   {
     Home: {
-      screen: HomeScreen,
-      tabBarOptions: {
-        activeTintColor: '#e91e63',
-        labelStyle: {
-          fontSize: 12,
-        }
-      },
-      style: {
-        backgroundColor: 'blue'
-      }
+      screen: HomeScreen
     },
     ReportPothole: {
       screen: ReportPhoto,
     },
-    IndividualPothole: {
-      screen: IndividualPothole
+    ReportDescription: {
+      screen: ReportDescription,
     }
-  })
+  });
 
-// const NavLinks = createStackNavigator(
-//   {
-//     Home: {
-//       screen: HomeScreen,
-//     },
-//     ReportPothole: {
-//       screen: ReportPhoto,
-//     }
-//   })
+const NavLinks = createStackNavigator({
+  Home: {
+    screen: HomeScreen,
+  },
+  ReportPothole: {
+    screen: ReportPhoto,
+  }
+});
 
 export default class App extends React.Component {
   render() {

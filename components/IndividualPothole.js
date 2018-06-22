@@ -23,6 +23,7 @@ export class IndividualPothole extends React.Component {
         <Text>ADDRESS: {pothole.streetAddress}</Text>
         <Text>ZIP: {pothole.zip}</Text>
         <Text>DESCRIPTION HERE</Text>
+        <Text>SERVICE #: {pothole.serviceNumber}</Text>
       </View>
     );
   }
