@@ -78,7 +78,7 @@ class AddPotholeLocation extends React.Component {
         provider={MapView.PROVIDER_GOOGLE}
       >
       <Text style={styles.text}>Do You See Your Pothole?</Text>
-        {this.state.potholes.map(marker => {
+        {this.props.potholes.map(marker => {
           const lat = Number(marker.latitude)
           const lon = Number(marker.longitude)
           return (
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight / 1.75,
+    height: ScreenHeight,
   },
   text: {
     backgroundColor: '#fff',

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import ipAddress from '../secrets'
 
 //ACTION TYPES
 const GET_POTHOLES = 'GET_POTHOLES'
@@ -17,7 +18,7 @@ const getPotholes = (potholes) => {
 
 export const fetchPotholes = (lat, lon, latDelt, lonDelt) => {
   return async dispatch => {
-    const potholes = await axios.get(`http://192.168.1.137:8080/api/potholes/${lat}/${lon}`);
+    const potholes = await axios.get(`http://172.17.20.156:8080/api/potholes/nearby?lat=${lat}&lon=${lon}`);
     dispatch(getPotholes(potholes.data))
   }
 }
