@@ -1,39 +1,48 @@
-import React, { Component } from 'react'
-import { StyleSheet, Text, TextInput, View, Picker, Switch, TouchableHighlight } from 'react-native'
-import axios from 'axios'
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Picker,
+  Switch,
+  TouchableHighlight,
+} from 'react-native';
+import axios from 'axios';
 
 export default class ReportDescription extends Component {
-  constructor () {
-    super()
+  constructor() {
+    super();
     this.state = {
       description: '',
       placement: '',
       anonymous: false,
-    }
+    };
   }
 
   handleSubmit = () => {
     // replace with thunk call to API server once the store is setup for singlePothole
-    console.log('Form submitted', this.state)
-  }
+    // console.log('Form submitted', this.state)
+  };
 
-  render () {
+  render() {
     return (
       <View style={styles.container}>
-        <TextInput style={styles.description}
+        <TextInput
+          style={styles.description}
           autoFocus
           multiline
-          placeholder='Enter pothole description'
+          placeholder="Enter pothole description"
           maxLength={500}
           value={this.state.description}
-          onChangeText={(text) => this.setState({description: text})}
+          onChangeText={text => this.setState({ description: text })}
         />
         <Text>Where is the pothole located?</Text>
         <Picker
           selectedValue={this.state.placement}
-          onValueChange={(itemValue) => this.setState({placement: itemValue})}
-          mode='dropdown'
-          prompt='Where is the pothole located?'
+          onValueChange={itemValue => this.setState({ placement: itemValue })}
+          mode="dropdown"
+          prompt="Where is the pothole located?"
         >
           <Picker.Item label="--Select an option--" value="" />
           <Picker.Item label="Bike Lane" value="Bike Lane" />
@@ -44,19 +53,21 @@ export default class ReportDescription extends Component {
         </Picker>
         <View style={styles.switchGroup}>
           <Switch
-            onValueChange={(value) => this.setState({anonymous: value})}
+            onValueChange={value => this.setState({ anonymous: value })}
             value={this.state.anonymous}
-            />
-          <Text style={ {marginLeft: 10} }>Remain Anonymous?</Text>
+          />
+          <Text style={{ marginLeft: 10 }}>Remain Anonymous?</Text>
         </View>
-        <TouchableHighlight style={styles.button}
+        <TouchableHighlight
+          style={styles.button}
           accessibilityLabel="Submit pothole service request"
           onPress={this.handleSubmit}
           disabled={!this.state.placement}
-        ><Text style={styles.buttonText}>Submit</Text>
+        >
+          <Text style={styles.buttonText}>Submit</Text>
         </TouchableHighlight>
       </View>
-    )
+    );
   }
 }
 
@@ -69,7 +80,7 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 10,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   button: {
     alignItems: 'center',
@@ -79,11 +90,11 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'white'
+    color: 'white',
   },
   switchGroup: {
     alignItems: 'center',
     flexDirection: 'row',
     marginBottom: 20,
-  }
-})
+  },
+});
