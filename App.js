@@ -6,9 +6,10 @@ import {
 import ReportPhoto from './components/ReportPhoto.js';
 import HomeScreen from './components/HomeScreen.js';
 import ReportDescription from './components/ReportDescription'
-import ConfirmAddress from './components/ConfirmAddress'
 import { Provider } from 'react-redux';
 import store from './store';
+import ConfirmAddress from './components/ConfirmAddress'
+import AddPotholeLocation from './components/AddPotholeLocation'
 
 const BottomLinks = createBottomTabNavigator({
   Home: {
@@ -41,7 +42,7 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <ConfirmAddress/>
+        <AddPotholeLocation/>
       </Provider>
     );
   }

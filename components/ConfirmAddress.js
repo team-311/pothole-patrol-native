@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, Form, Item, Input } from 'native-base';
-import {Button} from 'react-native'
+import { Container, Header, Content, Form, Item, Input, Button, Text } from 'native-base';
 
 export default class FormExample extends Component {
   constructor(){
@@ -11,6 +10,10 @@ export default class FormExample extends Component {
     }
   }
 
+  submitAddress = () => {
+    console.log('thanks for submitting your address!')
+  }
+
   render() {
     return (
       <Container>
@@ -18,11 +21,18 @@ export default class FormExample extends Component {
         <Content>
           <Form>
             <Item>
-              <Input placeholder="Street Address" />
+              <Input
+              placeholder="Street Address"
+              onChangeText={(text) => this.setState({streetAddress: text})}
+              />
             </Item>
             <Item last>
-              <Input placeholder="Zipcode" />
+              <Input
+              placeholder="Zipcode"
+              onChangeText={(text) => this.setState({zipCode: text})}
+              />
             </Item>
+            <Button onPress={this.submitAddress} primary><Text> Primary </Text></Button>
           </Form>
         </Content>
       </Container>

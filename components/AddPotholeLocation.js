@@ -3,10 +3,12 @@ import {connect} from 'react-redux'
 import { Platform, Text, View, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 const { Marker } = MapView;
+import {getGeocodedAddress} from '../store/potholes'
 
 const ScreenHeight = Dimensions.get('window').height;
 
 //to figure out: how do I get only the closest potholes and report those back...
+//make sure you do not submit this and change EVERYTHING BACK; your previous pullRequest needs to happen first
 
 const dummyData = [
   { latitude: 41.895, longitude: -87.63903 },
@@ -38,6 +40,11 @@ class AddPotholeLocation extends React.Component {
     } else {
       this._getLocationAsync();
     }
+    this.getUserAddress()
+  }
+
+  getUserAddress = () => {
+    this.props.geocodeLocation(this.state.initialRegion.latitude, this.state.initialRegion.longitude)
   }
 
   _getLocationAsync = async () => {
@@ -136,7 +143,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getLocalPotholes: (lat, lon, latDelt, lonDelt) => dispatch(fetchLocalPotholes(lat, lon, latDelt, lonDelt))
+    getLocalPotholes: (lat, lon, latDelt, lonDelt) => dispatch(fetchLocalPotholes(lat, lon, latDelt, lonDelt)),
+    geocodeLocation: (lat, lon) => dispatch(getGeocodedAddress(lat,lon))
   }
 }
 
