@@ -11,22 +11,7 @@ import IndividualPothole from './components/IndividualPothole'
 import { Provider } from 'react-redux';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import store from './store';
-
-// const BottomLinks = createBottomTabNavigator(
-//   {
-//     Home: {
-//       screen: HomeScreen
-//     },
-//     // ReportPothole: {
-//     //   screen: ReportPhoto,
-//     // },
-//     ReportDescription: {
-//       screen: ReportDescription,
-//     },
-//     ViewSinglePothole: {
-//       screen: IndividualPothole
-//     }
-//   });
+if (process.env.NODE_ENV !== 'production') require('./secrets');
 
 const BottomLinks = createDrawerNavigator({
   Home: {
@@ -51,7 +36,7 @@ const BaseNavigator = createStackNavigator({
     headerMode: 'float',
     navigationOptions: ({ navigation }) => ({
       headerStyle: { backgroundColor: '#B3DDF2' },
-      headerTintColor: '#FF0000',
+      headerTintColor: 'white',
       title: 'Pothole Patrol',
       headerLeft: <Text onPress={() => navigation.toggleDrawer()}>     MENU</Text>
     })
