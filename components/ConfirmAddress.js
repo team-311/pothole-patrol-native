@@ -1,7 +1,17 @@
 import React, { Component } from 'react';
-// import { Container, Header, Content, Form, Item, Input, Button, Text } from 'native-base';
-// import { Text, TextInput, View, Button, StyleSheet } from 'react-native';
-import { Container, Header, Content, Form, Item, Input } from 'native-base';
+import {
+  Container,
+  Header,
+  Content,
+  Form,
+  Item,
+  Input,
+  Button,
+  Text,
+} from 'native-base';
+import { Dimensions } from 'react-native';
+
+const ScreenHeight = Dimensions.get('window').height;
 
 export default class ConfirmAddress extends Component {
   constructor() {
@@ -17,40 +27,42 @@ export default class ConfirmAddress extends Component {
   };
 
   render() {
-    console.log('address', this.props.address)
-    const streetAddress = this.props.address.slice(0,2).join(' ')
-    const zipcode = this.props.address[4]
-    return (
-    //   <Container>
-    //   <Header />
-    //     <Form>
-    //       <Item>
-    //         <Input placeholder="Username" />
-    //       </Item>
-    //       <Item last>
-    //         <Input placeholder="Password" />
-    //       </Item>
-    //     </Form>
-    // </Container>
+    const streetAddress = this.props.address.slice(0, 2).join(' ');
+    const zipcode = this.props.address[4];
 
-      <View style={styles.formView}>
-        <TextInput
-          placeholder="Street Address"
-          defaultValue={`${streetAddress}`}
-          onChangeText={text => {
-            this.setState({ streetAddress: text });
-          }}
-        />
-        <TextInput
-          placeholder="Zipcode"
-          defaultValue={`${zipcode}`}
-          onChangeText={text => this.setState({ zipCode: text })}
-        />
-        <Button
-        title="Submit"
-        onPress={this.submitAddress} />
-      </View>
+    return (
+      <Container>
+        <Form>
+          <Item>
+            <Input
+              placeholder="Street Address"
+              defaultValue={`${streetAddress}`}
+              onChangeText={text => {
+                this.setState({ streetAddress: text });
+              }}
+            />
+          </Item>
+          <Item last>
+            <Input
+              placeholder="Zipcode"
+              defaultValue={`${zipcode}`}
+              onChangeText={text => this.setState({ zipCode: text })}
+            />
+          </Item>
+          <Button primary onPress={this.submitAddress}><Text> Primary </Text></Button>
+        </Form>
+      </Container>
     );
   }
 }
 
+// const styles = StyleSheet.create({
+//   container: {
+//     backgroundColor: '#fff',
+//     alignItems: 'center',
+//     top: 100
+//   },
+//   button: {
+//     top: 150
+//   }
+// })

@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Platform, StyleSheet, Dimensions } from 'react-native';
+import { Platform, StyleSheet, Dimensions, View } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 const { Marker } = MapView;
 import { getGeocodedAddress } from '../store/potholes';
 import axios from 'axios';
 import ConfirmAddress from './ConfirmAddress';
-import {Container, Content} from 'native-base'
+import { Container, Content, Header, Text } from 'native-base';
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -76,42 +76,46 @@ class AddPotholeLocation extends React.Component {
       text = JSON.stringify(this.state.initialRegion);
     }
     return (
-      <MapView
-        style={styles.map}
-        region={this.state.initialRegion}
-        provider={MapView.PROVIDER_GOOGLE}
-      >
-        {dummyData.map(marker => {
-          return (
-            <Marker
-              key={marker.latitude}
-              coordinate={{
-                latitude: marker.latitude,
-                longitude: marker.longitude,
-              }}
-              title="dummymarker"
-              description="dummymarker"
-              image="https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png"
-            />
-          );
-        })}
-        <Marker
-          draggable
-          coordinate={this.state.x}
-          onDragEnd={e =>
-            this.setState({
-              x: e.nativeEvent.coordinate,
-            })
-          }
-          coordinate={{
-            latitude: this.state.initialRegion.latitude,
-            longitude: this.state.initialRegion.longitude,
-          }}
-          title={text}
-        />
-
-      <ConfirmAddress address={this.props.address} />
-      </MapView>
+      <Container>
+         <Content>
+        <MapView
+          style={styles.map}
+          region={this.state.initialRegion}
+          provider={MapView.PROVIDER_GOOGLE}
+        >
+          {dummyData.map(marker => {
+            return (
+              <Marker
+                key={marker.latitude}
+                coordinate={{
+                  latitude: marker.latitude,
+                  longitude: marker.longitude,
+                }}
+                title="dummymarker"
+                description="dummymarker"
+                image="https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png"
+              />
+            );
+          })}
+          <Marker
+            draggable
+            coordinate={this.state.x}
+            onDragEnd={e =>
+              this.setState({
+                x: e.nativeEvent.coordinate,
+              })
+            }
+            coordinate={{
+              latitude: this.state.initialRegion.latitude,
+              longitude: this.state.initialRegion.longitude,
+            }}
+            title={text}
+          />
+          <ConfirmAddress address={this.props.address} />
+        </MapView>
+        <Text>Confirm Your Address</Text>
+        </Content>
+      </Container>
     );
   }
 }
@@ -123,8 +127,8 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight / 1.75,
-    borderWidth: 2
+    height: ScreenHeight,
+    borderWidth: 2,
   },
 });
 
