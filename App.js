@@ -5,11 +5,11 @@ import {
 } from 'react-navigation';
 import ReportPhoto from './components/ReportPhoto.js';
 import HomeScreen from './components/HomeScreen.js';
-import ReportDescription from './components/ReportDescription'
+import ReportDescription from './components/ReportDescription';
 import { Provider } from 'react-redux';
 import store from './store';
-import ConfirmAddress from './components/ConfirmAddress'
 import AddPotholeLocation from './components/AddPotholeLocation'
+if (process.env.NODE_ENV !== 'production') require('./secrets');
 
 const BottomLinks = createBottomTabNavigator({
   Home: {
@@ -26,7 +26,7 @@ const BottomLinks = createBottomTabNavigator({
   },
   ReportDescription: {
     screen: ReportDescription,
-  }
+  },
 });
 
 const NavLinks = createStackNavigator({
@@ -35,7 +35,7 @@ const NavLinks = createStackNavigator({
   },
   ReportPothole: {
     screen: ReportPhoto,
-  }
+  },
 });
 
 export default class App extends React.Component {

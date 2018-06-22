@@ -1,48 +1,34 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Platform, StyleSheet, Dimensions, View } from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 const { Marker } = MapView;
-import { getGeocodedAddress } from '../store/potholes';
-import axios from 'axios';
-import ConfirmAddress from './ConfirmAddress';
+import { getGeocodedAddress, fetchPotholes } from '../store/potholes';
 import {
   Container,
   Content,
-  Header,
   Text,
   Card,
   Form,
   Item,
   Input,
   Button,
-  CardItem,
 } from 'native-base';
 
 const ScreenHeight = Dimensions.get('window').height;
-
-//to figure out: how do I get only the closest potholes and report those back...
-//make sure you do not submit this and change EVERYTHING BACK; your previous pullRequest needs to happen first
-
-const dummyData = [
-  { latitude: 41.895, longitude: -87.63903 },
-  { latitude: 41.89526, longitude: -87.639 },
-  { latitude: 41.895265, longitude: -87.63902 },
-  { latitude: 41.89525, longitude: -87.63905 },
-];
 
 class AddPotholeLocation extends React.Component {
   constructor() {
     super();
     this.state = {
       errorMessage: null,
+      potholes: [],
       initialRegion: {
         latitude: 41.895266,
         longitude: -87.639035,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
       },
-      region: {},
     };
   }
 
@@ -83,6 +69,10 @@ class AddPotholeLocation extends React.Component {
     console.log('thanks for submitting your address!');
   };
 
+  _getPotholesAsync = async (lat, lon) => {
+    await this.props.getPotholes(lat, lon)
+  }
+
   render() {
     const streetAddress = this.props.address.slice(0, 2).join(' ');
     const zipcode = this.props.address[4];
@@ -100,17 +90,17 @@ class AddPotholeLocation extends React.Component {
             region={this.state.initialRegion}
             provider={MapView.PROVIDER_GOOGLE}
           >
-            {dummyData.map(marker => {
+            {this.props.potholes.map(marker => {
               return (
                 <Marker
                   key={marker.latitude}
                   coordinate={{
-                    latitude: marker.latitude,
-                    longitude: marker.longitude,
+                    latitude: Number(marker.latitude),
+                    longitude: Number(marker.longitude),
                   }}
-                  title="dummymarker"
-                  description="dummymarker"
-                  image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
+                  title="Open pothole"
+                  description="It's already on the map! If this is the one you were going to report, click on it to upvote so it gets to your rep's attention faster. (Maybe)."
+                  image='https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png'
                 />
               );
             })}
@@ -183,15 +173,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   return {
-    localPotholes: state.potholes.localPotholes,
+    potholes: state.potholes.potholes,
     address: state.potholes.address,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getLocalPotholes: (lat, lon, latDelt, lonDelt) =>
-      dispatch(fetchLocalPotholes(lat, lon, latDelt, lonDelt)),
+    getPotholes: (lat, lon) =>
+      dispatch(fetchLocalPotholes(lat, lon)),
     geocodeLocation: (lat, lon) => dispatch(getGeocodedAddress(lat, lon)),
   };
 };

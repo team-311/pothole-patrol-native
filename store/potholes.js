@@ -1,11 +1,32 @@
 import axios from 'axios';
 
+//ACTION TYPES
+const GET_POTHOLES = 'GET_POTHOLES'
 const GEOCODE_ADDRESS = 'GEOCODE_ADDRESS'
+
+
+//ACTION CREATORS
+
+const getPotholes = (potholes) => {
+  return {
+    type: GET_POTHOLES,
+    potholes
+  }
+}
 
 const geocodeAddress = (address) => {
   return {
     type: GEOCODE_ADDRESS,
     address
+  }
+}
+
+//THUNKS
+
+export const fetchPotholes = (lat, lon, latDelt, lonDelt) => {
+  return async dispatch => {
+    const potholes = await axios.get(`${process.env.SERVER_URL}/api/potholes/nearby?lat=${lat}&lon=${lon}`);
+    dispatch(getPotholes(potholes.data))
   }
 }
 
@@ -23,6 +44,7 @@ export const getGeocodedAddress = (lat, lon) => {
   }
 }
 
+//Default state
 const defaultPotholes = {
   localPotholes: [],
   address: []
@@ -32,6 +54,8 @@ export default function(state = defaultPotholes, action) {
   switch (action.type) {
     case GEOCODE_ADDRESS:
       return {...state, address: action.address}
+    case GET_POTHOLES:
+      return {...state, potholes: action.potholes}
     default:
       return state;
   }
