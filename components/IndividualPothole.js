@@ -14,10 +14,10 @@ export class IndividualPothole extends React.Component {
     this.props.getSinglePothole(1)
   }
 
-
   static navigationOptions = { title: 'SinglePothole' }
   render() {
     const pothole = this.props.singlePothole
+    console.log(pothole)
     let region = {
       latitude: pothole.latitude,
       longitude: pothole.longitude,
