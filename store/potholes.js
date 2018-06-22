@@ -1,5 +1,4 @@
 import axios from 'axios';
-import ipAddress from '../secrets'
 
 //ACTION TYPES
 const GET_POTHOLES = 'GET_POTHOLES'

@@ -6,8 +6,7 @@ const { Marker } = MapView;
 import {fetchPotholes} from '../store'
 
 const ScreenHeight = Dimensions.get('window').height;
-const ScreenWidth = Dimensions.get('window').width;
-console.log('ScreenWidth', ScreenWidth)
+
 
 class AddPotholeLocation extends React.Component {
   constructor() {
@@ -34,12 +33,6 @@ class AddPotholeLocation extends React.Component {
     }
   }
 
-  componentDidMount = async () => {
-    this.setState({
-      potholes: this.props.potholes
-    })
-  }
-
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
@@ -61,7 +54,6 @@ class AddPotholeLocation extends React.Component {
 
   _getPotholesAsync = async (lat, lon) => {
     await this.props.getPotholes(lat, lon)
-    this.setState({potholes: this.props.potholes})
   }
 
   render() {

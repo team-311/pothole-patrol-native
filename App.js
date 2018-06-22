@@ -8,7 +8,6 @@ import HomeScreen from './components/HomeScreen.js';
 import ReportDescription from './components/ReportDescription';
 import { Provider } from 'react-redux';
 import store from './store';
-import AddPotholeLocation from './components/AddPotholeLocation';
 
 const BottomLinks = createBottomTabNavigator({
   Home: {
