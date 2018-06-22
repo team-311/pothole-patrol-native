@@ -2,24 +2,21 @@ import React from 'react';
 import {
   createBottomTabNavigator,
   createStackNavigator,
+  createDrawerNavigator
 } from 'react-navigation';
 import ReportPhoto from './components/ReportPhoto.js';
 import HomeScreen from './components/HomeScreen.js';
-import ReportDescription from './components/ReportDescription';
+import ReportDescription from './components/ReportDescription'
+import IndividualPothole from './components/IndividualPothole'
 import { Provider } from 'react-redux';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import store from './store';
 import AddPotholeLocation from './components/AddPotholeLocation'
 if (process.env.NODE_ENV !== 'production') require('./secrets');
 
-const BottomLinks = createBottomTabNavigator({
+const BottomLinks = createDrawerNavigator({
   Home: {
-    screen: HomeScreen,
-    tabBarOptions: {
-      activeTintColor: '#e91e63',
-      labelStyle: {
-        fontSize: 12,
-      },
-    },
+    screen: HomeScreen
   },
   ReportPothole: {
     screen: ReportPhoto,
@@ -27,22 +24,30 @@ const BottomLinks = createBottomTabNavigator({
   ReportDescription: {
     screen: ReportDescription,
   },
-});
+  ViewSinglePothole: {
+    screen: IndividualPothole
+  }
+})
 
-const NavLinks = createStackNavigator({
-  Home: {
-    screen: HomeScreen,
+const BaseNavigator = createStackNavigator({
+  Base: {
+    screen: BottomLinks,
   },
-  ReportPothole: {
-    screen: ReportPhoto,
-  },
-});
+}, {
+    headerMode: 'float',
+    navigationOptions: ({ navigation }) => ({
+      headerStyle: { backgroundColor: '#B3DDF2' },
+      headerTintColor: '#FF0000',
+      title: 'Pothole Patrol',
+      headerLeft: <Text onPress={() => navigation.toggleDrawer()}>     MENU</Text>
+    })
+  });
 
 export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <AddPotholeLocation/>
+        <BaseNavigator />
       </Provider>
     );
   }
