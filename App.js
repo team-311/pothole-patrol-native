@@ -6,6 +6,7 @@ import {
 import ReportPhoto from './components/ReportPhoto.js';
 import HomeScreen from './components/HomeScreen.js';
 import ReportDescription from './components/ReportDescription'
+import ConfirmAddress from './components/ConfirmAddress'
 import { Provider } from 'react-redux';
 import store from './store';
 
@@ -40,7 +41,7 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <BottomLinks />
+        <ConfirmAddress/>
       </Provider>
     );
   }
