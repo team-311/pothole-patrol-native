@@ -8,9 +8,9 @@ import {
   Switch,
   TouchableHighlight,
 } from 'react-native';
-import axios from 'axios';
+import {NavigationActions, StackActions} from 'react-navigation'
 
-export default class ReportDescription extends Component {
+export default class ReportForm extends Component {
   constructor() {
     super();
     this.state = {
@@ -20,9 +20,14 @@ export default class ReportDescription extends Component {
     };
   }
 
-  handleSubmit = () => {
-    // replace with thunk call to API server once the store is setup for singlePothole
-    // console.log('Form submitted', this.state)
+  handleSubmit = async () => {
+    await this.props.handleSubmit({...this.props.report, ...this.state})
+    const action = StackActions.reset({
+      index: 0,
+      key: null,
+      actions: [NavigationActions.navigate({routeName: 'Base'})]
+    })
+    this.props.navigation.dispatch(action)
   };
 
   render() {

@@ -8,7 +8,6 @@ class CameraView extends React.Component {
   state = {
     hasCameraPermission: null,
     type: Camera.Constants.Type.back,
-    showCamera: true,
   };
 
   async componentWillMount() {
@@ -18,7 +17,6 @@ class CameraView extends React.Component {
 
   snap = async () => {
     if (this.camera) {
-      console.log(this.camera);
       let photo = await this.camera.takePictureAsync({
         quality: 0.25,
         base64: true,

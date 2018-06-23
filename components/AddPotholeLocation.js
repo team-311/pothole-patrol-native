@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 import { getGeocodedAddress, fetchPotholes } from '../store/potholes';
+import { createUpdateLocationAction } from '../store/report';
 import { Container, Content, Text, Card, Form, Item,
   Input,
   Button,
@@ -17,7 +18,6 @@ class AddPotholeLocation extends React.Component {
     this.state = {
       streetAddress: '',
       zipcode: '',
-      potholes: [],
       initialRegion: {
         latitude: 41.895266,
         longitude: -87.639035,
@@ -58,11 +58,15 @@ class AddPotholeLocation extends React.Component {
     };
 
     //get geocoded address and fetch potholes
-    this.setState({ initialRegion }, () => {
-      this.props.getAddress(
+    this.setState({ initialRegion }, async () => {
+      const address = await this.props.getAddress(
         this.state.initialRegion.latitude,
         this.state.initialRegion.longitude
       );
+      this.setState({
+        streetAddress: address.slice(0, 2).join(' '),
+        zipcode: address[2]
+      })
       this._getPotholesAsync(latitude, longitude)
     });
   };
@@ -71,15 +75,20 @@ class AddPotholeLocation extends React.Component {
     await this.props.getPotholes(lat, lon);
   };
 
-  submitAddress = () => {
-    console.log('thanks for submitting your address!');
+  handleNext = () => {
+    const location = {
+      streetAddress: this.state.streetAddress,
+      zip: this.state.zipcode,
+      latitude: this.state.initialRegion.latitude,
+      longitude: this.state.initialRegion.longitude,
+    }
+    this.props.updateLocation(location)
+    this.props.navigation.navigate('Camera')
   };
-
 
   render() {
     const potholes = this.props.potholes ? this.props.potholes : []
-    const streetAddress = this.props.address.slice(0, 2).join(' ');
-    const zipcode = this.props.address[2];
+
     return (
       <Container>
         <Content>
@@ -117,7 +126,7 @@ class AddPotholeLocation extends React.Component {
                 <Item>
                   <Input
                     placeholder="Street Address"
-                    defaultValue={`${streetAddress}`}
+                    value={this.state.streetAddress}
                     onChangeText={text => {
                       this.setState({ streetAddress: text });
                     }}
@@ -126,14 +135,14 @@ class AddPotholeLocation extends React.Component {
                 <Item last>
                   <Input
                     placeholder="Zipcode"
-                    defaultValue={`${zipcode}`}
-                    onChangeText={text => this.setState({ zipCode: text })}
+                    value={this.state.zipcode}
+                    onChangeText={text => this.setState({ zipcode: text })}
                   />
                 </Item>
                 <Button
                   style={styles.button}
                   primary
-                  onPress={this.submitAddress}
+                  onPress={this.handleNext}
                 >
                   <Text> Next </Text>
                 </Button>
@@ -173,6 +182,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getPotholes: (lat, lon) => dispatch(fetchPotholes(lat, lon)),
     getAddress: (lat, lon) => dispatch(getGeocodedAddress(lat, lon)),
+    updateLocation: (location) => dispatch(createUpdateLocationAction(location))
   };
 };
 
