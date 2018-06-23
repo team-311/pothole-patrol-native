@@ -42,6 +42,8 @@ export const getGeocodedAddress = (lat, lon) => {
     const zipcode = dataResults[7].long_name;
     const fullAddressArray = [streetNumber, streetName, zipcode];
     dispatch(geocodeAddress(fullAddressArray));
+
+    return fullAddressArray;
   };
 };
 
@@ -61,9 +63,8 @@ const getSinglePothole = pothole => {
 };
 
 export const getSinglePotholeServer = id => {
-  console.log('here');
   return async dispatch => {
-    const { data } = await axios.get(`http://172.17.21.27:8080/api/potholes/1`);
+    const { data } = await axios.get(`${process.env.SERVER_URL}/api/potholes/${id}`);
     dispatch(getSinglePothole(data));
   };
 };

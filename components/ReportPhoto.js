@@ -1,22 +1,101 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
+import { Camera, Permissions } from 'expo';
+import { getPicture } from '../store/report';
+import { connect } from 'react-redux';
 
+class CameraView extends React.Component {
+  state = {
+    hasCameraPermission: null,
+    type: Camera.Constants.Type.back,
+  };
 
-export default class ReportPhoto extends React.Component {
+  async componentWillMount() {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ hasCameraPermission: status === 'granted' });
+  }
+
+  snap = async () => {
+    if (this.camera) {
+      let photo = await this.camera.takePictureAsync({
+        quality: 0.25,
+        base64: true,
+      });
+      this.props.getPicture(`data:image/jpg;base64,${photo.base64}`);
+    }
+    const { replace } = this.props.navigation;
+    replace('ReportDescription');
+  };
+
   render() {
-    return (
-      <View style={styles.container}>
-        <Text>Report Camera</Text>
-      </View>
-    );
+    const { hasCameraPermission } = this.state;
+
+    if (hasCameraPermission === null) {
+      return <View />;
+    } else if (hasCameraPermission === false) {
+      return <Text>No access to camera</Text>;
+    } else {
+      return (
+        <View style={{ flex: 1 }}>
+          <Camera
+            ref={ref => {
+              this.camera = ref;
+            }}
+            style={{ flex: 1 }}
+            type={this.state.type}
+          >
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: 'transparent',
+                flexDirection: 'row',
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  flex: 0.1,
+                  alignSelf: 'flex-end',
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  this.snap();
+                }}
+              >
+                <Text
+                  style={{ fontSize: 18, marginBottom: 10, color: 'white' }}
+                >
+                  {' '}
+                  Flip{' '}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  this.snap();
+                }}
+              >
+                <Text
+                  style={{ fontSize: 18, marginBottom: 10, color: 'white' }}
+                >
+                  Take Picture
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Camera>
+        </View>
+      );
+    }
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const mapDispatch = dispatch => {
+  return {
+    getPicture(picture) {
+      dispatch(getPicture(picture));
+    },
+  };
+};
+
+export default connect(
+  null,
+  mapDispatch
+)(CameraView);
