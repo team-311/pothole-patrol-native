@@ -1,7 +1,6 @@
 import React from 'react';
 import * as Expo from 'expo'
 import {
-  createBottomTabNavigator,
   createStackNavigator,
   createDrawerNavigator
 } from 'react-navigation';
@@ -49,7 +48,7 @@ const BottomLinks = createDrawerNavigator({
   ViewSinglePothole: {
     screen: IndividualPothole,
     navigationOptions: {
-      title: 'View Single Pothole'
+      title: 'View Single Pothole',
     }
   }
 },

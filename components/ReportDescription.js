@@ -9,7 +9,7 @@ class ReportDescription extends Component {
   render () {
     return (
       <View style={styles.container}>
-        { !!this.props.report.image && <Image
+        { !!this.props.report.imageUrl && <Image
           style={{width: 100, height: 100}}
           source={{uri: this.props.report.image}}
         />}
