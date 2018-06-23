@@ -49,36 +49,11 @@ class CameraView extends React.Component {
                 flex: 1,
                 backgroundColor: 'transparent',
                 flexDirection: 'row',
+                alignItems: 'flex-end',
+                justifyContent: 'center',
               }}
             >
-              <TouchableOpacity
-                style={{
-                  flex: 0.1,
-                  alignSelf: 'flex-end',
-                  alignItems: 'center',
-                }}
-                onPress={() => {
-                  this.snap();
-                }}
-              >
-                <Text
-                  style={{ fontSize: 18, marginBottom: 10, color: 'white' }}
-                >
-                  {' '}
-                  Flip{' '}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  this.snap();
-                }}
-              >
-                <Text
-                  style={{ fontSize: 18, marginBottom: 10, color: 'white' }}
-                >
-                  Take Picture
-                </Text>
-              </TouchableOpacity>
+              <TouchableOpacity style={styles.circle} onPress={this.snap} />
             </View>
           </Camera>
         </View>
@@ -99,3 +74,14 @@ export default connect(
   null,
   mapDispatch
 )(CameraView);
+
+const styles = {
+  circle: {
+    width: 75,
+    height: 75,
+    borderRadius: 75/2,
+    backgroundColor: 'white',
+    opacity: 0.75,
+    marginBottom: 50,
+  }
+}

@@ -12,6 +12,7 @@ import AddPotholeLocation from './components/AddPotholeLocation'
 import { Provider } from 'react-redux';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import store from './store';
+import { Icon } from 'native-base'
 if (process.env.NODE_ENV !== 'production') require('./secrets');
 
 const ReportStack = createStackNavigator(
@@ -66,7 +67,7 @@ const BaseNavigator = createStackNavigator({
       headerStyle: { backgroundColor: '#B3DDF2' },
       headerTintColor: '#FF0000',
       title: 'Pothole Patrol',
-      headerLeft: <Text onPress={() => navigation.toggleDrawer()}>     MENU</Text>
+      headerLeft: <Icon name="menu" style={{marginLeft: 15}} onPress={() => navigation.toggleDrawer()} />
     })
   });
 
