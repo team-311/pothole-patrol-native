@@ -3,6 +3,7 @@ import * as Expo from 'expo'
 import { Provider } from 'react-redux';
 import { View } from 'react-native';
 import store from './store';
+import { Icon } from 'native-base'
 if (process.env.NODE_ENV !== 'production') require('./secrets');
 import Main from './components/main'
 

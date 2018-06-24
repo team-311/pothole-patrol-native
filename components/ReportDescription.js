@@ -9,6 +9,7 @@ class ReportDescription extends Component {
   static navigationOptions = {title: 'Add Details'}
   render () {
     return (
+
       <Container style={styles.container}>
         <Content>
           { !!this.props.report.imageUrl && <View style={styles.thumbnail}>
@@ -20,6 +21,7 @@ class ReportDescription extends Component {
           <ReportForm navigation={this.props.navigation} report={this.props.report} handleSubmit={this.props.submitReport}/>
         </Content>
       </Container>
+
     )
   }
 }
