@@ -16,15 +16,18 @@ import {
 
 const ScreenHeight = Dimensions.get('window').height;
 
-export class IndividualPothole extends React.Component {
-  constructor(props) {
-    super(props);
-    this.props.getSinglePothole(1);
+class IndividualPothole extends React.Component {
+
+  componentDidMount() {
+    this.props.getSinglePothole(1)
   }
 
   static navigationOptions = { title: 'SinglePothole' };
   render() {
-    const pothole = this.props.singlePothole;
+    const pothole = this.props.singlePothole
+
+    if (!pothole.id) return <View />
+
     let region = {
       latitude: Number(pothole.latitude),
       longitude: Number(pothole.longitude),
