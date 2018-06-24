@@ -3,26 +3,38 @@ import { StyleSheet, View, Image } from 'react-native'
 import ReportForm from './ReportForm'
 import { connect } from 'react-redux'
 import { createPostReportThunk } from '../store/report';
+import { Container, Content } from 'native-base'
 
 class ReportDescription extends Component {
   static navigationOptions = {title: 'Add Details'}
   render () {
     return (
-      <View style={styles.container}>
-        { !!this.props.report.imageUrl && <Image
-          style={{width: 100, height: 100}}
-          source={{uri: this.props.report.image}}
-        />}
-        <ReportForm navigation={this.props.navigation} report={this.props.report} handleSubmit={this.props.submitReport}/>
-      </View>
+
+      <Container style={styles.container}>
+        <Content>
+          { !!this.props.report.imageUrl && <View style={styles.thumbnail}>
+            <Image
+            style={{width: 200, height: 200,}}
+            source={{uri: this.props.report.imageUrl}}
+            />
+          </View>}
+          <ReportForm navigation={this.props.navigation} report={this.props.report} handleSubmit={this.props.submitReport}/>
+        </Content>
+      </Container>
+
     )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
     backgroundColor: 'white',
+    padding: 10
+  },
+  thumbnail: {
+    marginBottom: 20,
+    justifyContent: 'center',
+    flexDirection: 'row',
   }
 })
 
