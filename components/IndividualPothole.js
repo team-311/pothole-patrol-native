@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, View } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 const { Marker } = MapView;
 import { connect } from 'react-redux'
@@ -8,16 +8,18 @@ import { Container, Header, Content, Card, CardItem, Text, Body } from 'native-b
 
 const ScreenHeight = Dimensions.get('window').height;
 
-export class IndividualPothole extends React.Component {
-  constructor(props) {
-    super(props)
+class IndividualPothole extends React.Component {
+
+  componentDidMount() {
     this.props.getSinglePothole(1)
   }
 
   static navigationOptions = { title: 'SinglePothole' }
   render() {
     const pothole = this.props.singlePothole
-    console.log(pothole)
+
+    if (!pothole.id) return <View />
+
     let region = {
       latitude: pothole.latitude,
       longitude: pothole.longitude,
