@@ -1,10 +1,18 @@
 import React from 'react';
-import { StyleSheet, Dimensions, View } from 'react-native';
+import { StyleSheet, Dimensions, Image, View } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 const { Marker } = MapView;
-import { connect } from 'react-redux'
-import { getSinglePotholeServer } from '../store/potholes'
-import { Container, Header, Content, Card, CardItem, Text, Body } from 'native-base';
+import { connect } from 'react-redux';
+import { getSinglePotholeServer } from '../store/potholes';
+import {
+  Container,
+  Header,
+  Content,
+  Card,
+  CardItem,
+  Text,
+  Body,
+} from 'native-base';
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -14,18 +22,21 @@ class IndividualPothole extends React.Component {
     this.props.getSinglePothole(1)
   }
 
-  static navigationOptions = { title: 'SinglePothole' }
+  static navigationOptions = { title: 'SinglePothole' };
   render() {
     const pothole = this.props.singlePothole
 
     if (!pothole.id) return <View />
 
     let region = {
-      latitude: pothole.latitude,
-      longitude: pothole.longitude,
+      latitude: Number(pothole.latitude),
+      longitude: Number(pothole.longitude),
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
-    }
+    };
+
+    if (!pothole.id) return <View />
+
     return (
       <Container>
         <Header />
@@ -36,14 +47,14 @@ class IndividualPothole extends React.Component {
             provider={MapView.PROVIDER_GOOGLE}
           >
             <Marker
-              key={pothole.latitude}
+              key={pothole.id}
               coordinate={{
                 latitude: region.latitude,
                 longitude: region.longitude,
               }}
               title="dummymarker"
               description="dummymarker"
-              image='https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png'
+              image="https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png"
             />
           </MapView>
         </Content>
@@ -54,6 +65,14 @@ class IndividualPothole extends React.Component {
                 <Text>ID: {pothole.id}</Text>
               </Body>
             </CardItem>
+            {!!pothole.imageUrl && (
+              <CardItem>
+                <Image
+                  style={{ width: 100, height: 100 }}
+                  source={{ uri: pothole.imageUrl }}
+                />
+              </CardItem>
+            )}
             <CardItem>
               <Body>
                 <Text>STATUS: {pothole.status}</Text>
@@ -99,28 +118,30 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    height: (ScreenHeight * 0.5),
+    height: ScreenHeight * 0.5,
   },
   text: {
     backgroundColor: '#fff',
     height: 20,
     width: 170,
     top: 200,
-    left: 80
-  }
+    left: 80,
+  },
 });
-
 
 const mapState = state => {
   return {
     singlePothole: state.singlePothole,
-  }
-}
+  };
+};
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = dispatch => {
   return {
-    getSinglePothole: (id) => dispatch(getSinglePotholeServer(id))
-  }
-}
+    getSinglePothole: id => dispatch(getSinglePotholeServer(id)),
+  };
+};
 
-export default connect(mapState, mapDispatch)(IndividualPothole)
+export default connect(
+  mapState,
+  mapDispatch
+)(IndividualPothole);
