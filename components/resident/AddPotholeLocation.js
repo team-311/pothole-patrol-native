@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
-import { getGeocodedAddress, fetchPotholes } from '../../store/potholes';
+import { getGeocodedAddress, fetchPotholes, upvotePotholeInDB } from '../../store/potholes';
 import { createUpdateLocationAction } from '../../store/report';
 import { Container, Content, Text, Card, Form, Item,
   Input,
@@ -97,13 +97,14 @@ class AddPotholeLocation extends React.Component {
             region={this.state.initialRegion}
             provider={MapView.PROVIDER_GOOGLE}
           >
-            {potholes.map(marker => {
+            {potholes.map(pothole => {
+              if (pothole.id === 121) this.props.upvotePothole(this.props.userId, pothole.id)
               return (
                 <Marker
-                  key={marker.id}
+                  key={pothole.id}
                   coordinate={{
-                    latitude: Number(marker.latitude),
-                    longitude: Number(marker.longitude),
+                    latitude: Number(pothole.latitude),
+                    longitude: Number(pothole.longitude),
                   }}
                   title="Open pothole"
                   description="It's already on the map! If this is the one you were going to report, click on it to upvote so it gets to your rep's attention faster. (Maybe)."
@@ -175,6 +176,7 @@ const mapStateToProps = state => {
   return {
     potholes: state.potholes.potholes,
     address: state.potholes.address,
+    userId: state.user.id
   };
 };
 
@@ -182,7 +184,8 @@ const mapDispatchToProps = dispatch => {
   return {
     getPotholes: (lat, lon) => dispatch(fetchPotholes(lat, lon)),
     getAddress: (lat, lon) => dispatch(getGeocodedAddress(lat, lon)),
-    updateLocation: (location) => dispatch(createUpdateLocationAction(location))
+    updateLocation: (location) => dispatch(createUpdateLocationAction(location)),
+    upvotePothole: (userId, potholeId) => dispatch(upvotePotholeInDB(userId, potholeId))
   };
 };
 
