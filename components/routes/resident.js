@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text } from 'react-native'
+import { Icon } from 'native-base'
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation'
 import AddPotholeLocation from '../resident/AddPotholeLocation';
 import ReportPhoto from '../resident/ReportPhoto';
@@ -68,6 +68,6 @@ export default createStackNavigator({
       headerStyle: { backgroundColor: '#B3DDF2' },
       headerTintColor: '#FF0000',
       title: 'Pothole Patrol',
-      headerLeft: <Text onPress={() => navigation.toggleDrawer()}>     MENU</Text>
+      headerLeft: <Icon name="menu" style={{marginLeft: 15}} onPress={() => navigation.toggleDrawer()} />
     })
 })
