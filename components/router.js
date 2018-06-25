@@ -1,6 +1,6 @@
 import React from 'react'
-import { Text } from 'react-native'
 import { createStackNavigator, createDrawerNavigator, createSwitchNavigator } from 'react-navigation'
+import { Icon } from 'native-base'
 import Login from './login'
 import AddPotholeLocation from './AddPotholeLocation';
 import ReportPhoto from './ReportPhoto';
@@ -83,7 +83,7 @@ export const SignedIn = createStackNavigator({
       headerStyle: { backgroundColor: '#B3DDF2' },
       headerTintColor: '#FF0000',
       title: 'Pothole Patrol',
-      headerLeft: <Text onPress={() => navigation.toggleDrawer()}>     MENU</Text>
+      headerLeft: <Icon name="menu" style={{marginLeft: 15}} onPress={() => navigation.toggleDrawer()} />
     })
 })
 
