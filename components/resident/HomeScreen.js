@@ -11,7 +11,7 @@ export default class HomeScreen extends React.Component {
         <Text>Welcome to the home screen!</Text>
         <Text>Let's see if this works</Text>
         <TouchableOpacity onPress={() => navigate('ReportPothole')} color="blue">
-          <Image source={require('../customStyling/butReportAPothole.png')} style={styles.button} />
+          <Image source={require('../../customStyling/butReportAPothole.png')} style={styles.button} />
         </TouchableOpacity>
         <Text>Here are your active potholes:</Text>
         <Text>------------------------</Text>

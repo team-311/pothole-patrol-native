@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Dimensions, Image, View } from 'react-native';
-import { MapView, Constants, Location, Permissions } from 'expo';
+import { MapView } from 'expo';
 const { Marker } = MapView;
 import { connect } from 'react-redux';
 import { getSinglePotholeServer } from '../store/potholes';

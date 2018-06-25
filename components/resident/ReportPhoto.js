@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions } from 'expo';
-import { getPicture } from '../store/report';
+import { getPicture } from '../../store/report';
 import { connect } from 'react-redux';
 
 class CameraView extends React.Component {

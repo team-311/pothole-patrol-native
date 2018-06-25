@@ -1,15 +1,8 @@
-import React from 'react'
-import { Text } from 'react-native'
-import { createStackNavigator, createDrawerNavigator, createSwitchNavigator } from 'react-navigation'
+import { createStackNavigator, createSwitchNavigator } from 'react-navigation'
+import ResidentSignedIn from './routes/resident'
+import CrewSignedIn from './routes/crew'
 import Login from './login'
-import AddPotholeLocation from './AddPotholeLocation';
-import ReportPhoto from './ReportPhoto';
-import ReportDescription from './ReportDescription';
-import HomeScreen from './HomeScreen';
-import IndividualPothole from './IndividualPothole';
-import Settings from './Settings'
 
-// Authentication routes
 export const SignedOut = createStackNavigator({
   Login: {
     screen: Login,
@@ -24,78 +17,22 @@ export const SignedOut = createStackNavigator({
   }
 })
 
-// Application routes
-const ReportStack = createStackNavigator(
-  {
-    Location: {
-      screen: AddPotholeLocation,
-    },
-    Camera: {
-      screen: ReportPhoto,
-    },
-    ReportDescription: {
-      screen: ReportDescription,
-    },
-  },
-  {
-    initialRouteName: 'Location',
-    headerMode: 'none',
-    navigationOptions: {
-        headerVisible: false,
-    }
-  }
-)
+export const createRootNavigator = (signedIn = false, type = 'resident') => {
+  let initialRouteName = 'SignedOut'
+  if (signedIn && type === 'crew') initialRouteName = 'CrewSignedIn'
+  else if (signedIn) initialRouteName = 'ResidentSignedIn'
 
-const DrawerLinks = createDrawerNavigator({
-  Home: {
-    screen: HomeScreen
-  },
-  ReportPothole: {
-    screen: ReportStack,
-    navigationOptions: {
-      drawerLabel: 'Report a Pothole' //() => null
-    }
-  },
-  ViewSinglePothole: {
-    screen: IndividualPothole,
-    navigationOptions: {
-      title: 'View Single Pothole'
-    }
-  },
-  Settings: {
-    screen: Settings,
-    navigationOptions: {
-      title: 'Settings'
-    }
-  }
-},
-{
-  initialRouteName: 'Home',
-})
-
-export const SignedIn = createStackNavigator({
-  Base: {
-    screen: DrawerLinks,
-  },
-}, {
-    headerMode: 'float',
-    navigationOptions: ({ navigation }) => ({
-      headerStyle: { backgroundColor: '#B3DDF2' },
-      headerTintColor: '#FF0000',
-      title: 'Pothole Patrol',
-      headerLeft: <Text onPress={() => navigation.toggleDrawer()}>     MENU</Text>
-    })
-})
-
-export const createRootNavigator = (signedIn = false) => {
   return createSwitchNavigator({
-    SignedIn: {
-      screen: SignedIn,
+    ResidentSignedIn: {
+      screen: ResidentSignedIn,
+    },
+    CrewSignedIn: {
+      screen: CrewSignedIn,
     },
     SignedOut: {
       screen: SignedOut,
     }
   },{
-    initialRouteName: (signedIn) ? 'SignedIn' : 'SignedOut'
+    initialRouteName,
   })
 }

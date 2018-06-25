@@ -26,7 +26,6 @@ export const auth = (email, password, method) =>
         dispatch(createGetUserAction(res.data))
         return res.data
       }, authError => { // rare example: a good use case for parallel (non-catch) error handler
-        dispatch(createGetUserAction({error: authError}))
         return { error: authError.message }
       })
       .catch(dispatchOrHistoryErr => console.error(dispatchOrHistoryErr))

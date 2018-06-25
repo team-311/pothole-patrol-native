@@ -20,7 +20,8 @@ class Main extends Component {
   render() {
     const { checkSignedIn } = this.state
     if (!checkSignedIn) return <View />
-    const RootNav = createRootNavigator(this.props.isLoggedIn)
+    const userType = this.props.user.id ? this.props.user.type : null
+    const RootNav = createRootNavigator(this.props.isLoggedIn, userType)
 
     return (
       <RootNav />
@@ -31,6 +32,7 @@ class Main extends Component {
 const mapStateToProps = (state) => {
   return {
     isLoggedIn: !!state.user.id,
+    user: state.user,
   }
 }
 
