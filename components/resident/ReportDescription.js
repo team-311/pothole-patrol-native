@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 import ReportForm from './ReportForm'
 import { connect } from 'react-redux'
-import { createPostReportThunk } from '../store/report';
+import { createPostReportThunk } from '../../store/report';
 import { Container, Content } from 'native-base'
 
 class ReportDescription extends Component {
