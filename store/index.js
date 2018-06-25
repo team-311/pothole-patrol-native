@@ -5,12 +5,14 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import { potholesReducer, singlePotholeReducer } from './potholes'
 import report from './report'
 import user from './user'
+import residentReports from './resident-reports'
 
 const reducer = combineReducers({
   potholes: potholesReducer,
   singlePothole: singlePotholeReducer,
   report,
   user,
+  residentReports,
 })
 
 const middleware = composeWithDevTools(applyMiddleware(
