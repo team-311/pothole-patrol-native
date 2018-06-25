@@ -1,23 +1,33 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
+import { connect } from 'react-redux'
+import { createGetResidentReportsThunk } from '../../store/resident-reports';
 
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
   static navigationOptions = { title: 'HOME' }
+
+  componentDidMount () {
+    this.props.getReports(this.props.user.id)
+  }
+
   render() {
     const { navigate } = this.props.navigation
+    const { user, openPotholes } = this.props
     return (
       <View style={styles.container}>
-        <Text>Welcome to the home screen!</Text>
-        <Text>Let's see if this works</Text>
+        <Text>Welcome {user.firstName}!</Text>
+        <Text>Let's make Chicago better, together.</Text>
+        {
+          (openPotholes && openPotholes.length > 0) && (
+            <View style={styles.openPotholes}>
+              {openPotholes.map(pothole => <Text key={pothole.id}>{pothole.streetAddress}</Text>)}
+            </View>
+          )
+        }
         <TouchableOpacity onPress={() => navigate('ReportPothole')} color="blue">
           <Image source={require('../../customStyling/butReportAPothole.png')} style={styles.button} />
         </TouchableOpacity>
-        <Text>Here are your active potholes:</Text>
-        <Text>------------------------</Text>
-        <Text>------------------------</Text>
-        <Text>------------------------</Text>
-        <Text>------------------------</Text>
       </View>
     );
   }
@@ -35,5 +45,23 @@ const styles = StyleSheet.create({
     width: 200,
     height: 93,
     resizeMode: Image.resizeMode.contain
+  },
+  openPotholes: {
+    margin: 20,
   }
 });
+
+const mapStateToProps = (state) => {
+  return {
+    openPotholes: state.residentReports.potholes.filter(report => report.status.toLowerCase() === 'open'),
+    user: state.user,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getReports: (id) => dispatch(createGetResidentReportsThunk(id)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
