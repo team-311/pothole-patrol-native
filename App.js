@@ -1,57 +1,42 @@
 import React from 'react';
-import {
-  createBottomTabNavigator,
-  createStackNavigator,
-  createDrawerNavigator
-} from 'react-navigation';
-import ReportPhoto from './components/ReportPhoto.js';
-import HomeScreen from './components/HomeScreen.js';
-import ReportDescription from './components/ReportDescription'
-import IndividualPothole from './components/IndividualPothole'
-import LoginScreen from './components/Login'
+import * as Expo from 'expo'
 import { Provider } from 'react-redux';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
+import { View } from 'react-native';
 import store from './store';
+import { Icon } from 'native-base'
 if (process.env.NODE_ENV !== 'production') require('./secrets');
-
-const BottomLinks = createDrawerNavigator({
-  Login: {
-    screen: LoginScreen
-  },
-  Home: {
-    screen: HomeScreen
-  },
-  ReportPothole: {
-    screen: ReportPhoto,
-  },
-  ReportDescription: {
-    screen: ReportDescription,
-  },
-  ViewSinglePothole: {
-    screen: IndividualPothole
-  }
-})
-
-const BaseNavigator = createStackNavigator({
-  Base: {
-    screen: BottomLinks,
-  },
-}, {
-    headerMode: 'float',
-    navigationOptions: ({ navigation }) => ({
-      headerStyle: { backgroundColor: '#B3DDF2' },
-      headerTintColor: '#FF0000',
-      title: 'Pothole Patrol',
-      headerLeft: <Text style={{ color: '#FFFFFF' }} onPress={() => navigation.toggleDrawer()}>     MENU   </Text>
-    })
-  });
+import Main from './components/main'
 
 export default class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      isReady: false,
+    }
+  }
+
+  componentWillMount() {
+    this.loadFonts();
+  }
+
+  // Android doesn't natively have the fonts that native-base uses...
+  async loadFonts() {
+    await Expo.Font.loadAsync({
+      Roboto: require("native-base/Fonts/Roboto.ttf"),
+      Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+      Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf")
+    });
+    this.setState({ isReady: true });
+  }
+
   render() {
+    const { isReady } = this.state
+    if (!isReady) return <View />
+
     return (
       <Provider store={store}>
-        <BaseNavigator />
+        <Main />
       </Provider>
-    );
+    )
   }
 }
