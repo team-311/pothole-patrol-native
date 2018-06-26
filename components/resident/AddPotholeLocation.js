@@ -5,7 +5,6 @@ import { MapView, Constants, Location, Permissions } from 'expo';
 import {
   getGeocodedAddress,
   fetchPotholes,
-  upvotePotholeInDB,
 } from '../../store/potholes';
 import { createUpdateLocationAction } from '../../store/report';
 import {
@@ -193,8 +192,6 @@ const mapDispatchToProps = dispatch => {
     getPotholes: (lat, lon) => dispatch(fetchPotholes(lat, lon)),
     getAddress: (lat, lon) => dispatch(getGeocodedAddress(lat, lon)),
     updateLocation: location => dispatch(createUpdateLocationAction(location)),
-    upvotePothole: (userId, potholeId) =>
-      dispatch(upvotePotholeInDB(userId, potholeId)),
   };
 };
 

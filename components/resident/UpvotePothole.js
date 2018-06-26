@@ -1,23 +1,15 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Platform, StyleSheet, Dimensions, View } from 'react-native';
-import { MapView, Constants, Location, Permissions } from 'expo';
+import {StyleSheet} from 'react-native';
+import { MapView} from 'expo';
 import {
   getGeocodedAddress,
   fetchPotholes,
   upvotePotholeInDB,
 } from '../../store/potholes';
-import { createUpdateLocationAction } from '../../store/report';
 import {
   Container,
-  Content,
   Text,
-  Card,
-  Form,
-  Item,
-  Input,
   Button,
-  H3,
 } from 'native-base';
 
 const UpvotePothole = props => {

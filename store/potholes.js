@@ -21,10 +21,11 @@ const geocodeAddress = address => {
   };
 };
 
-const upvotePothole = upvotes => {
+const upvotePothole = upvotedPothole => {
   return {
     type: UPVOTE_POTHOLE,
-    upvotes
+    upvotedPothole: upvotedPothole.pothole,
+    upvoters: upvotedPothole.upvoters
   }
 }
 
@@ -34,6 +35,7 @@ export const upvotePotholeInDB = (potholeId, userId) => {
   const postObject = {potholeId, userId}
   return async dispatch => {
     const upvotedPotholeData = await axios.post(`${process.env.SERVER_URL}/api/potholes/upvote`, postObject)
+    console.log('data from upvote', upvotedPotholeData.data)
     dispatch(upvotePothole(upvotedPotholeData.data))
   }
 }
@@ -92,17 +94,18 @@ export function potholesReducer(state = defaultPotholes, action) {
       return { ...state, address: action.address };
     case GET_POTHOLES:
       return { ...state, potholes: action.potholes };
-    case UPVOTE_POTHOLE:
-      return {...state, upvotes: action.upvotes}
     default:
       return state;
   }
 }
 
+
 export function singlePotholeReducer(state = {}, action) {
   switch (action.type) {
     case GET_SINGLE_POTHOLE:
-      return action.pothole;
+      return {pothole: action.pothole, upvoters: action.pothole.upvoters};
+    case UPVOTE_POTHOLE:
+      return {...state, pothole: action.upvotedPothole, upvoters: action.upvoters}
     default:
       return state;
   }
