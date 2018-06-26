@@ -6,6 +6,7 @@ import { potholesReducer, singlePotholeReducer } from './potholes'
 import report from './report'
 import user from './user'
 import residentReports from './resident-reports'
+import singleOrder from './single-order'
 
 const reducer = combineReducers({
   potholes: potholesReducer,
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   report,
   user,
   residentReports,
+  singleOrder,
 })
 
 const middleware = composeWithDevTools(applyMiddleware(
@@ -26,3 +28,4 @@ export default store
 
 export * from './potholes'
 export * from './user'
+export * from './single-order'

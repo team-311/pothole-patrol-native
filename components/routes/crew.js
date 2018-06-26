@@ -3,11 +3,31 @@ import { Icon } from 'native-base'
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation'
 import Home from '../crew/home'
 import Settings from '../Settings'
+import SingleOrder from '../crew/single-order'
+import OrderDirections from '../crew/order-directions'
+
+const SingleOrderLinks = createStackNavigator({
+  SingleOrder: {
+    screen: SingleOrder,
+  },
+  Directions: {
+    screen: OrderDirections,
+  }
+}, {
+  initialRouteName: 'SingleOrder',
+})
+
 
 // Resident main app routes
 const DrawerLinks = createDrawerNavigator({
   Home: {
     screen: Home
+  },
+  SingleOrder: {
+    screen: SingleOrderLinks,
+    navigationOptions: {
+      drawerLabel: `Today's Work Order`
+    }
   },
   Settings: {
     screen: Settings,
