@@ -90,11 +90,13 @@ class IndividualPothole extends React.Component {
                 <Text>ZIP: {pothole.zip}</Text>
               </Body>
             </CardItem>
-            <CardItem>
-              <Body>
-                <Text>DESCRIPTION HERE</Text>
-              </Body>
-            </CardItem>
+            {!!pothole.description && (
+              <CardItem>
+                <Body>
+                  <Text>Description{pothole.description}</Text>
+                </Body>
+              </CardItem>
+            )}
             <CardItem>
               <Body>
                 <Text>SERVICE #: {pothole.serviceNumber}</Text>
