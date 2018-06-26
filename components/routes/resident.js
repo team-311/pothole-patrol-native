@@ -25,7 +25,7 @@ const ReportStack = createStackNavigator(
     initialRouteName: 'Location',
     headerMode: 'none',
     navigationOptions: {
-        headerVisible: false,
+      headerVisible: false,
     }
   }
 )
@@ -54,9 +54,9 @@ const DrawerLinks = createDrawerNavigator({
     }
   }
 },
-{
-  initialRouteName: 'Home',
-})
+  {
+    initialRouteName: 'Home',
+  })
 
 export default createStackNavigator({
   Base: {
@@ -68,6 +68,6 @@ export default createStackNavigator({
       headerStyle: { backgroundColor: '#B3DDF2' },
       headerTintColor: '#FF0000',
       title: 'Pothole Patrol',
-      headerLeft: <Icon name="menu" style={{marginLeft: 15}} onPress={() => navigation.toggleDrawer()} />
+      headerLeft: <Icon name="menu" style={{ marginLeft: 15 }} onPress={() => navigation.toggleDrawer()} />
     })
-})
+  })

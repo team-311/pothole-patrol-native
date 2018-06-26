@@ -19,12 +19,14 @@ const ScreenHeight = Dimensions.get('window').height;
 class IndividualPothole extends React.Component {
 
   componentDidMount() {
-    this.props.getSinglePothole(1)
+    this.props.getSinglePothole(this.props.navigation.state.params.id)
   }
 
   static navigationOptions = { title: 'SinglePothole' };
+
   render() {
     const pothole = this.props.singlePothole
+    const id = this.props.navigation.state.params.id
 
     if (!pothole.id) return <View />
 
@@ -88,11 +90,13 @@ class IndividualPothole extends React.Component {
                 <Text>ZIP: {pothole.zip}</Text>
               </Body>
             </CardItem>
-            <CardItem>
-              <Body>
-                <Text>DESCRIPTION HERE</Text>
-              </Body>
-            </CardItem>
+            {!!pothole.description && (
+              <CardItem>
+                <Body>
+                  <Text>Description{pothole.description}</Text>
+                </Body>
+              </CardItem>
+            )}
             <CardItem>
               <Body>
                 <Text>SERVICE #: {pothole.serviceNumber}</Text>
