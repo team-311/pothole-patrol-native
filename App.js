@@ -8,12 +8,16 @@ import ReportPhoto from './components/ReportPhoto.js';
 import HomeScreen from './components/HomeScreen.js';
 import ReportDescription from './components/ReportDescription'
 import IndividualPothole from './components/IndividualPothole'
+import LoginScreen from './components/Login'
 import { Provider } from 'react-redux';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import store from './store';
 if (process.env.NODE_ENV !== 'production') require('./secrets');
 
 const BottomLinks = createDrawerNavigator({
+  Login: {
+    screen: LoginScreen
+  },
   Home: {
     screen: HomeScreen
   },
@@ -38,7 +42,7 @@ const BaseNavigator = createStackNavigator({
       headerStyle: { backgroundColor: '#B3DDF2' },
       headerTintColor: '#FF0000',
       title: 'Pothole Patrol',
-      headerLeft: <Text onPress={() => navigation.toggleDrawer()}>     MENU</Text>
+      headerLeft: <Text style={{ color: '#FFFFFF' }} onPress={() => navigation.toggleDrawer()}>     MENU   </Text>
     })
   });
 
