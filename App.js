@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== 'production') require('./secrets');
 import Main from './components/main'
 
 export default class App extends React.Component {
-  constructor () {
+  constructor() {
     super()
     this.state = {
       isReady: false,

@@ -2,12 +2,13 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import { connect } from 'react-redux'
 import { createGetResidentReportsThunk } from '../../store/resident-reports';
+import MyPotholes from './MyPotholes'
 
 
 class HomeScreen extends React.Component {
   static navigationOptions = { title: 'HOME' }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.getReports(this.props.user.id)
   }
 
@@ -18,16 +19,10 @@ class HomeScreen extends React.Component {
       <View style={styles.container}>
         <Text>Welcome {user.firstName}!</Text>
         <Text>Let's make Chicago better, together.</Text>
-        {
-          (openPotholes && openPotholes.length > 0) && (
-            <View style={styles.openPotholes}>
-              {openPotholes.map(pothole => <Text key={pothole.id}>{pothole.streetAddress}</Text>)}
-            </View>
-          )
-        }
         <TouchableOpacity onPress={() => navigate('ReportPothole')} color="blue">
           <Image source={require('../../customStyling/butReportAPothole.png')} style={styles.button} />
         </TouchableOpacity>
+        <MyPotholes navigate={this.props.navigation.navigate} />
       </View>
     );
   }
@@ -36,7 +31,7 @@ class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
   },

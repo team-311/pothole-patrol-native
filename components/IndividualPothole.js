@@ -31,7 +31,7 @@ class IndividualPothole extends React.Component {
   }
 
   async componentDidMount() {
-    await this.props.getSinglePothole(1);
+    await this.props.getSinglePothole(this.props.navigation.state.params.id);
     //set # of upvoters on state
     console.log('this.props.upvoters', this.props.upvoters, 'this.props.singlePothole', this.props.singlePothole)
     this.setState({
