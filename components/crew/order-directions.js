@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Dimensions } from 'react-native'
 import { Container, Content, Text, Spinner, List, ListItem, Body, Separator } from 'native-base'
-import { MapView, Permissions, Location } from 'expo'
+import { MapView } from 'expo'
 import axios from 'axios'
 
 class OrderDirections extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       isFetching: true,
       region: {
-        latitude: 41.895266,
-        longitude: -87.639035,
+        latitude: props.navigation.state.params.currLatitude,
+        longitude: props.navigation.state.params.currLongitude,
         latitudeDelta: 0.005,
         longitudeDelta: 0.005,
       },
@@ -22,41 +22,23 @@ class OrderDirections extends Component {
   }
 
   componentWillMount() {
-    this.getLocationAsync()
+    this.getDirections()
   }
 
-  getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION)
-    if (status !== 'granted') {
-      this.setState({
-        errorMsg: 'Permission to access location was denied'
-      })
+  getDirections = async () => {
+    const { latitude: destLat, longitude: destLon } = this.props.navigation.state.params
+    const routeOptions = {
+      startLat: this.state.region.latitude,
+      startLon: this.state.region.longitude,
+      destLat,
+      destLon,
     }
-
-    const location = await Location.getCurrentPositionAsync({})
-    const { latitude, longitude } = location.coords
-    const region = {
-      latitude,
-      longitude,
-      latitudeDelta: 0.05,
-      longitudeDelta: 0.05,
+    try {
+      const { data } = await axios.post(`${process.env.SERVER_URL}/api/crews/directions`, routeOptions)
+      this.setState({ isFetching: false, coords: data.coords, steps: data.steps || [] })
+    } catch (error) {
+      this.setState({isFetching: false, errorMsg: error.message})
     }
-
-    this.setState({region}, async () => {
-      const { latitude: destLat, longitude: destLon } = this.props.navigation.state.params
-      const routeOptions = {
-        startLat: this.state.region.latitude,
-        startLon: this.state.region.longitude,
-        destLat,
-        destLon,
-      }
-      try {
-        const { data } = await axios.post(`${process.env.SERVER_URL}/api/crews/potholes/directions`, routeOptions)
-        this.setState({ isFetching: false, coords: data.coords, steps: data.steps || [] })
-      } catch (error) {
-        this.setState({isFetching: false, errorMsg: error.message})
-      }
-    })
   }
 
   render() {
