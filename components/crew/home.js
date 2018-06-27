@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Button, Text } from 'native-base'
+import { connect } from 'react-redux'
 
-export default class Home extends Component {
+class Home extends Component {
   static navigationOptions = { title: 'Home' }
   render() {
+    const { navigate } = this.props.navigation
     return (
       <View style={styles.container}>
-        <Text>Crew Home Screen</Text>
-        <Text>View open work orders</Text>
+        <Text>{`Welcome, ${this.props.user.firstName}!`}</Text>
+        <Button block primary onPress={() => navigate('SingleOrder')}>
+          <Text>View Today's Order</Text>
+        </Button>
       </View>
     );
   }
@@ -21,3 +26,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 })
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  }
+}
+
+export default connect(mapStateToProps)(Home)

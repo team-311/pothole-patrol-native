@@ -12,6 +12,9 @@ import IndividualPothole from '../IndividualPothole'
 const SingleOrderLinks = createStackNavigator({
   SingleOrder: {
     screen: SingleOrder,
+    navigationOptions: () => ({
+      title: "Today's Work Order"
+    })
   },
   Directions: {
     screen: OrderDirections,
@@ -39,19 +42,16 @@ const OrderHistoryLinks = createStackNavigator({
 
 
 const DrawerLinks = createDrawerNavigator({
-  Home: {
-    screen: Home
+  SingleOrder: {
+    screen: SingleOrderLinks,
+    navigationOptions: {
+      title: "Today's Work Order"
+    }
   },
   OrderHistory: {
     screen: OrderHistoryLinks,
     navigationOptions: {
       drawerLabel: 'Work Order History'
-    }
-  },
-  SingleOrder: {
-    screen: SingleOrderLinks,
-    navigationOptions: {
-      drawerLabel: `Today's Work Order`
     }
   },
   Settings: {
@@ -62,7 +62,7 @@ const DrawerLinks = createDrawerNavigator({
   }
 },
 {
-  initialRouteName: 'Home',
+  initialRouteName: 'SingleOrder',
 })
 
 export default createStackNavigator({

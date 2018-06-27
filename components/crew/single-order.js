@@ -99,6 +99,11 @@ class SingleOrder extends Component {
                 </Button>
             )}
           </View>
+          <View style={styles.buttonContainer}>
+            <Button block success style={styles.button}>
+              <Text style={styles.buttonText}>Complete Work Order</Text>
+            </Button>
+          </View>
         </Content>
       </Container>
     )
