@@ -31,8 +31,9 @@ class IndividualPothole extends React.Component {
   }
 
   async componentDidMount() {
-    await this.props.getSinglePothole(this.props.navigation.state.params.id);
-    //set # of upvoters on state
+    await this.props.getSinglePothole(this._getId());
+
+    // // //set # of upvoters on state
 
     this.setState({
       upvotes: this.props.singlePothole.upvoters.length,
@@ -40,11 +41,19 @@ class IndividualPothole extends React.Component {
     });
   }
 
+  _getId = () => {
+    let id = 1;
+    if (this.props.navigation.state.params) {
+      id = this.props.navigation.state.params.id;
+    }
+    return id;
+  }
+
   _handleUpvote = async () => {
     this.setState({ disableUpvote: true })
     await this.props.upvotePothole(
-      this.props.userId,
-      this.props.singlePothole.id
+      this.props.singlePothole.id,
+      this.props.userId
     );
     Alert.alert('Thanks for upvoting!')
     //reset state after upvoting
@@ -54,7 +63,7 @@ class IndividualPothole extends React.Component {
   };
 
   _handleCancel = () => {
-    this.props.navigation.navigator.goBack(null)
+    this.props.navigation.goBack(null)
   };
 
   static navigationOptions = { title: 'SinglePothole' };
@@ -73,8 +82,8 @@ class IndividualPothole extends React.Component {
 
     if (!pothole.id) return <View />
     return (
-      <Container >
-        {true ? (
+      <Container>
+        {!this.props.navigation.state.params.myPotholes ? (
           <Header>
             <Button
               style={styles.button}
@@ -207,8 +216,8 @@ const mapState = state => {
 const mapDispatch = dispatch => {
   return {
     getSinglePothole: id => dispatch(getSinglePotholeServer(id)),
-    upvotePothole: (userId, potholeId) =>
-      dispatch(upvotePotholeInDB(userId, potholeId)),
+    upvotePothole: (potholeId, userId) =>
+      dispatch(upvotePotholeInDB(potholeId, userId)),
   };
 };
 
