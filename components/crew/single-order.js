@@ -22,7 +22,7 @@ class SingleOrder extends Component {
   }
 
   componentDidMount() {
-    this.props.getOrder(this.props.crewId, 5)
+    this.props.getOrder(this.props.crewId, this.props.navigation.state.params.orderId)
   }
 
   getLocationAsync = async () => {

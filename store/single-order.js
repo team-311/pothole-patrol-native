@@ -55,6 +55,7 @@ export const createUpdateSingleOrderPotholeThunk = (crewId, potholeId) => {
 export const createGetNextPotholeThunk = (crewId, orderId, lat, lon) => {
   return async (dispatch) => {
     try {
+      dispatch(createGetSingleOrderNextPotholeAction())
       const { data: newPothole } = await axios.put(`${process.env.SERVER_URL}/api/crews/${crewId}/orders/${orderId}/next`, {lat, lon})
       dispatch(createGotSingleOrderNextPotholeAction(newPothole))
     } catch (error) {

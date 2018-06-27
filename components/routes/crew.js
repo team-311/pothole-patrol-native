@@ -5,6 +5,7 @@ import Home from '../crew/home'
 import Settings from '../Settings'
 import SingleOrder from '../crew/single-order'
 import OrderDirections from '../crew/order-directions'
+import OrderHistory from '../crew/order-history'
 
 const SingleOrderLinks = createStackNavigator({
   SingleOrder: {
@@ -17,11 +18,27 @@ const SingleOrderLinks = createStackNavigator({
   initialRouteName: 'SingleOrder',
 })
 
+const OrderHistoryLinks = createStackNavigator({
+  OrderHistory: {
+    screen: OrderHistory,
+  },
+  SingleOrderHistory: {
+    screen: SingleOrder,
+  }
+}, {
+  initialRouteName: 'OrderHistory'
+})
 
-// Resident main app routes
+
 const DrawerLinks = createDrawerNavigator({
   Home: {
     screen: Home
+  },
+  OrderHistory: {
+    screen: OrderHistoryLinks,
+    navigationOptions: {
+      drawerLabel: 'Work Order History'
+    }
   },
   SingleOrder: {
     screen: SingleOrderLinks,
