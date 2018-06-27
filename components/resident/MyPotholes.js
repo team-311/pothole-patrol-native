@@ -26,7 +26,7 @@ class MyPotholes extends React.Component {
                     <ListItem key={pothole.id} >
                       <TouchableOpacity onPress={() => navigate('ViewSinglePothole', { id: pothole.id, canUpvote: false })}>
                         <Text>
-                          {pothole.status} -- {pothole.streetAddress}
+                          {pothole.streetAddress} -- {pothole.status}
                         </Text>
                       </TouchableOpacity>
                     </ListItem>
