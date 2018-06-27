@@ -14,7 +14,6 @@ class MyPotholes extends React.Component {
   render() {
     const navigate = this.props.navigate
     const { user, openPotholes } = this.props
-    console.log(openPotholes[1])
     return (
       <View >
         {
@@ -25,7 +24,7 @@ class MyPotholes extends React.Component {
                 {
                   openPotholes.map(pothole =>
                     <ListItem key={pothole.id} >
-                      <TouchableOpacity onPress={() => navigate('ViewSinglePothole', { id: pothole.id })}>
+                      <TouchableOpacity onPress={() => navigate('ViewSinglePothole', { id: pothole.id, myPotholes: true })}>
                         <Text>
                           {pothole.status} -- {pothole.streetAddress}
                         </Text>
