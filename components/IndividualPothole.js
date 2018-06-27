@@ -81,7 +81,7 @@ class IndividualPothole extends React.Component {
 
     return (
       <Container>
-        {!this.props.navigation.state.params.myPotholes ? (
+        {this.props.navigation.state.params.canUpvote ? (
           <Header>
             <Button
               style={styles.button}
