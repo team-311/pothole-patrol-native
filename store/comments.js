@@ -4,12 +4,6 @@ import axios from 'axios';
 const ALL_COMMENTS = 'ALL_COMMENTS';
 const NEW_COMMENT = 'NEW_COMMENT';
 
-// initial state
-// const initialState = {
-//   comment: '',
-//   allComments: [],
-// };
-
 // action creators
 const getAllComments = allComments => ({ type: ALL_COMMENTS, allComments });
 const createNewComment = comment => ({ type: NEW_COMMENT, comment });
