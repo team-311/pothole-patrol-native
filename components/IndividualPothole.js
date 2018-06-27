@@ -50,7 +50,6 @@ class IndividualPothole extends React.Component {
 
   _handleUpvote = async () => {
     this.setState({disableUpvote: true})
-    console.log('userId', this.props.userId, 'singlePothole', this.props.singlePothole.id)
     await this.props.upvotePothole(
       this.props.singlePothole.id,
       this.props.userId
@@ -63,7 +62,6 @@ class IndividualPothole extends React.Component {
   };
 
   _handleCancel = () => {
-    console.log('this.props.navigation', this.props.navigation)
     this.props.navigation.goBack(null)
   };
 
