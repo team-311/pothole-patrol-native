@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import { StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import { Location, Permissions } from 'expo'
-import { Container, Content, H1, List, ListItem, CheckBox, Text, Body, Spinner, Button, View } from 'native-base';
-import { createGetSingleOrderThunk, createUpdateSingleOrderPotholeThunk, createGetNextPotholeThunk } from '../../store';
+import { Container, Content, H1, List, ListItem, CheckBox, Text, Body, Spinner, Button, View } from 'native-base'
+import { createGetTodaysOrderThunk, createUpdateSingleOrderPotholeThunk, createGetNextPotholeThunk } from '../../store'
 
 class SingleOrder extends Component {
   constructor() {
@@ -22,7 +22,7 @@ class SingleOrder extends Component {
   }
 
   componentDidMount() {
-    this.props.getOrder(this.props.crewId, this.props.navigation.state.params.orderId)
+    this.props.getTodaysOrder(this.props.crewId)
   }
 
   getLocationAsync = async () => {
@@ -53,46 +53,51 @@ class SingleOrder extends Component {
       <Container style={styles.container}>
           <H1>Work Order: {''+order.id}</H1>
         <Content>
-          <View style={{flex: 1, justifyContent: 'space-between'}}>
-            <View>
-              <List>
-              {
-                order.id && order.potholes.map(pothole => (
-                  <ListItem key={pothole.id}>
-                    <Body>
-                      <Text>{pothole.streetAddress}</Text>
-                      <Button small transparent onPress={() => navigation.navigate('Directions', {
-                        latitude: pothole.latitude,
-                        longitude: pothole.longitude,
-                        currLatitude: this.state.region.latitude,
-                        currLongitude: this.state.region.longitude,
-                      })}>
-                        <Text>View Directions</Text>
-                      </Button>
-                    </Body>
-                    <CheckBox large color="green"
-                      checked={!!pothole.completionDate}
-                      disabled={!!pothole.completionDate}
-                      onPress={() => this.props.updateOrder(crewId, pothole.id)}
-                    />
-                  </ListItem>
-                ))
-              }
-              </List>
-              { isReadyForNext && (
-                  <Button block warning
-                    style={styles.button}
-                    onPress={() => this.props.getNext(crewId, order.id, this.state.region.latitude, this.state.region.longitude)}
-                  >
-                    <Text style={styles.buttonText}>Request Next Pothole</Text>
-                  </Button>
-              )}
-            </View>
-            <View style={styles.buttonContainer}>
-              <Button block success style={styles.button}>
-                <Text style={styles.buttonText}>Complete Work Order</Text>
-              </Button>
-            </View>
+        <View style={{flex: 1, justifyContent: 'space-between'}}>
+          <List>
+          {
+            order.id && order.potholes.map(pothole => (
+              <ListItem key={pothole.id}>
+                <Body>
+                  <Text>{pothole.streetAddress}</Text>
+                  <View style={{flexDirection: 'row'}}>
+                    <Button
+                      small
+                      transparent
+                      onPress={() => navigation.navigate('IndividualPothole', {
+                        id: pothole.id,
+                        canUpvote: false,
+                      })}
+                    >
+                      <Text>View Details</Text>
+                    </Button>
+                    <Button small transparent onPress={() => navigation.navigate('Directions', {
+                      latitude: pothole.latitude,
+                      longitude: pothole.longitude,
+                      currLatitude: this.state.region.latitude,
+                      currLongitude: this.state.region.longitude,
+                    })}>
+                      <Text>View Directions</Text>
+                    </Button>
+                  </View>
+                </Body>
+                <CheckBox large color="green"
+                  checked={!!pothole.completionDate}
+                  disabled={!!pothole.completionDate}
+                  onPress={() => this.props.updateOrder(crewId, pothole.id)}
+                />
+              </ListItem>
+            ))
+          }
+          </List>
+            { isReadyForNext && (
+                <Button block warning
+                  style={styles.button}
+                  onPress={() => this.props.getNext(crewId, order.id, this.state.region.latitude, this.state.region.longitude)}
+                >
+                  <Text style={styles.buttonText}>Request Next Pothole</Text>
+                </Button>
+            )}
           </View>
         </Content>
       </Container>
@@ -127,7 +132,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getOrder: (crewId, orderId) => dispatch(createGetSingleOrderThunk(crewId, orderId)),
+    getTodaysOrder: (crewId, orderId) => dispatch(createGetTodaysOrderThunk(crewId, orderId)),
     updateOrder: (crewId, potholeId) => dispatch(createUpdateSingleOrderPotholeThunk(crewId, potholeId)),
     getNext: (crewId, orderId, lat, lon) => dispatch(createGetNextPotholeThunk(crewId, orderId, lat, lon)),
   }

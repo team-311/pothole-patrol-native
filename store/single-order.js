@@ -28,6 +28,18 @@ const createGetSingleOrderNextPotholeAction = () => ({type: GET_SINGLE_ORDER_NEX
 const createGotSingleOrderNextPotholeAction = (pothole) => ({type: GOT_SINGLE_ORDER_NEXT_POTHOLE, pothole})
 
 // thunk creators
+export const createGetTodaysOrderThunk = (crewId) => {
+  return async (dispatch) => {
+    try {
+      dispatch(createGetSingleOrderAction())
+      const { data: order } = await axios.get(`${process.env.SERVER_URL}/api/crews/${crewId}/orders/today`)
+      dispatch(createGotSingleOrderAction(order))
+    } catch (error) {
+      dispatch(createGetSingleOrderErrorAction(error.message))
+    }
+  }
+}
+
 export const createGetSingleOrderThunk = (crewId, orderId) => {
   return async (dispatch) => {
     try {

@@ -15,6 +15,9 @@ const SingleOrderLinks = createStackNavigator({
   },
   Directions: {
     screen: OrderDirections,
+  },
+  IndividualPothole: {
+    screen: IndividualPothole,
   }
 }, {
   initialRouteName: 'SingleOrder',
