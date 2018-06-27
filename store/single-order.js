@@ -18,14 +18,14 @@ const initialState = {
 }
 
 // action creators
-const createGetSingleOrderAction = () => ({type: GET_SINGLE_ORDER})
-const createGetSingleOrderErrorAction = (error) => ({type: GET_SINGLE_ORDER_ERROR, error})
-const createGotSingleOrderAction = (order) => ({type: GOT_SINGLE_ORDER, order})
-const createUpdatingSingleOrderPotholeAction = () => ({type: UPDATING_SINGLE_ORDER_POTHOLE})
-const createUpdatedSingleOrderPotholeAction = (pothole) => ({type: UPDATED_SINGLE_ORDER_POTHOLE, pothole})
-const createUpdatingSingleOrderPotholeErrorAction = (error) => ({type: UPDATING_SINGLE_ORDER_POTHOLE_ERROR, error})
-const createGetSingleOrderNextPotholeAction = () => ({type: GET_SINGLE_ORDER_NEXT_POTHOLE})
-const createGotSingleOrderNextPotholeAction = (pothole) => ({type: GOT_SINGLE_ORDER_NEXT_POTHOLE, pothole})
+const createGetSingleOrderAction = () => ({ type: GET_SINGLE_ORDER })
+const createGetSingleOrderErrorAction = (error) => ({ type: GET_SINGLE_ORDER_ERROR, error })
+const createGotSingleOrderAction = (order) => ({ type: GOT_SINGLE_ORDER, order })
+const createUpdatingSingleOrderPotholeAction = () => ({ type: UPDATING_SINGLE_ORDER_POTHOLE })
+const createUpdatedSingleOrderPotholeAction = (pothole) => ({ type: UPDATED_SINGLE_ORDER_POTHOLE, pothole })
+const createUpdatingSingleOrderPotholeErrorAction = (error) => ({ type: UPDATING_SINGLE_ORDER_POTHOLE_ERROR, error })
+const createGetSingleOrderNextPotholeAction = () => ({ type: GET_SINGLE_ORDER_NEXT_POTHOLE })
+const createGotSingleOrderNextPotholeAction = (pothole) => ({ type: GOT_SINGLE_ORDER_NEXT_POTHOLE, pothole })
 
 // thunk creators
 export const createGetSingleOrderThunk = (crewId, orderId) => {
@@ -55,7 +55,7 @@ export const createUpdateSingleOrderPotholeThunk = (crewId, potholeId) => {
 export const createGetNextPotholeThunk = (crewId, orderId, lat, lon) => {
   return async (dispatch) => {
     try {
-      const { data: newPothole } = await axios.put(`${process.env.SERVER_URL}/api/crews/${crewId}/orders/${orderId}/next`, {lat, lon})
+      const { data: newPothole } = await axios.put(`${process.env.SERVER_URL}/api/crews/${crewId}/orders/${orderId}/next`, { lat, lon })
       dispatch(createGotSingleOrderNextPotholeAction(newPothole))
     } catch (error) {
       console.error(error)
@@ -64,32 +64,34 @@ export const createGetNextPotholeThunk = (crewId, orderId, lat, lon) => {
 }
 
 // reducer
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case GET_SINGLE_ORDER:
     case UPDATING_SINGLE_ORDER_POTHOLE:
     case GET_SINGLE_ORDER_NEXT_POTHOLE:
-      return {...state, isFetching: true}
+      return { ...state, isFetching: true }
     case GET_SINGLE_ORDER_ERROR:
     case UPDATING_SINGLE_ORDER_POTHOLE_ERROR:
-      return {...state, isFetching: false, error: action.error}
+      return { ...state, isFetching: false, error: action.error }
     case GOT_SINGLE_ORDER:
-      return {...state, error: '', isFetching: false, order: action.order}
+      return { ...state, error: '', isFetching: false, order: action.order }
     case GOT_SINGLE_ORDER_NEXT_POTHOLE:
       return {
         ...state,
         error: '',
         isFetching: false,
-        order: {...state.order, potholes: [...state.order.potholes, action.pothole]}
+        order: { ...state.order, potholes: [...state.order.potholes, action.pothole] }
       }
     case UPDATED_SINGLE_ORDER_POTHOLE:
       return {
         ...state,
         error: '',
         isFetching: false,
-        order: {...state.order, potholes: state.order.potholes.map(pothole => {
-          return pothole.id === action.pothole.id ? action.pothole : pothole
-        })},
+        order: {
+          ...state.order, potholes: state.order.potholes.map(pothole => {
+            return pothole.id === action.pothole.id ? action.pothole : pothole
+          })
+        },
       }
     default:
       return state
