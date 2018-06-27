@@ -68,12 +68,8 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case GET_SINGLE_ORDER:
     case UPDATING_SINGLE_ORDER_POTHOLE:
-<<<<<<< HEAD
-      return { ...state, isFetching: true }
-=======
     case GET_SINGLE_ORDER_NEXT_POTHOLE:
-      return {...state, isFetching: true}
->>>>>>> 11552fbf6c2cac5b06fd190b7580eada4dc9dd18
+      return { ...state, isFetching: true }
     case GET_SINGLE_ORDER_ERROR:
     case UPDATING_SINGLE_ORDER_POTHOLE_ERROR:
       return { ...state, isFetching: false, error: action.error }
