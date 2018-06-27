@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { logout } from '../store'
-import { Text } from 'react-native'
-import { Container, Button, Header, Content, H1 } from 'native-base'
+import { Container, Button, Header, Content, H1, Text } from 'native-base'
 
 const Settings = (props) => {
   return (
