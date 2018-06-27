@@ -37,8 +37,6 @@ class IndividualPothole extends React.Component {
     this.setState({
       upvotes: this.props.singlePothole.upvoters.length,
       disableUpvote: !!(this.props.upvoters.filter(upvoter => upvoter.id === this.props.userId).length)
-    }, () => {
-      console.log('this.state', this.state)
     });
   }
 
