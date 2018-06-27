@@ -44,7 +44,6 @@ const createError = (error) => {
 export const createPostReportThunk = report => {
   return async (dispatch) => {
     try {
-      console.log("report: ", report)
       await axios.post(`${process.env.SERVER_URL}/api/potholes`, report)
       dispatch(clearReport())
     } catch (error) {

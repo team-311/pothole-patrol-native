@@ -1,63 +1,60 @@
 import React from 'react';
 import { StyleSheet, Dimensions, Image, View, Alert } from 'react-native';
 import { connect } from 'react-redux';
-import { createGetCommentsThunk } from '../store/comments';
+import { createNewCommentThunk } from '../store/comments';
 import {
-  Container,
-  Header,
+  Form,
+  Item,
   Content,
-  Card,
-  CardItem,
-  Text,
-  Body,
+  Label,
   Button,
+  Textarea,
+  Text
 } from 'native-base';
 
 class Comments extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      commentText: ''
+    }
+  }
 
-  async componentDidMount() {
-    await this.props.getAllComments(this.props.potholeId);
+
+  handleSubmit = async () => {
+    this.props.postComment({
+      text: this.state.commentText,
+      userId: this.props.user.id,
+      potholeId: this.props.pothole.id
+    }).then(() => {
+      this.setState({
+        commentText: ''
+      })
+    })
   }
 
   render() {
-    const commentList = this.props.allComments;
-    console.log('comment list: ', commentList)
-    if (!commentList) return (<View><Text>No Comments</Text></View>);
     return (
       <Content>
-        {commentList.map(comment => (
-          <Card key={comment.id}>
-            <CardItem >
-              <Body>
-                <Text>{comment.text}</Text>
-              </Body>
-            </CardItem>
-            <CardItem >
-              <Body>
-                <Text>By: {comment.user.firstName}</Text>
-              </Body>
-            </CardItem>
-          </Card>
-        ))
-        }
+        <Form>
+          <Textarea rowSpan={5} bordered placeholder="Leave Comment Here"
+            onChangeText={(text) => this.setState({ commentText: text })}
+            value={this.state.commentText}
+          />
+        </Form>
+        <Button block onPress={this.handleSubmit}><Text>Submit</Text></Button>
       </Content>
     );
   }
 }
 
-const mapState = state => {
-  return {
-    allComments: state.comments
-  };
-};
-
 const mapDispatch = dispatch => {
   return {
-    getAllComments: id => dispatch(createGetCommentsThunk(id)),
+    postComment: comment => dispatch(createNewCommentThunk(comment)),
   };
 };
 
 export default connect(
-  mapState,
+  null,
   mapDispatch
 )(Comments);
