@@ -4,7 +4,8 @@ import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 import { getGeocodedAddress, fetchPotholes } from '../../store/potholes';
 import { createUpdateLocationAction } from '../../store/report';
-import { Container, Content, Text, Card, Form, Item,
+import {
+  Container, Content, Text, Card, Form, Item,
   Input,
   Button,
 } from 'native-base';

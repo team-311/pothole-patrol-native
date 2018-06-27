@@ -44,6 +44,7 @@ const createError = (error) => {
 export const createPostReportThunk = report => {
   return async (dispatch) => {
     try {
+      console.log("report: ", report)
       await axios.post(`${process.env.SERVER_URL}/api/potholes`, report)
       dispatch(clearReport())
     } catch (error) {
@@ -52,16 +53,16 @@ export const createPostReportThunk = report => {
   }
 }
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case GET_PICTURE:
-      return {...state, imageUrl: action.picture };
+      return { ...state, imageUrl: action.picture };
     case UPDATE_LOCATION:
-      return {...state, location: action.location}
+      return { ...state, location: action.location }
     case CLEAR_REPORT:
-      return {...initialState}
+      return { ...initialState }
     case REPORT_ERROR:
-      return {...state, error: action.error}
+      return { ...state, error: action.error }
     default:
       return state;
   }

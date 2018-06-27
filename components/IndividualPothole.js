@@ -38,7 +38,7 @@ class IndividualPothole extends React.Component {
     };
 
     if (!pothole.id) return <View />
-
+    console.log(pothole.latitude)
     return (
       <Container>
         <Header />

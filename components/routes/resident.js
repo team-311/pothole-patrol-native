@@ -44,7 +44,7 @@ const DrawerLinks = createDrawerNavigator({
   ViewSinglePothole: {
     screen: IndividualPothole,
     navigationOptions: {
-      title: 'View Single Pothole'
+      drawerLabel: () => null
     }
   },
   Settings: {
