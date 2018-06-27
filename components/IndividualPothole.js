@@ -1,9 +1,13 @@
 import React from 'react';
-import { StyleSheet, Dimensions, Image, View } from 'react-native';
+import { StyleSheet, Dimensions, Image, View, Alert } from 'react-native';
 import { MapView } from 'expo';
 const { Marker } = MapView;
 import { connect } from 'react-redux';
-import { getSinglePotholeServer } from '../store/potholes';
+import {
+  getSinglePotholeServer,
+  upvotePotholeInDB,
+} from '../store/potholes';
+import Comments from './comments'
 import {
   Container,
   Header,
@@ -12,23 +16,53 @@ import {
   CardItem,
   Text,
   Body,
+  Button,
 } from 'native-base';
 
 const ScreenHeight = Dimensions.get('window').height;
 
 class IndividualPothole extends React.Component {
-
-  componentDidMount() {
-    this.props.getSinglePothole(this.props.navigation.state.params.id)
+  constructor() {
+    super();
+    this.state = {
+      upvotes: 0,
+      disableUpvote: false
+    };
   }
+
+  async componentDidMount() {
+    await this.props.getSinglePothole(this.props.navigation.state.params.id);
+    //set # of upvoters on state
+
+    this.setState({
+      upvotes: this.props.singlePothole.upvoters.length,
+      disableUpvote: !!(this.props.upvoters.filter(upvoter => upvoter.id === this.props.userId).length)
+    });
+  }
+
+  _handleUpvote = async () => {
+    this.setState({ disableUpvote: true })
+    await this.props.upvotePothole(
+      this.props.userId,
+      this.props.singlePothole.id
+    );
+    Alert.alert('Thanks for upvoting!')
+    //reset state after upvoting
+    this.setState({
+      upvotes: this.props.upvoters.length,
+    });
+  };
+
+  _handleCancel = () => {
+    this.props.navigation.navigator.goBack(null)
+  };
 
   static navigationOptions = { title: 'SinglePothole' };
 
   render() {
-    const pothole = this.props.singlePothole
-    const id = this.props.navigation.state.params.id
+    const pothole = this.props.singlePothole;
 
-    if (!pothole.id) return <View />
+    if (!pothole) return <View />;
 
     let region = {
       latitude: Number(pothole.latitude),
@@ -38,10 +72,31 @@ class IndividualPothole extends React.Component {
     };
 
     if (!pothole.id) return <View />
-    console.log(pothole.latitude)
     return (
-      <Container>
-        <Header />
+      <Container >
+        {true ? (
+          <Header>
+            <Button
+              style={styles.button}
+              small
+              success
+              onPress={this._handleUpvote}
+              disabled={this.state.disableUpvote}
+            >
+              <Text>Upvote</Text>
+            </Button>
+            <Button
+              style={styles.button}
+              small
+              danger
+              onPress={this._handleCancel}
+            >
+              <Text>Cancel</Text>
+            </Button>
+          </Header>
+        ) : (
+            <Header />
+          )}
         <Content>
           <MapView
             style={styles.backgroundMap}
@@ -56,7 +111,7 @@ class IndividualPothole extends React.Component {
               }}
               title="dummymarker"
               description="dummymarker"
-              image="https://s3.us-east-2.amazonaws.com/soundandcolor/poo.png"
+              image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
             />
           </MapView>
         </Content>
@@ -65,6 +120,11 @@ class IndividualPothole extends React.Component {
             <CardItem>
               <Body>
                 <Text>ID: {pothole.id}</Text>
+              </Body>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>Upvotes: {this.state.upvotes}</Text>
               </Body>
             </CardItem>
             {!!pothole.imageUrl && (
@@ -90,19 +150,18 @@ class IndividualPothole extends React.Component {
                 <Text>ZIP: {pothole.zip}</Text>
               </Body>
             </CardItem>
-            {!!pothole.description && (
-              <CardItem>
-                <Body>
-                  <Text>Description{pothole.description}</Text>
-                </Body>
-              </CardItem>
-            )}
+            <CardItem>
+              <Body>
+                <Text>DESCRIPTION HERE</Text>
+              </Body>
+            </CardItem>
             <CardItem>
               <Body>
                 <Text>SERVICE #: {pothole.serviceNumber}</Text>
               </Body>
             </CardItem>
           </Card>
+          <Comments potholeId={pothole.id} />
         </Content>
       </Container>
     );
@@ -122,7 +181,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight * 0.5,
+    height: ScreenHeight * 0.4,
   },
   text: {
     backgroundColor: '#fff',
@@ -131,17 +190,25 @@ const styles = StyleSheet.create({
     top: 200,
     left: 80,
   },
+  button: {
+    padding: 5,
+    justifyContent: 'space-between',
+  },
 });
 
 const mapState = state => {
   return {
-    singlePothole: state.singlePothole,
+    singlePothole: state.singlePothole.pothole,
+    userId: state.user.id,
+    upvoters: state.singlePothole.upvoters,
   };
 };
 
 const mapDispatch = dispatch => {
   return {
     getSinglePothole: id => dispatch(getSinglePotholeServer(id)),
+    upvotePothole: (userId, potholeId) =>
+      dispatch(upvotePotholeInDB(userId, potholeId)),
   };
 };
 

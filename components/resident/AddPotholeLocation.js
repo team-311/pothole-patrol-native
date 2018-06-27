@@ -2,13 +2,23 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
-import { getGeocodedAddress, fetchPotholes } from '../../store/potholes';
+import {
+  getGeocodedAddress,
+  fetchPotholes,
+} from '../../store/potholes';
 import { createUpdateLocationAction } from '../../store/report';
 import {
-  Container, Content, Text, Card, Form, Item,
+  Container,
+  Content,
+  Text,
+  Card,
+  Form,
+  Item,
   Input,
   Button,
+  H3,
 } from 'native-base';
+import UpvotePothole from './UpvotePothole.js'
 const { Marker } = MapView;
 
 const ScreenHeight = Dimensions.get('window').height;
@@ -66,9 +76,9 @@ class AddPotholeLocation extends React.Component {
       );
       this.setState({
         streetAddress: address.slice(0, 2).join(' '),
-        zipcode: address[2]
-      })
-      this._getPotholesAsync(latitude, longitude)
+        zipcode: address[2],
+      });
+      this._getPotholesAsync(latitude, longitude);
     });
   };
 
@@ -82,13 +92,13 @@ class AddPotholeLocation extends React.Component {
       zip: this.state.zipcode,
       latitude: this.state.initialRegion.latitude,
       longitude: this.state.initialRegion.longitude,
-    }
-    this.props.updateLocation(location)
-    this.props.navigation.navigate('Camera')
+    };
+    this.props.updateLocation(location);
+    this.props.navigation.navigate('Camera');
   };
 
   render() {
-    const potholes = this.props.potholes ? this.props.potholes : []
+    const potholes = this.props.potholes ? this.props.potholes : [];
 
     return (
       <Container>
@@ -98,18 +108,19 @@ class AddPotholeLocation extends React.Component {
             region={this.state.initialRegion}
             provider={MapView.PROVIDER_GOOGLE}
           >
-            {potholes.map(marker => {
+            {potholes.map(pothole => {
               return (
                 <Marker
-                  key={marker.id}
+                  key={pothole.id}
                   coordinate={{
-                    latitude: Number(marker.latitude),
-                    longitude: Number(marker.longitude),
+                    latitude: Number(pothole.latitude),
+                    longitude: Number(pothole.longitude),
                   }}
                   title="Open pothole"
-                  description="It's already on the map! If this is the one you were going to report, click on it to upvote so it gets to your rep's attention faster. (Maybe)."
                   image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
-                />
+                >
+                  <UpvotePothole upvotePothole={this.props.upvotePothole} userId={this.props.userId} potholeId={this.props.potholeId} navigation={this.props.navigation} />
+                </Marker>
               );
             })}
             <Marker
@@ -117,7 +128,7 @@ class AddPotholeLocation extends React.Component {
                 latitude: this.state.initialRegion.latitude,
                 longitude: this.state.initialRegion.longitude,
               }}
-              title='Your current location'
+              title="Your current location"
             />
           </MapView>
           <Text style={styles.text}>Confirm Pothole Address</Text>
@@ -140,11 +151,7 @@ class AddPotholeLocation extends React.Component {
                     onChangeText={text => this.setState({ zipcode: text })}
                   />
                 </Item>
-                <Button
-                  style={styles.button}
-                  primary
-                  onPress={this.handleNext}
-                >
+                <Button style={styles.button} primary onPress={this.handleNext}>
                   <Text> Next </Text>
                 </Button>
               </Form>
@@ -176,6 +183,7 @@ const mapStateToProps = state => {
   return {
     potholes: state.potholes.potholes,
     address: state.potholes.address,
+    userId: state.user.id,
   };
 };
 
@@ -183,7 +191,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getPotholes: (lat, lon) => dispatch(fetchPotholes(lat, lon)),
     getAddress: (lat, lon) => dispatch(getGeocodedAddress(lat, lon)),
-    updateLocation: (location) => dispatch(createUpdateLocationAction(location))
+    updateLocation: location => dispatch(createUpdateLocationAction(location)),
   };
 };
 

@@ -3,16 +3,20 @@ import { createLogger } from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { potholesReducer, singlePotholeReducer } from './potholes'
+import comments from './comments'
 import report from './report'
 import user from './user'
 import residentReports from './resident-reports'
+import singleOrder from './single-order'
 
 const reducer = combineReducers({
   potholes: potholesReducer,
   singlePothole: singlePotholeReducer,
   report,
   user,
+  comments,
   residentReports,
+  singleOrder,
 })
 
 const middleware = composeWithDevTools(applyMiddleware(
@@ -26,3 +30,5 @@ export default store
 
 export * from './potholes'
 export * from './user'
+export * from './single-order'
+export * from './comments'

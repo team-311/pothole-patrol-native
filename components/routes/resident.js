@@ -14,6 +14,9 @@ const ReportStack = createStackNavigator(
     Location: {
       screen: AddPotholeLocation,
     },
+    ViewPothole: {
+      screen: IndividualPothole
+    },
     Camera: {
       screen: ReportPhoto,
     },
@@ -38,7 +41,7 @@ const DrawerLinks = createDrawerNavigator({
   ReportPothole: {
     screen: ReportStack,
     navigationOptions: {
-      drawerLabel: 'Report a Pothole' //() => null
+      drawerLabel: 'Report a Pothole' // () => null
     }
   },
   ViewSinglePothole: {
