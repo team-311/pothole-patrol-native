@@ -20,7 +20,7 @@ class OrderHistory extends Component {
             <List>
               {this.props.orders.map(order => (
                 <ListItem key={order.id} onPress={() => navigate('SingleOrderHistory', {
-                  orderId: order.id,
+                  order,
                 })}>
                   <Left>
                     <Text>{order.id}: {order.status}</Text>

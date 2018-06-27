@@ -6,6 +6,8 @@ import Settings from '../Settings'
 import SingleOrder from '../crew/single-order'
 import OrderDirections from '../crew/order-directions'
 import OrderHistory from '../crew/order-history'
+import SingleOrderHistory from '../crew/single-order-history'
+import IndividualPothole from '../IndividualPothole'
 
 const SingleOrderLinks = createStackNavigator({
   SingleOrder: {
@@ -23,7 +25,10 @@ const OrderHistoryLinks = createStackNavigator({
     screen: OrderHistory,
   },
   SingleOrderHistory: {
-    screen: SingleOrder,
+    screen: SingleOrderHistory,
+  },
+  IndividualPothole: {
+    screen: IndividualPothole
   }
 }, {
   initialRouteName: 'OrderHistory'
