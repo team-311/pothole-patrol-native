@@ -7,7 +7,8 @@ const GET_SINGLE_ORDER = 'GET_SINGLE_ORDER'
 const UPDATING_SINGLE_ORDER_POTHOLE = 'UPDATING_SINGLE_ORDER_POTHOLE'
 const UPDATING_SINGLE_ORDER_POTHOLE_ERROR = 'UPDATING_SINGLE_ORDER_POTHOLE_ERROR'
 const UPDATED_SINGLE_ORDER_POTHOLE = 'UPDATE_SINGLE_ORDER_POTHOLE'
-const GOT_SINGLE_ORDER_NEXT_POTHOLE = 'GET_SINGLE_ORDER_NEXT_POTHOLE'
+const GET_SINGLE_ORDER_NEXT_POTHOLE = 'GET_SINGLE_ORDER_NEXT_POTHOLE'
+const GOT_SINGLE_ORDER_NEXT_POTHOLE = 'GOT_SINGLE_ORDER_NEXT_POTHOLE'
 
 // initial state
 const initialState = {
@@ -23,6 +24,7 @@ const createGotSingleOrderAction = (order) => ({type: GOT_SINGLE_ORDER, order})
 const createUpdatingSingleOrderPotholeAction = () => ({type: UPDATING_SINGLE_ORDER_POTHOLE})
 const createUpdatedSingleOrderPotholeAction = (pothole) => ({type: UPDATED_SINGLE_ORDER_POTHOLE, pothole})
 const createUpdatingSingleOrderPotholeErrorAction = (error) => ({type: UPDATING_SINGLE_ORDER_POTHOLE_ERROR, error})
+const createGetSingleOrderNextPotholeAction = () => ({type: GET_SINGLE_ORDER_NEXT_POTHOLE})
 const createGotSingleOrderNextPotholeAction = (pothole) => ({type: GOT_SINGLE_ORDER_NEXT_POTHOLE, pothole})
 
 // thunk creators
@@ -66,6 +68,7 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case GET_SINGLE_ORDER:
     case UPDATING_SINGLE_ORDER_POTHOLE:
+    case GET_SINGLE_ORDER_NEXT_POTHOLE:
       return {...state, isFetching: true}
     case GET_SINGLE_ORDER_ERROR:
     case UPDATING_SINGLE_ORDER_POTHOLE_ERROR:
