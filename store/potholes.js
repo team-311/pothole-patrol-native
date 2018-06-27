@@ -35,7 +35,6 @@ export const upvotePotholeInDB = (potholeId, userId) => {
   const postObject = {potholeId, userId}
   return async dispatch => {
     const upvotedPotholeData = await axios.post(`${process.env.SERVER_URL}/api/potholes/upvote`, postObject)
-    console.log('data from upvote', upvotedPotholeData.data)
     dispatch(upvotePothole(upvotedPotholeData.data))
   }
 }

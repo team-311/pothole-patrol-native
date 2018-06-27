@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import {
   getSinglePotholeServer,
   upvotePotholeInDB,
-  getPotholeUpvotesThunkCreator,
 } from '../store/potholes';
 import {
   Container,
@@ -33,7 +32,7 @@ class IndividualPothole extends React.Component {
   async componentDidMount() {
     await this.props.getSinglePothole(this.props.navigation.state.params.id);
     //set # of upvoters on state
-    console.log('this.props.upvoters', this.props.upvoters, 'this.props.singlePothole', this.props.singlePothole)
+
     this.setState({
       upvotes: this.props.singlePothole.upvoters.length,
       disableUpvote: !!(this.props.upvoters.filter(upvoter => upvoter.id === this.props.userId).length)
@@ -54,7 +53,7 @@ class IndividualPothole extends React.Component {
   };
 
   _handleCancel = () => {
-    this.props.navigation.navigate('LOCATION');
+    this.props.navigation.navigator.goBack(null)
   };
 
   static navigationOptions = { title: 'SinglePothole' };
@@ -70,8 +69,6 @@ class IndividualPothole extends React.Component {
       latitudeDelta: 0.0922,
       longitudeDelta: 0.0421,
     };
-
-    if (!pothole.id) return <View />;
 
     return (
       <Container>
