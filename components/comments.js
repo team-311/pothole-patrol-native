@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Dimensions, Image, View, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Image, View, Alert, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { createNewCommentThunk } from '../store/comments';
 import {
@@ -11,6 +11,7 @@ import {
   Textarea,
   Text
 } from 'native-base';
+
 
 class Comments extends React.Component {
   constructor() {
@@ -35,7 +36,7 @@ class Comments extends React.Component {
 
   render() {
     return (
-      <Content>
+      <KeyboardAvoidingView>
         <Form>
           <Textarea rowSpan={5} bordered placeholder="Leave Comment Here"
             onChangeText={(text) => this.setState({ commentText: text })}
@@ -43,7 +44,7 @@ class Comments extends React.Component {
           />
         </Form>
         <Button block onPress={this.handleSubmit}><Text>Submit</Text></Button>
-      </Content>
+      </KeyboardAvoidingView>
     );
   }
 }

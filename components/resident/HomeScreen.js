@@ -1,12 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Button } from 'react-native';
 import { connect } from 'react-redux'
 import { createGetResidentReportsThunk } from '../../store/resident-reports';
 import MyPotholes from './MyPotholes'
+import { StyleSheet, ImageBackground, Dimensions } from 'react-native'
+import { Container, View, Text, Button, Icon } from 'native-base'
 
+
+const ScreenHeight = Dimensions.get('window').height;
 
 
 class HomeScreen extends React.Component {
+
   static navigationOptions = { title: 'HOME' }
 
   componentDidMount() {
@@ -18,12 +22,11 @@ class HomeScreen extends React.Component {
     const { user, openPotholes } = this.props
     return (
       <View style={styles.container}>
-        <Text>Welcome {user.firstName}!</Text>
-        <Text>Let's make Chicago better, together.</Text>
-        <TouchableOpacity onPress={() => navigate('ReportPothole')} color="blue" >
-          <Image source={require('../../customStyling/butReportAPothole.png')} style={styles.button} />
-        </TouchableOpacity>
-        <MyPotholes navigate={this.props.navigation.navigate} />
+        <ImageBackground source={require('../../customStyling/home.jpg')} style={styles.image}>
+          <Button block rounded style={styles.button} onPress={() => navigate('ReportPothole')}>
+            <Text>Report a Pothole</Text>
+          </Button>
+        </ImageBackground>
       </View>
     );
   }
@@ -31,21 +34,31 @@ class HomeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    //justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: 'white',
   },
   button: {
-    backgroundColor: '#B3DDF2',
-    width: 200,
-    height: 93,
-    resizeMode: Image.resizeMode.contain
+    width: '80%',
+    marginTop: 375,
+    alignSelf: 'center',
   },
-  openPotholes: {
-    margin: 20,
+  flex: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 30,
+  },
+  message: {
+    color: 'gray',
+    margin: 10,
+    textAlign: 'center',
+  },
+  image: {
+    height: ScreenHeight,
+    width: '100%',
+    marginTop: 0,
+    alignSelf: 'center',
   }
-});
+})
 
 const mapStateToProps = (state) => {
   return {
