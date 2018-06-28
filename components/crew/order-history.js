@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { createGetOrdersThunk } from '../../store';
 import { Spinner, View, Text, Container, Content, List, ListItem, Left, Right, Icon } from 'native-base'
+import moment from 'moment'
 
 class OrderHistory extends Component {
 
@@ -23,8 +24,8 @@ class OrderHistory extends Component {
                   order,
                 })}>
                   <Left>
-                    <Text>{order.id}: {order.status}</Text>
-                    <Text>{order.dateCompleted}</Text>
+                    <Text>Order {order.id}: {order.status}</Text>
+                    {order.dateCompleted && <Text> on {moment(order.dateCompleted).format('MM/DD/YY')}</Text> }
                   </Left>
                   <Right>
                     <Icon style={{color: "skyblue"}} name="arrow-forward" />
