@@ -26,7 +26,7 @@ class MyPotholes extends React.Component {
                       onPress={() =>
                         navigate('ViewSinglePothole', {
                           id: pothole.id,
-                          myPotholes: true,
+                          canUpvote: false,
                         })
                       }
                     >

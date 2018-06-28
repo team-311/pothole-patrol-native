@@ -95,7 +95,7 @@ class IndividualPothole extends React.Component {
     if (!pothole.id) return <View />
     return (
       <Container>
-        {!this.props.navigation.state.params.myPotholes ? (
+        {this.props.navigation.state.params.canUpvote ? (
           <Header>
             <Button
               style={styles.button}
