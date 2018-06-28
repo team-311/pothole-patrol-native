@@ -76,6 +76,9 @@ class IndividualPothole extends React.Component {
     if (!pothole) return <View />;
 
     let commentString = ''
+    if (this.props.allComments.length < 1) {
+      commentString = 'No Comments -- Leave Yours Here!'
+    }
     for (let i = 0; i < this.props.allComments.length; i++) {
       commentString += this.props.allComments[i].text + '\nBy ' + this.props.allComments[i].user.firstName + '\n \n'
     }

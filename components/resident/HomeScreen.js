@@ -5,6 +5,7 @@ import { createGetResidentReportsThunk } from '../../store/resident-reports';
 import MyPotholes from './MyPotholes'
 
 
+
 class HomeScreen extends React.Component {
   static navigationOptions = { title: 'HOME' }
 
@@ -19,7 +20,7 @@ class HomeScreen extends React.Component {
       <View style={styles.container}>
         <Text>Welcome {user.firstName}!</Text>
         <Text>Let's make Chicago better, together.</Text>
-        <TouchableOpacity onPress={() => navigate('ReportPothole')} color="blue">
+        <TouchableOpacity onPress={() => navigate('ReportPothole')} color="blue" >
           <Image source={require('../../customStyling/butReportAPothole.png')} style={styles.button} />
         </TouchableOpacity>
         <MyPotholes navigate={this.props.navigation.navigate} />
@@ -32,8 +33,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
+    //justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   button: {
     backgroundColor: '#B3DDF2',

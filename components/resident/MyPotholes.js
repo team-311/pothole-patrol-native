@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { connect } from 'react-redux'
 import { createGetResidentReportsThunk } from '../../store/resident-reports';
 import { Container, ListItem, Header, List, Card, CardItem, Body, Text } from 'native-base';
@@ -13,27 +13,30 @@ class MyPotholes extends React.Component {
 
   render() {
     const navigate = this.props.navigate
-    const { user, openPotholes } = this.props
+    let { user, openPotholes } = this.props
+    if (this.props.openPotholes.length > 5) {
+      openPotholes = openPotholes.slice(5)
+    }
     return (
       <View >
         {
           (openPotholes && openPotholes.length > 0) && (
-            <View >
-              <Text >Your Reported Potholes:</Text>
+            <ScrollView >
+              <Text >My Recent Potholes:</Text>
               <List >
                 {
                   openPotholes.map(pothole =>
-                    <ListItem key={pothole.id} >
+                    (<ListItem key={pothole.id} >
                       <TouchableOpacity onPress={() => navigate('ViewSinglePothole', { id: pothole.id, myPotholes: true })}>
                         <Text>
                           {pothole.streetAddress} -- {pothole.status}
                         </Text>
                       </TouchableOpacity>
-                    </ListItem>
+                    </ListItem>)
                   )
                 }
               </List>
-            </View>
+            </ScrollView>
           )
         }
       </View>
