@@ -10,23 +10,45 @@ const ScreenHeight = Dimensions.get('window').height;
 
 
 class HomeScreen extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      isVisible: true
+    }
+    //this.hideSplashScreen = this.hideSplashScreen.bind(this)
+  }
 
+  hideSplashScreen = () => {
+    this.setState({
+      isVisible: false
+    })
+  }
   static navigationOptions = { title: 'HOME' }
 
   componentDidMount() {
+    var that = this
     this.props.getReports(this.props.user.id)
+    setTimeout(function () {
+      that.hideSplashScreen()
+    }, 3000)
   }
 
   render() {
     const { navigate } = this.props.navigation
     const { user, openPotholes } = this.props
+    let splashScreen = (
+      <View>
+        <ImageBackground source={require('../../customStyling/splash-screen.jpg')} style={styles.image}>
+        </ImageBackground>
+      </View>
+    )
     return (
       <View style={styles.container}>
-        <ImageBackground source={require('../../customStyling/home.jpg')} style={styles.image}>
+        {(this.state.isVisible === true) ? splashScreen : (<ImageBackground source={require('../../customStyling/home.jpg')} style={styles.image}>
           <Button block rounded style={styles.button} onPress={() => navigate('ReportPothole')}>
             <Text>Report a Pothole</Text>
           </Button>
-        </ImageBackground>
+        </ImageBackground>)}
       </View>
     );
   }
