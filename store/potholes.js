@@ -4,6 +4,7 @@ import axios from 'axios';
 const GET_POTHOLES = 'GET_POTHOLES';
 const GEOCODE_ADDRESS = 'GEOCODE_ADDRESS';
 const UPVOTE_POTHOLE = 'UPVOTE_POTHOLE';
+// const GEOCODE_USER_LOCATION = 'GEOCODE_USER_LOCATION'
 
 //ACTION CREATORS
 
@@ -28,6 +29,13 @@ const upvotePothole = upvotedPothole => {
     upvoters: upvotedPothole.upvoters
   }
 }
+
+// const geocodeUserLocation = coordinates => {
+//   return {
+//     type: GEOCODE_USER_LOCATION,
+//     coordinates
+//   }
+// }
 
 //THUNKS
 
@@ -56,19 +64,30 @@ export const getGeocodedAddress = (lat, lon) => {
     const dataResults = results.data.results[0].address_components;
     const streetNumber = dataResults[0].long_name;
     const streetName = dataResults[1].short_name;
+    const city = dataResults[3].short_name
+    const state = dataResults[5].long_name
     const zipcode = dataResults[7].long_name;
-    const fullAddressArray = [streetNumber, streetName, zipcode];
+    const fullAddressArray = [streetNumber, streetName, zipcode, city, state];
     dispatch(geocodeAddress(fullAddressArray));
 
     return fullAddressArray;
   };
 };
 
+// export const reverseGeocodeAddress = (address) => {
+//   const query = //fill this in
+//   return async dispatch => {
+//     const results = await axios(`https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyCDyhK7JGy-x8idR46N4pHd89LtxKzbuq8`)
+//   }
+// }
+
+
 //Default state
 const defaultPotholes = {
   potholes: [],
   address: [],
-  upvotes: []
+  upvotes: [],
+  userLocation: []
 };
 
 export const GET_SINGLE_POTHOLE = 'GET_SINGLE_POTHOLE';
@@ -93,6 +112,9 @@ export function potholesReducer(state = defaultPotholes, action) {
       return { ...state, address: action.address };
     case GET_POTHOLES:
       return { ...state, potholes: action.potholes };
+    // case GEOCODE_USER_LOCATION: {
+    //   return {...state, userLocation: action.coordinates}
+    // }
     default:
       return state;
   }

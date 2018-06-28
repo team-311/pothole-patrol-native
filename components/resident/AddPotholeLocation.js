@@ -16,7 +16,6 @@ import {
   Item,
   Input,
   Button,
-  H3,
 } from 'native-base';
 import UpvotePothole from './UpvotePothole.js'
 const { Marker } = MapView;
@@ -35,6 +34,10 @@ class AddPotholeLocation extends React.Component {
         latitudeDelta: 0.005,
         longitudeDelta: 0.005,
       },
+      userLocation: {
+        latitude: 41.895266,
+        longitude: -87.639035
+      }
     };
   }
 
@@ -64,23 +67,32 @@ class AddPotholeLocation extends React.Component {
     const initialRegion = {
       latitude,
       longitude,
-      latitudeDelta: 0.002,
-      longitudeDelta: 0.001,
+      latitudeDelta: 0.0002,
+      longitudeDelta: 0.0001,
     };
 
+    const userLocation = {
+      latitude,
+      longitude
+    }
+
     //get geocoded address and fetch potholes
-    this.setState({ initialRegion }, async () => {
-      const address = await this.props.getAddress(
-        this.state.initialRegion.latitude,
-        this.state.initialRegion.longitude
-      );
-      this.setState({
-        streetAddress: address.slice(0, 2).join(' '),
-        zipcode: address[2],
-      });
+    this.setState({ initialRegion, userLocation }, async () => {
+      this._getAddressAsync(userLocation.latitude, userLocation.longitude)
       this._getPotholesAsync(latitude, longitude);
     });
   };
+
+  _getAddressAsync = async (latitude, longitude) => {
+    const address = await this.props.getAddress(
+      latitude,
+      longitude
+    );
+    this.setState({
+      streetAddress: address.slice(0, 2).join(' '),
+      zipcode: address[2],
+    });
+  }
 
   _getPotholesAsync = async (lat, lon) => {
     await this.props.getPotholes(lat, lon);
@@ -97,6 +109,22 @@ class AddPotholeLocation extends React.Component {
     this.props.navigation.navigate('Camera');
   };
 
+  _onUserDragEnd = (event) => {
+    this.setState({
+      userLocation: {
+        longitude: event.nativeEvent.coordinate.longitude,
+        latitude: event.nativeEvent.coordinate.latitude,
+      }, initialRegion: {
+        longitude: event.nativeEvent.coordinate.longitude,
+        latitude: event.nativeEvent.coordinate.latitude,
+        latitudeDelta: 0.0002,
+        longitudeDelta: 0.0001
+      }
+    }, () => {
+      this._getAddressAsync(this.state.userLocation.latitude, this.state.userLocation.longitude)
+    })
+  }
+
   render() {
     const potholes = this.props.potholes ? this.props.potholes : [];
 
@@ -104,9 +132,12 @@ class AddPotholeLocation extends React.Component {
       <Container>
         <Content>
           <MapView
+            ref={map => (this.map = map)}
             style={styles.map}
-            initialRegion={this.state.initialRegion}
+            region={this.state.initialRegion}
             provider={MapView.PROVIDER_GOOGLE}
+            onRegionChangeComplete={this._onRegionChange}
+            onPanDrag={this._onPanDrag}
           >
             {potholes.map(pothole => {
               return (
@@ -124,10 +155,12 @@ class AddPotholeLocation extends React.Component {
               );
             })}
             <Marker
+              draggable
               coordinate={{
-                latitude: this.state.initialRegion.latitude,
-                longitude: this.state.initialRegion.longitude,
+                latitude: this.state.userLocation.latitude,
+                longitude: this.state.userLocation.longitude,
               }}
+              onDragEnd={this._onUserDragEnd}
               title="Your current location"
             />
           </MapView>
