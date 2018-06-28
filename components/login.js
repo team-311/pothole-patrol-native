@@ -60,7 +60,8 @@ const styles = {
     color: 'white'
   },
   container: {
-    margin: 10
+    padding: 10,
+    backgroundColor: 'white',
   },
   error: {
     backgroundColor: 'red',

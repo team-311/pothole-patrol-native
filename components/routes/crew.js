@@ -5,28 +5,57 @@ import Home from '../crew/home'
 import Settings from '../Settings'
 import SingleOrder from '../crew/single-order'
 import OrderDirections from '../crew/order-directions'
+import OrderHistory from '../crew/order-history'
+import SingleOrderHistory from '../crew/single-order-history'
+import IndividualPothole from '../IndividualPothole'
+import FinishedLanding from '../crew/finished-landing'
 
 const SingleOrderLinks = createStackNavigator({
+  Home: {
+    screen: Home,
+    navigationOptions: () => ({
+      title: "Today's Work Order"
+    })
+  },
   SingleOrder: {
     screen: SingleOrder,
   },
   Directions: {
     screen: OrderDirections,
+  },
+  IndividualPothole: {
+    screen: IndividualPothole,
   }
 }, {
-  initialRouteName: 'SingleOrder',
+  initialRouteName: 'Home',
+})
+
+const OrderHistoryLinks = createStackNavigator({
+  OrderHistory: {
+    screen: OrderHistory,
+  },
+  SingleOrderHistory: {
+    screen: SingleOrderHistory,
+  },
+  IndividualPothole: {
+    screen: IndividualPothole
+  }
+}, {
+  initialRouteName: 'OrderHistory'
 })
 
 
-// Resident main app routes
 const DrawerLinks = createDrawerNavigator({
-  Home: {
-    screen: Home
-  },
   SingleOrder: {
     screen: SingleOrderLinks,
     navigationOptions: {
-      drawerLabel: `Today's Work Order`
+      title: "Today's Work Order"
+    }
+  },
+  OrderHistory: {
+    screen: OrderHistoryLinks,
+    navigationOptions: {
+      drawerLabel: 'Work Order History'
     }
   },
   Settings: {
@@ -34,10 +63,16 @@ const DrawerLinks = createDrawerNavigator({
     navigationOptions: {
       title: 'Settings'
     }
+  },
+  Finished: {
+    screen: FinishedLanding,
+    navigationOptions: {
+      drawerLabel: () => null
+    }
   }
 },
 {
-  initialRouteName: 'Home',
+  initialRouteName: 'SingleOrder',
 })
 
 export default createStackNavigator({

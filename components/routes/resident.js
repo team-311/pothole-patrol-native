@@ -6,6 +6,7 @@ import ReportPhoto from '../resident/ReportPhoto';
 import ReportDescription from '../resident/ReportDescription';
 import HomeScreen from '../resident/HomeScreen';
 import IndividualPothole from '../IndividualPothole';
+import MyPotholes from '../resident/MyPotholes'
 import Settings from '../Settings'
 
 // request form routes
@@ -42,6 +43,12 @@ const DrawerLinks = createDrawerNavigator({
     screen: ReportStack,
     navigationOptions: {
       drawerLabel: 'Report a Pothole' // () => null
+    }
+  },
+  MyPotholes: {
+    screen: MyPotholes,
+    navigationOptions: {
+      drawerLabel: 'View My Potholes'
     }
   },
   ViewSinglePothole: {
