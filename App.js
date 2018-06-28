@@ -6,6 +6,7 @@ import store from './store';
 import { Icon } from 'native-base'
 if (process.env.NODE_ENV !== 'production') require('./secrets');
 import Main from './components/main'
+import TestDraggingMarker from './components/resident/TestDraggingMarker'
 
 export default class App extends React.Component {
   constructor() {
@@ -35,7 +36,7 @@ export default class App extends React.Component {
 
     return (
       <Provider store={store}>
-        <Main />
+        <TestDraggingMarker />
       </Provider>
     )
   }

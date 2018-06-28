@@ -2,10 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Platform, StyleSheet, Dimensions } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
-import {
-  getGeocodedAddress,
-  fetchPotholes,
-} from '../../store/potholes';
+import { getGeocodedAddress, fetchPotholes } from '../../store/potholes';
 import { createUpdateLocationAction } from '../../store/report';
 import {
   Container,
@@ -18,7 +15,7 @@ import {
   Button,
   H3,
 } from 'native-base';
-import UpvotePothole from './UpvotePothole.js'
+import UpvotePothole from './UpvotePothole.js';
 const { Marker } = MapView;
 
 const ScreenHeight = Dimensions.get('window').height;
@@ -104,59 +101,26 @@ class AddPotholeLocation extends React.Component {
       <Container>
         <Content>
           <MapView
-            style={styles.map}
-            initialRegion={this.state.initialRegion}
-            provider={MapView.PROVIDER_GOOGLE}
+            ref={map => (this.map = map)}
+            style={{ width: Dimensions.width(), Dimentions.height: mapHeight, zIndex: 0 }}
+            region={{
+              latitude: this.state.location.coords.latitude,
+              longitude: this.state.location.coords.longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
+            }}
           >
-            {potholes.map(pothole => {
-              return (
-                <Marker
-                  key={pothole.id}
-                  coordinate={{
-                    latitude: Number(pothole.latitude),
-                    longitude: Number(pothole.longitude),
-                  }}
-                  title="Open pothole"
-                  image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
-                >
-                  <UpvotePothole potholeId={pothole.id} navigation={this.props.navigation} />
-                </Marker>
-              );
-            })}
-            <Marker
+            <Components.MapView.Marker
+              key={'i29'}
+              draggable
+              onDragEnd={this.onUserPinDragEnd.bind(this)}
+              title={'You are here'}
               coordinate={{
-                latitude: this.state.initialRegion.latitude,
-                longitude: this.state.initialRegion.longitude,
+                latitude: this.state.userLocation.coords.latitude,
+                longitude: this.state.userLocation.coords.longitude,
               }}
-              title="Your current location"
             />
-          </MapView>
-          <Text style={styles.text}>Confirm Pothole Address</Text>
-          <Container>
-            <Card>
-              <Form>
-                <Item>
-                  <Input
-                    placeholder="Street Address"
-                    value={this.state.streetAddress}
-                    onChangeText={text => {
-                      this.setState({ streetAddress: text });
-                    }}
-                  />
-                </Item>
-                <Item last>
-                  <Input
-                    placeholder="Zipcode"
-                    value={this.state.zipcode}
-                    onChangeText={text => this.setState({ zipcode: text })}
-                  />
-                </Item>
-                <Button style={styles.button} primary onPress={this.handleNext}>
-                  <Text> Next </Text>
-                </Button>
-              </Form>
-            </Card>
-          </Container>
+          </Components.MapView>
         </Content>
       </Container>
     );
