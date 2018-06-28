@@ -60,7 +60,10 @@ class Home extends Component {
           completePothole={this.props.completePothole}
           navigate={navigate}
           region={this.state.region}
-          completeJob={this.props.updateStatus.bind(this, crewId, order.id, 'Completed')}
+          completeJob={() => {
+            this.props.updateStatus(crewId, order.id, 'Completed')
+            navigate('Finished')
+          }}
         />)
     } else if (order && order.status === 'Requested') {
       return (
