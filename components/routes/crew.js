@@ -10,11 +10,14 @@ import SingleOrderHistory from '../crew/single-order-history'
 import IndividualPothole from '../IndividualPothole'
 
 const SingleOrderLinks = createStackNavigator({
-  SingleOrder: {
-    screen: SingleOrder,
+  Home: {
+    screen: Home,
     navigationOptions: () => ({
       title: "Today's Work Order"
     })
+  },
+  SingleOrder: {
+    screen: SingleOrder,
   },
   Directions: {
     screen: OrderDirections,
@@ -23,7 +26,7 @@ const SingleOrderLinks = createStackNavigator({
     screen: IndividualPothole,
   }
 }, {
-  initialRouteName: 'SingleOrder',
+  initialRouteName: 'Home',
 })
 
 const OrderHistoryLinks = createStackNavigator({

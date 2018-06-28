@@ -11,7 +11,7 @@ const SingleOrderHistory = (props) => {
       <H1>Work Order: {''+order.id}</H1>
       <H3>Potholes Filled: {''+order.potholes.length}</H3>
       <Content>
-        {order.dateCompleted && <Text>Date Completed: {order.dateCompleted.toDateString()}</Text>}
+        {order.dateCompleted && <Text>Date Completed: {order.dateCompleted}</Text>}
         <List>
         { order.id && order.potholes.map(pothole => (
           <ListItem key={pothole.id} onPress={() => navigate('IndividualPothole', {
