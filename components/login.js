@@ -56,7 +56,7 @@ class Login extends Component {
                 value={this.state.password}
                 onChangeText={(text) => this.setState({ password: text })} />
             </Item>
-            {this.state.error &&
+            {!!this.state.error &&
               <Item>
                 <Text style={styles.error}>Incorrect username or password</Text>
               </Item>

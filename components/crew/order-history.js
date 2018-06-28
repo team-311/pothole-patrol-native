@@ -25,7 +25,7 @@ class OrderHistory extends Component {
                 })}>
                   <Left>
                     <Text>Order {order.id}: {order.status}</Text>
-                    {order.dateCompleted && <Text> on {moment(order.dateCompleted).format('MM/DD/YY')}</Text> }
+                    {!!order.dateCompleted && <Text> on {moment(order.dateCompleted).format('MM/DD/YY')}</Text> }
                   </Left>
                   <Right>
                     <Icon style={{color: "skyblue"}} name="arrow-forward" />

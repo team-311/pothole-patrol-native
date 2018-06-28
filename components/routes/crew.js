@@ -9,6 +9,7 @@ import OrderHistory from '../crew/order-history'
 import SingleOrderHistory from '../crew/single-order-history'
 import IndividualPothole from '../IndividualPothole'
 import FinishedLanding from '../crew/finished-landing'
+import Logout from '../logout'
 
 const SingleOrderLinks = createStackNavigator({
   Home: {
@@ -44,7 +45,6 @@ const OrderHistoryLinks = createStackNavigator({
   initialRouteName: 'OrderHistory'
 })
 
-
 const DrawerLinks = createDrawerNavigator({
   SingleOrder: {
     screen: SingleOrderLinks,
@@ -63,6 +63,9 @@ const DrawerLinks = createDrawerNavigator({
     navigationOptions: {
       title: 'Settings'
     }
+  },
+  Logout: {
+    screen: Logout,
   },
   Finished: {
     screen: FinishedLanding,

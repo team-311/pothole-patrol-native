@@ -10,7 +10,7 @@ const RequestedSingleOrder = (props) => {
         <View>
           <View>
             <List>
-              {order.id && order.potholes.map(pothole => (
+              {!!order.id && order.potholes.map(pothole => (
                 <ListItem key={pothole.id}>
                     <Text>{pothole.streetAddress}</Text>
                 </ListItem>
