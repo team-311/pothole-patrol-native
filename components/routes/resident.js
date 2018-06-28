@@ -8,6 +8,7 @@ import HomeScreen from '../resident/HomeScreen';
 import IndividualPothole from '../IndividualPothole';
 import MyPotholes from '../resident/MyPotholes'
 import Settings from '../Settings'
+import Logout from '../logout'
 
 // request form routes
 const ReportStack = createStackNavigator(
@@ -62,6 +63,9 @@ const DrawerLinks = createDrawerNavigator({
     navigationOptions: {
       title: 'Settings'
     }
+  },
+  Logout: {
+    screen: Logout,
   }
 },
   {
