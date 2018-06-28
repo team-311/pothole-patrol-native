@@ -1,8 +1,9 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Camera, Permissions } from 'expo';
-import { getPicture } from '../../store/report';
+import { getPicture, clearPicture } from '../../store/report';
 import { connect } from 'react-redux';
+import { Button } from 'native-base'
 
 class CameraView extends React.Component {
   state = {
@@ -31,28 +32,33 @@ class CameraView extends React.Component {
     replace('ReportDescription')
   }
 
+  skip = () => {
+    this.props.clearPicture()
+    this.nextPage()
+  }
+
   render() {
     const { hasCameraPermission } = this.state;
 
     if (hasCameraPermission === null) {
-      return <View />;
+      return <View />
     } else if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>;
+      return <Text>No access to camera</Text>
     } else {
       return (
         <View style={{ flex: 1 }}>
-          <View style={{ flex: 4 }}>
-            <Camera
-              ref={ref => {
-                this.camera = ref;
-              }}
-              type={this.state.type}
-            />
-          </View>
-          <View style={styles.cameraActions}>
-            <TouchableOpacity style={styles.circle} onPress={this.snap} />
-            <Text style={styles.skip} onPress={this.nextPage}>Skip</Text>
-          </View>
+          <Camera
+            ref={ref => {
+              this.camera = ref;
+            }}
+            style={{flex: 1}}
+            type={this.state.type}
+          >
+            <View style={styles.cameraActions}>
+              <TouchableOpacity style={styles.circle} onPress={this.snap} />
+              <Button small transparent block onPress={this.skip}><Text style={styles.skip}>Skip</Text></Button>
+            </View>
+          </Camera>
         </View>
       );
     }
@@ -64,6 +70,9 @@ const mapDispatch = dispatch => {
     getPicture(picture) {
       dispatch(getPicture(picture));
     },
+    clearPicture() {
+      dispatch(clearPicture())
+    }
   };
 };
 
@@ -75,8 +84,9 @@ export default connect(
 const styles = StyleSheet.create({
   cameraActions: {
     flex: 1,
-    marginBottom: 50,
-    backgroundColor: 'black',
+    marginBottom: 30,
+    backgroundColor: 'transparent',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-end',
   },

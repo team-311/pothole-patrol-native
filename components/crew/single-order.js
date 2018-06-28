@@ -11,7 +11,7 @@ const SingleOrder = (props) => {
       <View style={{flex: 1, justifyContent: 'space-between'}}>
         <List>
         {
-          order.id && order.potholes.map(pothole => (
+          !!order.id && order.potholes.map(pothole => (
             <ListItem key={pothole.id}>
               <Body>
                 <Text>{pothole.streetAddress}</Text>
