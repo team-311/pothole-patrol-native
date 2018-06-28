@@ -41,18 +41,18 @@ class CameraView extends React.Component {
     } else {
       return (
         <View style={{ flex: 1 }}>
-          <Camera
-            ref={ref => {
-              this.camera = ref;
-            }}
-            style={{ flex: 4 }}
-            type={this.state.type}
-          >
-            <View style={styles.cameraActions}>
-              <TouchableOpacity style={styles.circle} onPress={this.snap} />
-              <Text style={styles.skip} onPress={this.nextPage}>Skip</Text>
-            </View>
-          </Camera>
+          <View style={{ flex: 4 }}>
+            <Camera
+              ref={ref => {
+                this.camera = ref;
+              }}
+              type={this.state.type}
+            />
+          </View>
+          <View style={styles.cameraActions}>
+            <TouchableOpacity style={styles.circle} onPress={this.snap} />
+            <Text style={styles.skip} onPress={this.nextPage}>Skip</Text>
+          </View>
         </View>
       );
     }
