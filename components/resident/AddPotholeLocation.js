@@ -119,7 +119,7 @@ class AddPotholeLocation extends React.Component {
                   title="Open pothole"
                   image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
                 >
-                <UpvotePothole potholeId={pothole.id} navigation={this.props.navigation} />
+                  <UpvotePothole potholeId={pothole.id} navigation={this.props.navigation} />
                 </Marker>
               );
             })}

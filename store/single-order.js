@@ -96,17 +96,17 @@ export const createUpdateStatusSingleOrderThunk = (crewId, orderId, status) => {
 }
 
 // reducer
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case GET_SINGLE_ORDER:
     case UPDATING_SINGLE_ORDER:
     case UPDATING_SINGLE_ORDER_POTHOLE:
     case GET_SINGLE_ORDER_NEXT_POTHOLE:
-      return {...state, isFetching: true}
+      return { ...state, isFetching: true }
     case GET_SINGLE_ORDER_ERROR:
     case UPDATING_SINGLE_ORDER_ERROR:
     case UPDATING_SINGLE_ORDER_POTHOLE_ERROR:
-      return {...state, isFetching: false, error: action.error}
+      return { ...state, isFetching: false, error: action.error }
     case GOT_SINGLE_ORDER:
     case UPDATED_SINGLE_ORDER:
       return {...state, error: '', isFetching: false, order: action.order}
@@ -115,16 +115,18 @@ export default function(state = initialState, action) {
         ...state,
         error: '',
         isFetching: false,
-        order: {...state.order, potholes: [...state.order.potholes, action.pothole]}
+        order: { ...state.order, potholes: [...state.order.potholes, action.pothole] }
       }
     case UPDATED_SINGLE_ORDER_POTHOLE:
       return {
         ...state,
         error: '',
         isFetching: false,
-        order: {...state.order, potholes: state.order.potholes.map(pothole => {
-          return pothole.id === action.pothole.id ? action.pothole : pothole
-        })},
+        order: {
+          ...state.order, potholes: state.order.potholes.map(pothole => {
+            return pothole.id === action.pothole.id ? action.pothole : pothole
+          })
+        },
       }
     default:
       return state

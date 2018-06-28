@@ -7,6 +7,7 @@ import {
   getSinglePotholeServer,
   upvotePotholeInDB,
 } from '../store/potholes';
+import Comments from './comments'
 import {
   Container,
   Header,
@@ -16,7 +17,9 @@ import {
   Text,
   Body,
   Button,
+  Accordion
 } from 'native-base';
+import { createGetCommentsThunk } from '../store/comments';
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -31,7 +34,7 @@ class IndividualPothole extends React.Component {
 
   async componentDidMount() {
     await this.props.getSinglePothole(this._getId());
-
+    await this.props.getAllComments(this.props.singlePothole.id);
     // // //set # of upvoters on state
 
     this.setState({
@@ -42,14 +45,14 @@ class IndividualPothole extends React.Component {
 
   _getId = () => {
     let id = 1;
-    if(this.props.navigation.state.params) {
+    if (this.props.navigation.state.params) {
       id = this.props.navigation.state.params.id;
     }
     return id;
   }
 
   _handleUpvote = async () => {
-    this.setState({disableUpvote: true})
+    this.setState({ disableUpvote: true })
     await this.props.upvotePothole(
       this.props.singlePothole.id,
       this.props.userId
@@ -72,6 +75,11 @@ class IndividualPothole extends React.Component {
 
     if (!pothole) return <View />;
 
+    let commentString = ''
+    for (let i = 0; i < this.props.allComments.length; i++) {
+      commentString += this.props.allComments[i].text + '\nBy ' + this.props.allComments[i].user.firstName + '\n \n'
+    }
+
     let region = {
       latitude: Number(pothole.latitude),
       longitude: Number(pothole.longitude),
@@ -79,9 +87,15 @@ class IndividualPothole extends React.Component {
       longitudeDelta: 0.0421,
     };
 
+    let dataArray = [
+      { title: "More Information", content: `ID: ${pothole.id} \nSTATUS: ${pothole.status} \nUPVOTES: ${this.state.upvotes} \nADDRESS: ${pothole.streetAddress} \nDESCRIPTION: ${pothole.description} \nSERVICE #: ${pothole.serviceNumber}` },
+      { title: "Comments", content: `${commentString}` }
+    ]
+
+    if (!pothole.id) return <View />
     return (
       <Container>
-        {!this.props.navigation.state.params.myPotholes ? (
+        {this.props.navigation.state.params.canUpvote ? (
           <Header>
             <Button
               style={styles.button}
@@ -102,8 +116,8 @@ class IndividualPothole extends React.Component {
             </Button>
           </Header>
         ) : (
-          <Header />
-        )}
+            <Header />
+          )}
         <Content>
           <MapView
             style={styles.backgroundMap}
@@ -123,51 +137,8 @@ class IndividualPothole extends React.Component {
           </MapView>
         </Content>
         <Content>
-          <Card>
-            <CardItem>
-              <Body>
-                <Text>ID: {pothole.id}</Text>
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Text>Upvotes: {this.state.upvotes}</Text>
-              </Body>
-            </CardItem>
-            {!!pothole.imageUrl && (
-              <CardItem>
-                <Image
-                  style={{ width: 100, height: 100 }}
-                  source={{ uri: pothole.imageUrl }}
-                />
-              </CardItem>
-            )}
-            <CardItem>
-              <Body>
-                <Text>STATUS: {pothole.status}</Text>
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Text>ADDRESS: {pothole.streetAddress}</Text>
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Text>ZIP: {pothole.zip}</Text>
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Text>DESCRIPTION HERE</Text>
-              </Body>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Text>SERVICE #: {pothole.serviceNumber}</Text>
-              </Body>
-            </CardItem>
-          </Card>
+          <Accordion dataArray={dataArray} />
+          <Comments user={this.props.user} pothole={this.props.singlePothole} />
         </Content>
       </Container>
     );
@@ -187,7 +158,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight * 0.5,
+    height: ScreenHeight * 0.4,
   },
   text: {
     backgroundColor: '#fff',
@@ -206,7 +177,9 @@ const mapState = state => {
   return {
     singlePothole: state.singlePothole.pothole,
     userId: state.user.id,
+    user: state.user,
     upvoters: state.singlePothole.upvoters,
+    allComments: state.comments
   };
 };
 
@@ -215,6 +188,7 @@ const mapDispatch = dispatch => {
     getSinglePothole: id => dispatch(getSinglePotholeServer(id)),
     upvotePothole: (potholeId, userId) =>
       dispatch(upvotePotholeInDB(potholeId, userId)),
+    getAllComments: id => dispatch(createGetCommentsThunk(id)),
   };
 };
 
