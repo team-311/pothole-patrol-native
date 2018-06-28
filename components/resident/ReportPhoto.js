@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Camera, Permissions } from 'expo';
-import { getPicture } from '../../store/report';
+import { getPicture, clearPicture } from '../../store/report';
 import { connect } from 'react-redux';
+import { Button } from 'native-base'
 
 class CameraView extends React.Component {
   state = {
@@ -23,17 +24,26 @@ class CameraView extends React.Component {
       });
       this.props.getPicture(`data:image/jpg;base64,${photo.base64}`);
     }
-    const { replace } = this.props.navigation;
-    replace('ReportDescription');
-  };
+    this.nextPage()
+  }
+
+  nextPage = () => {
+    const { replace } = this.props.navigation
+    replace('ReportDescription')
+  }
+
+  skip = () => {
+    this.props.clearPicture()
+    this.nextPage()
+  }
 
   render() {
     const { hasCameraPermission } = this.state;
 
     if (hasCameraPermission === null) {
-      return <View />;
+      return <View />
     } else if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>;
+      return <Text>No access to camera</Text>
     } else {
       return (
         <View style={{ flex: 1 }}>
@@ -41,19 +51,12 @@ class CameraView extends React.Component {
             ref={ref => {
               this.camera = ref;
             }}
-            style={{ flex: 1 }}
+            style={{flex: 1}}
             type={this.state.type}
           >
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: 'transparent',
-                flexDirection: 'row',
-                alignItems: 'flex-end',
-                justifyContent: 'center',
-              }}
-            >
+            <View style={styles.cameraActions}>
               <TouchableOpacity style={styles.circle} onPress={this.snap} />
+              <Button small transparent block onPress={this.skip}><Text style={styles.skip}>Skip</Text></Button>
             </View>
           </Camera>
         </View>
@@ -67,6 +70,9 @@ const mapDispatch = dispatch => {
     getPicture(picture) {
       dispatch(getPicture(picture));
     },
+    clearPicture() {
+      dispatch(clearPicture())
+    }
   };
 };
 
@@ -75,13 +81,25 @@ export default connect(
   mapDispatch
 )(CameraView);
 
-const styles = {
+const styles = StyleSheet.create({
+  cameraActions: {
+    flex: 1,
+    marginBottom: 30,
+    backgroundColor: 'transparent',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
   circle: {
     width: 75,
     height: 75,
     borderRadius: 75/2,
     backgroundColor: 'white',
     opacity: 0.75,
-    marginBottom: 50,
+    marginBottom: 20
+  },
+  skip: {
+    textDecorationLine: 'underline',
+    color: 'gray'
   }
-}
+})

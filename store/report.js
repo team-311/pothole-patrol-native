@@ -8,6 +8,7 @@ const initialState = {
 
 // Action Type
 const GET_PICTURE = 'GET_PICTURE';
+const CLEAR_PICTURE = 'CLEAR_PICTURE';
 const CLEAR_REPORT = 'CLEAR_REPORT';
 const REPORT_ERROR = 'REPORT_ERROR';
 const UPDATE_LOCATION = 'UPDATE_LOCATION';
@@ -40,6 +41,12 @@ const createError = (error) => {
   }
 }
 
+export const clearPicture = () => {
+  return {
+    type: CLEAR_PICTURE,
+  }
+}
+
 // thunk creators
 export const createPostReportThunk = report => {
   return async (dispatch) => {
@@ -55,7 +62,9 @@ export const createPostReportThunk = report => {
 export default function (state = initialState, action) {
   switch (action.type) {
     case GET_PICTURE:
-      return { ...state, imageUrl: action.picture };
+      return { ...state, imageUrl: action.picture }
+    case CLEAR_PICTURE:
+      return { ...state, imageUrl: '' }
     case UPDATE_LOCATION:
       return { ...state, location: action.location }
     case CLEAR_REPORT:

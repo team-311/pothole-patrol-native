@@ -152,7 +152,7 @@ class AddPotholeLocation extends React.Component {
                   />
                 </Item>
                 <Button style={styles.button} primary onPress={this.handleNext}>
-                  <Text> Next </Text>
+                  <Text>Next</Text>
                 </Button>
               </Form>
             </Card>

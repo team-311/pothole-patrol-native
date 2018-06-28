@@ -73,7 +73,7 @@ class IndividualPothole extends React.Component {
   render() {
     const pothole = this.props.singlePothole;
 
-    if (!pothole) return <View />;
+    if (!pothole) return <View />
 
     let commentString = ''
     for (let i = 0; i < this.props.allComments.length; i++) {

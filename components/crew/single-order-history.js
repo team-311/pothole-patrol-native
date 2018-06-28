@@ -12,9 +12,9 @@ const SingleOrderHistory = (props) => {
       <H1>Work Order: {''+order.id}</H1>
       <H3>Potholes Filled: {''+order.potholes.length}</H3>
       <Content>
-        {order.dateCompleted && <Text>Date Completed: {moment(order.dateCompleted).format('MM/DD/YY')}</Text>}
+        {!!order.dateCompleted && <Text>Date Completed: {moment(order.dateCompleted).format('MM/DD/YY')}</Text>}
         <List>
-        { order.id && order.potholes.map(pothole => (
+        { !!order.id && order.potholes.map(pothole => (
           <ListItem key={pothole.id} onPress={() => navigate('IndividualPothole', {
             id: pothole.id,
             canUpvote: false,
