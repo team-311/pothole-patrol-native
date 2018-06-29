@@ -6,6 +6,8 @@ import store from './store';
 import { Icon } from 'native-base'
 if (process.env.NODE_ENV !== 'production') require('./secrets');
 import Main from './components/main'
+import GooglePlacesAutoCompleteTest from '/Users/Drevets/FullStack/senior-phase/pothole-patrol/pothole-patrol-native/components/resident/GooglePlacesAutoCompleteTest.js'
+import AddPotholeLocationTest from './components/resident/AddPotholeLocationTest'
 
 export default class App extends React.Component {
   constructor() {
@@ -35,7 +37,7 @@ export default class App extends React.Component {
 
     return (
       <Provider store={store}>
-        <Main />
+        <AddPotholeLocationTest />
       </Provider>
     )
   }
