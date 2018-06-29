@@ -1,6 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { connect } from 'react-redux'
+import {
+  StyleSheet,
+  View,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+import { connect } from 'react-redux';
 import { createGetResidentReportsThunk } from '../../store/resident-reports';
 import { Container, ListItem, List, Text, Content, H3 } from 'native-base';
 
@@ -10,10 +16,12 @@ class MyPotholes extends React.Component {
   }
 
   render() {
-    const navigate = this.props.navigate || this.props.navigation.navigate
-    const { user, openPotholes } = this.props;
+
+    const navigate = this.props.navigate || this.props.navigation.navigate;
+    const { user, openPotholes, upvotedPotholes } = this.props;
+    const text = openPotholes.length || upvotedPotholes.length ? '' : `Let's get patrolling!...`
     return (
-      <View>
+      <View style={styles.openPotholes}>
         <View>
           {openPotholes && openPotholes.length > 0 ? (
             <View>
@@ -38,8 +46,33 @@ class MyPotholes extends React.Component {
               </List>
             </View>
           ) : (
-              <Text>Let's get patrolling!...</Text>
+            <Text>{text}</Text>
+          )}
+          <View>
+            {upvotedPotholes && upvotedPotholes.length > 0 && (
+              <View>
+                <H3>Your Upvoted Potholes:</H3>
+                <List>
+                  {upvotedPotholes.map(pothole => (
+                    <ListItem key={pothole.id}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigate('ViewSinglePothole', {
+                            id: pothole.id,
+                            canUpvote: false,
+                          })
+                        }
+                      >
+                        <Text>
+                          {pothole.streetAddress} -- {pothole.status}
+                        </Text>
+                      </TouchableOpacity>
+                    </ListItem>
+                  ))}
+                </List>
+              </View>
             )}
+          </View>
         </View>
       </View>
     );
@@ -66,8 +99,8 @@ const styles = StyleSheet.create({
   text: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 });
 
 const mapStateToProps = state => {
@@ -76,6 +109,9 @@ const mapStateToProps = state => {
       report => report.status.toLowerCase() === 'open'
     ),
     user: state.user,
+    upvotedPotholes: state.residentReports.upvotedPotholes.filter(
+      report => report.status.toLowerCase() === 'open'
+    ),
   };
 };
 

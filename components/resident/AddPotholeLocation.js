@@ -23,6 +23,12 @@ import UpvotePothole from './UpvotePothole.js';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 const { Marker } = MapView;
+const defaultRegion = {
+  latitude: 41.895266,
+  longitude: -87.639035,
+  latitudeDelta: 0.005,
+  longitudeDelta: 0.005,
+}
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -32,12 +38,7 @@ class AddPotholeLocation extends React.Component {
     this.state = {
       streetAddress: '',
       zipcode: '',
-      initialRegion: {
-        latitude: 41.895266,
-        longitude: -87.639035,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      },
+      initialRegion: defaultRegion,
       userLocation: {
         latitude: 41.895266,
         longitude: -87.639035,
@@ -83,8 +84,8 @@ class AddPotholeLocation extends React.Component {
     //get geocoded address and fetch potholes
     this.setState({ initialRegion, userLocation }, async () => {
       this._getAddressAsync(userLocation.latitude, userLocation.longitude);
-      this._getPotholesAsync(latitude, longitude);
       this.props.updateUserLatLonDirect({ latitude, longitude });
+      this._getPotholesAsync(latitude, longitude);
     });
   };
 
@@ -181,7 +182,11 @@ class AddPotholeLocation extends React.Component {
             style={styles.map}
             region={this.state.initialRegion}
             provider={MapView.PROVIDER_GOOGLE}
-            onRegionChangeComplete={(region) => this.setState({initialRegion: region})}
+            onRegionChangeComplete={(region) =>
+              {
+              if (region.logitudeDelta > 1) this.setState({initialRegion: defaultRegion})
+                this.setState({initialRegion: region})}
+            }
           >
             {potholes.map(pothole => {
               return (

@@ -7,15 +7,15 @@ import {
   getSinglePotholeServer,
   upvotePotholeInDB,
 } from '../store/potholes';
+import {
+  getUserUpvotesThunkCreator
+} from '../store/resident-reports'
 import Comments from './comments'
 import {
   Container,
   Header,
   Content,
-  Card,
-  CardItem,
   Text,
-  Body,
   Button,
   Accordion
 } from 'native-base';
@@ -27,7 +27,7 @@ class IndividualPothole extends React.Component {
   constructor() {
     super();
     this.state = {
-      upvotes: 0,
+      upVotes: 0,
       disableUpvote: false
     };
   }
@@ -35,10 +35,8 @@ class IndividualPothole extends React.Component {
   async componentDidMount() {
     await this.props.getSinglePothole(this._getId());
     await this.props.getAllComments(this.props.singlePothole.id);
-    // // //set # of upvoters on state
-
     this.setState({
-      upvotes: this.props.singlePothole.upvoters.length,
+      upVotes: this.props.singlePothole.upVotes,
       disableUpvote: !!(this.props.upvoters.filter(upvoter => upvoter.id === this.props.userId).length)
     });
   }
@@ -59,8 +57,9 @@ class IndividualPothole extends React.Component {
     );
     Alert.alert('Thanks for upvoting!')
     //reset state after upvoting
+    this.props.getUserUpvotes(this.props.userId)
     this.setState({
-      upvotes: this.props.upvoters.length,
+      upVotes: this.props.singlePothole.upVotes,
     });
   };
 
@@ -91,7 +90,7 @@ class IndividualPothole extends React.Component {
     };
 
     let dataArray = [
-      { title: "More Information", content: `ID: ${pothole.id} \nSTATUS: ${pothole.status} \nUPVOTES: ${this.state.upvotes} \nADDRESS: ${pothole.streetAddress} \nDESCRIPTION: ${pothole.description} \nSERVICE #: ${pothole.serviceNumber}` },
+      { title: "More Information", content: `ID: ${pothole.id} \nSTATUS: ${pothole.status} \nUPVOTES: ${this.state.upVotes} \nADDRESS: ${pothole.streetAddress} \nDESCRIPTION: ${pothole.description} \nSERVICE #: ${pothole.serviceNumber}` },
       { title: "Comments", content: `${commentString}` }
     ]
 
@@ -112,10 +111,10 @@ class IndividualPothole extends React.Component {
             <Button
               style={styles.button}
               small
-              danger
+              warning
               onPress={this._handleCancel}
             >
-              <Text>Cancel</Text>
+              <Text>Back</Text>
             </Button>
           </Header>
         ) : (
@@ -192,6 +191,7 @@ const mapDispatch = dispatch => {
     upvotePothole: (potholeId, userId) =>
       dispatch(upvotePotholeInDB(potholeId, userId)),
     getAllComments: id => dispatch(createGetCommentsThunk(id)),
+    getUserUpvotes: userId => dispatch(getUserUpvotesThunkCreator(userId))
   };
 };
 
