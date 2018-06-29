@@ -4,7 +4,7 @@ import { Container, Header, Content, Form, Item, Input, Label, Button } from 'na
 import { auth } from '../store'
 import { connect } from 'react-redux'
 
-const ScreenHeight = Dimensions.get('window').height;
+//const ScreenHeight = Dimensions.get('window').height;
 
 class Login extends Component {
   constructor() {
@@ -13,66 +13,62 @@ class Login extends Component {
       username: '',
       password: '',
       error: '',
-      isVisible: false
+      isVisible: true
     }
   }
 
-  hideSplashScreen = () => {
-    this.setState({
-      isVisible: false
-    })
-  }
+  // hideSplashScreen = () => {
+  //   this.setState({
+  //     isVisible: false
+  //   })
+  // }
 
-  componentDidMount() {
-    var that = this
-    setTimeout(function () {
-      that.hideSplashScreen()
-    }, 3000)
-  }
+  // componentDidMount() {
+  //   var that = this
+  //   setTimeout(function () {
+  //     that.hideSplashScreen()
+  //   }, 3000)
+  // }
 
   render() {
-    let splashScreen = (
-      <View>
-        <ImageBackground source={require('../customStyling/splash-screen.jpg')} style={styles.image}>
-        </ImageBackground>
-      </View>
-    )
+    // let splashScreen = (
+    //   <View>
+    //     <ImageBackground source={require('../customStyling/splash-screen.jpg')} style={styles.image}>
+    //     </ImageBackground>
+    //   </View>
+    // )
     return (
       <View style={styles.container}>
-        {(this.state.isVisible === true) ? splashScreen : (<View>
-          <Form>
-            <Item stackedLabel>
-              <Label>Username</Label>
-              <Input
-                autoFocus
-                autoCapitalize='none'
-                value={this.state.username}
-                onChangeText={(text) => this.setState({ username: text })} />
+        <Form>
+          <Item stackedLabel>
+            <Label>Username</Label>
+            <Input
+              autoFocus
+              autoCapitalize='none'
+              value={this.state.username}
+              onChangeText={(text) => this.setState({ username: text })} />
+          </Item>
+          <Item stackedLabel>
+            <Label>Password</Label>
+            <Input
+              secureTextEntry
+              value={this.state.password}
+              onChangeText={(text) => this.setState({ password: text })} />
+          </Item>
+          {!!this.state.error &&
+            <Item>
+              <Text style={styles.error}>Incorrect username or password</Text>
             </Item>
-            <Item stackedLabel>
-              <Label>Password</Label>
-              <Input
-                secureTextEntry
-                value={this.state.password}
-                onChangeText={(text) => this.setState({ password: text })} />
-            </Item>
-            {!!this.state.error &&
-              <Item>
-                <Text style={styles.error}>Incorrect username or password</Text>
-              </Item>
-            }
-            <Button primary block onPress={() => {
-              this.props.handleSubmit(this.state.username, this.state.password, 'login')
-                .then((res) => {
-                  if (res.error) this.setState({ error: res.error })
-                }).catch((error) => console.error(error))
-            }}>
-              <Text style={styles.buttonText}>Login</Text>
-            </Button>
-          </Form>
-        </View>
-
-        )}
+          }
+          <Button primary block onPress={() => {
+            this.props.handleSubmit(this.state.username, this.state.password, 'login')
+              .then((res) => {
+                if (res.error) this.setState({ error: res.error })
+              }).catch((error) => console.error(error))
+          }}>
+            <Text style={styles.buttonText}>Login</Text>
+          </Button>
+        </Form>
       </View>
     )
   }
@@ -99,7 +95,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   image: {
-    height: ScreenHeight,
+    //height: ScreenHeight,
     width: '100%',
     marginTop: 0,
     alignSelf: 'center',

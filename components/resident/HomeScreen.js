@@ -44,11 +44,12 @@ class HomeScreen extends React.Component {
     )
     return (
       <View style={styles.container}>
-        {(this.state.isVisible === true) ? splashScreen : (<ImageBackground source={require('../../customStyling/home.jpg')} style={styles.image}>
-          <Button block rounded style={styles.button} onPress={() => navigate('ReportPothole')}>
-            <Text>Report a Pothole</Text>
-          </Button>
-        </ImageBackground>)}
+        {(this.state.isVisible === true) ? splashScreen : (
+          <ImageBackground source={require('../../customStyling/home.jpg')} style={styles.image}>
+            <Button block rounded style={styles.button} onPress={() => navigate('ReportPothole')}>
+              <Text>Report a Pothole</Text>
+            </Button>
+          </ImageBackground>)}
       </View>
     );
   }
