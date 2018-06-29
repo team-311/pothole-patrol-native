@@ -18,9 +18,7 @@ export default class ReportForm extends Component {
     const action = StackActions.reset({
       index: 0,
       key: null,
-      //actions: [NavigationActions.navigate({ routeName: 'Base' }), NavigationActions.navigate({ routeName: 'LandingPage' })]
     })
-    //this.props.navigation.dispatch(action)
     this.props.navigation.navigate('LandingPage')
   }
 
