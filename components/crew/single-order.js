@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Linking } from 'react-native'
+import { StyleSheet, Linking, Alert } from 'react-native'
 import { Container, Content, List, ListItem, CheckBox, Text, Body, Button, View, Icon, Left, Right, Separator } from 'native-base'
 
 const SingleOrder = (props) => {
@@ -67,7 +67,14 @@ const SingleOrder = (props) => {
             <Button block success
               iconLeft
               style={styles.button}
-              onPress={completeJob}
+              onPress={() => {
+                Alert.alert('Are you sure?', 'Please confirm your crew is done working for today',
+                  [
+                    {text: 'Cancel', onPress: null, style: 'cancel'},
+                    {text: 'OK', onPress: () => completeJob()}
+                  ],
+                {cancelable: false})
+              }}
             >
               <Icon name="clipboard-check" type="MaterialCommunityIcons" />
               <Text style={styles.buttonText}>Finish today's assignment</Text>
