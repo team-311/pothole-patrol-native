@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { createGetResidentReportsThunk } from '../../store/resident-reports';
+import { createGetResidentReportsThunk, getUserUpvotesThunkCreator } from '../../store/resident-reports';
 import MyPotholes from './MyPotholes'
 import { StyleSheet, ImageBackground, Dimensions } from 'react-native'
 import { Container, View, Text, Button, Icon } from 'native-base'
@@ -20,8 +20,8 @@ class HomeScreen extends React.Component {
   static navigationOptions = { title: 'HOME' }
 
   componentDidMount() {
-    var that = this
     this.props.getReports(this.props.user.id)
+    this.props.getUpvotes(this.props.user.id)
   }
 
   render() {
@@ -77,6 +77,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getReports: (id) => dispatch(createGetResidentReportsThunk(id)),
+    getUpvotes: (id) => dispatch(getUserUpvotesThunkCreator(id))
   }
 }
 

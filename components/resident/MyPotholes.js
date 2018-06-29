@@ -16,10 +16,16 @@ class MyPotholes extends React.Component {
   }
 
   render() {
-
     const navigate = this.props.navigate || this.props.navigation.navigate;
-    const { user, openPotholes, upvotedPotholes } = this.props;
+    let { user, openPotholes, upvotedPotholes } = this.props;
     const text = openPotholes.length || upvotedPotholes.length ? '' : `Let's get patrolling!...`
+    const hashMap = openPotholes.reduce((acc, curr) => {
+      return {[curr.id]: 1}
+    }, {})
+    upvotedPotholes = upvotedPotholes.filter(pothole => {
+      return !hashMap[pothole.id]
+    })
+    console.log('upvotedPotholes', upvotedPotholes)
     return (
       <View style={styles.openPotholes}>
         <View>
