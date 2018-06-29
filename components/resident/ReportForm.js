@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Switch } from 'react-native';
 import { Container, Content, Form, Textarea, Picker, Button, Icon } from 'native-base'
-import {NavigationActions, StackActions} from 'react-navigation'
+import { NavigationActions, StackActions } from 'react-navigation'
 
 export default class ReportForm extends Component {
   constructor() {
@@ -14,13 +14,12 @@ export default class ReportForm extends Component {
   }
 
   handleSubmit = async () => {
-    await this.props.handleSubmit({...this.props.report, ...this.state})
+    await this.props.handleSubmit({ ...this.props.report, ...this.state })
     const action = StackActions.reset({
       index: 0,
       key: null,
-      actions: [NavigationActions.navigate({routeName: 'Base'})]
     })
-    this.props.navigation.dispatch(action)
+    this.props.navigation.navigate('LandingPage')
   }
 
   render() {

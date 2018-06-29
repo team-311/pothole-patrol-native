@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
+import { StyleSheet, View, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { connect } from 'react-redux'
 import { createGetResidentReportsThunk } from '../../store/resident-reports';
 import { Container, ListItem, List, Text, Content, H3 } from 'native-base';
 
@@ -39,8 +39,8 @@ class MyPotholes extends React.Component {
               </List>
             </View>
           ) : (
-            <Text>Let's get patrolling!...</Text>
-          )}
+              <Text>Let's get patrolling!...</Text>
+            )}
         </View>
       </View>
     );

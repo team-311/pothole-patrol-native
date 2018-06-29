@@ -16,9 +16,9 @@ const initialState = {
 }
 
 // action creators
-const createGetOrdersAction = () => ({type: GET_ORDERS})
-const createGetOrdersErrorAction = (error) => ({type:GET_ORDERS_ERROR, error})
-const createGotOrdersAction = (ordersInfo) => ({type: GOT_ORDERS, ordersInfo})
+const createGetOrdersAction = () => ({ type: GET_ORDERS })
+const createGetOrdersErrorAction = (error) => ({ type: GET_ORDERS_ERROR, error })
+const createGotOrdersAction = (ordersInfo) => ({ type: GOT_ORDERS, ordersInfo })
 
 // thunk creators
 export const createGetOrdersThunk = (crewId) => {
@@ -40,12 +40,12 @@ export const createGetOrdersThunk = (crewId) => {
 }
 
 // reducer
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case GET_ORDERS:
-      return {...state, isFetching: true}
+      return { ...state, isFetching: true }
     case GET_ORDERS_ERROR:
-      return {...state, isFetching: false, error: action.error}
+      return { ...state, isFetching: false, error: action.error }
     case GOT_ORDERS:
       return {
         ...state,
@@ -55,7 +55,7 @@ export default function(state = initialState, action) {
         count: action.ordersInfo.count,
         currentPage: action.ordersInfo.currentPage,
         lastPage: action.ordersInfo.lastPage
-    }
+      }
     default:
       return state
   }
