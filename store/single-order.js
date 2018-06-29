@@ -47,6 +47,18 @@ export const createGetTodaysOrderThunk = (crewId) => {
   }
 }
 
+export const createCreateNewOrderThunk = (crewId) => {
+  return async (dispatch) => {
+    try {
+      dispatch(createGetSingleOrderAction())
+      const { data : order } = await axios.post(`${process.env.SERVER_URL}/api/crews/${crewId}/orders/`)
+      dispatch(createGotSingleOrderAction(order))
+    } catch (error) {
+      dispatch(createGetSingleOrderErrorAction(error.message))
+    }
+  }
+}
+
 export const createGetSingleOrderThunk = (crewId, orderId) => {
   return async (dispatch) => {
     try {
