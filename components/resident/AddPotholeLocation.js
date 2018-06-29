@@ -5,6 +5,9 @@ import { MapView, Constants, Location, Permissions } from 'expo';
 import {
   getGeocodedAddress,
   fetchPotholes,
+  updateUserLatLonThunkCreator,
+  updateAddressActionCreator,
+  updateUserLatLonAction,
 } from '../../store/potholes';
 import { createUpdateLocationAction } from '../../store/report';
 import {
@@ -14,11 +17,11 @@ import {
   Card,
   Form,
   Item,
-  Input,
   Button,
-  H3,
 } from 'native-base';
-import UpvotePothole from './UpvotePothole.js'
+import UpvotePothole from './UpvotePothole.js';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+
 const { Marker } = MapView;
 
 const ScreenHeight = Dimensions.get('window').height;
@@ -34,6 +37,10 @@ class AddPotholeLocation extends React.Component {
         longitude: -87.639035,
         latitudeDelta: 0.005,
         longitudeDelta: 0.005,
+      },
+      userLocation: {
+        latitude: 41.895266,
+        longitude: -87.639035,
       },
     };
   }
@@ -60,26 +67,38 @@ class AddPotholeLocation extends React.Component {
     let location = await Location.getCurrentPositionAsync({});
     let { latitude, longitude } = location.coords;
 
-    //create region based on user location
+    //create region and place marker based on user location
     const initialRegion = {
       latitude,
       longitude,
-      latitudeDelta: 0.002,
-      longitudeDelta: 0.001,
+      latitudeDelta: 0.0005,
+      longitudeDelta: 0.0005,
+    };
+
+    const userLocation = {
+      latitude,
+      longitude,
     };
 
     //get geocoded address and fetch potholes
-    this.setState({ initialRegion }, async () => {
-      const address = await this.props.getAddress(
-        this.state.initialRegion.latitude,
-        this.state.initialRegion.longitude
-      );
-      this.setState({
+    this.setState({ initialRegion, userLocation }, async () => {
+      this._getAddressAsync(userLocation.latitude, userLocation.longitude);
+      this._getPotholesAsync(latitude, longitude);
+      this.props.updateUserLatLonDirect({ latitude, longitude });
+    });
+  };
+
+  _getAddressAsync = async (latitude, longitude) => {
+    const address = await this.props.getAddress(latitude, longitude);
+    this.setState(
+      {
         streetAddress: address.slice(0, 2).join(' '),
         zipcode: address[2],
-      });
-      this._getPotholesAsync(latitude, longitude);
-    });
+      },
+      () => {
+        this.locationRef.setAddressText(this.state.streetAddress);
+      }
+    );
   };
 
   _getPotholesAsync = async (lat, lon) => {
@@ -97,6 +116,60 @@ class AddPotholeLocation extends React.Component {
     this.props.navigation.navigate('Camera');
   };
 
+  _onUserDragEnd = event => {
+    const currentLatDelta = this.state.initialRegion.latitudeDelta
+    const currentLonDelta = this.state.initialRegion.longitudeDelta
+    this.setState(
+      {
+        userLocation: {
+          longitude: event.nativeEvent.coordinate.longitude,
+          latitude: event.nativeEvent.coordinate.latitude,
+        },
+        initialRegion: {
+          longitude: event.nativeEvent.coordinate.longitude,
+          latitude: event.nativeEvent.coordinate.latitude,
+          latitudeDelta: currentLatDelta,
+          longitudeDelta: currentLonDelta,
+        },
+      },
+      () => {
+        this._getAddressAsync(
+          this.state.userLocation.latitude,
+          this.state.userLocation.longitude
+        );
+        this._getPotholesAsync(
+          this.state.userLocation.latitude,
+          this.state.userLocation.longitude
+        );
+      }
+    );
+  };
+
+  _handleLocationSearch = async details => {
+    await this.props.updateUserLatLon(details.address_components);
+    await this.props.updateAddress(details.address_components);
+    await this._getPotholesAsync(
+      this.props.userLatLon.latitude,
+      this.props.userLatLon.longitude
+    );
+    const streetAddress =
+      details.address_components[0].long_name +
+      ' ' +
+      details.address_components[1].short_name;
+    const zipcode = details.address_components[7].long_name;
+    this.setState({
+      streetAddress,
+      zipcode,
+      userLocation: this.props.userLatLon,
+      initialRegion: {
+        latitude: this.props.userLatLon.latitude,
+        longitude: this.props.userLatLon.longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      },
+    });
+  };
+
   render() {
     const potholes = this.props.potholes ? this.props.potholes : [];
 
@@ -104,9 +177,11 @@ class AddPotholeLocation extends React.Component {
       <Container>
         <Content>
           <MapView
+            ref={map => (this.map = map)}
             style={styles.map}
             region={this.state.initialRegion}
             provider={MapView.PROVIDER_GOOGLE}
+            onRegionChangeComplete={(region) => this.setState({initialRegion: region})}
           >
             {potholes.map(pothole => {
               return (
@@ -119,15 +194,20 @@ class AddPotholeLocation extends React.Component {
                   title="Open pothole"
                   image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
                 >
-                  <UpvotePothole potholeId={pothole.id} navigation={this.props.navigation} />
+                  <UpvotePothole
+                    potholeId={pothole.id}
+                    navigation={this.props.navigation}
+                  />
                 </Marker>
               );
             })}
             <Marker
+              draggable
               coordinate={{
-                latitude: this.state.initialRegion.latitude,
-                longitude: this.state.initialRegion.longitude,
+                latitude: this.state.userLocation.latitude,
+                longitude: this.state.userLocation.longitude,
               }}
+              onDragEnd={this._onUserDragEnd}
               title="Your current location"
             />
           </MapView>
@@ -135,20 +215,42 @@ class AddPotholeLocation extends React.Component {
           <Container>
             <Card>
               <Form>
-                <Item>
-                  <Input
-                    placeholder="Street Address"
-                    value={this.state.streetAddress}
-                    onChangeText={text => {
-                      this.setState({ streetAddress: text });
-                    }}
-                  />
-                </Item>
                 <Item last>
-                  <Input
-                    placeholder="Zipcode"
-                    value={this.state.zipcode}
-                    onChangeText={text => this.setState({ zipcode: text })}
+                  <GooglePlacesAutocomplete
+                    ref={instance => {
+                      this.locationRef = instance;
+                    }}
+                    placeholder="Search"
+                    minLength={3}
+                    autoFocus={false}
+                    returnKeyType={'search'}
+                    listViewDisplayed="auto"
+                    fetchDetails={true}
+                    renderDescription={row => row.description}
+                    onPress={(data, details = null) => {
+                      this._handleLocationSearch(details);
+                    }}
+                    getDefaultValue={() => this.state.streetAddress}
+                    query={{
+                      key: 'AIzaSyCDyhK7JGy-x8idR46N4pHd89LtxKzbuq8',
+                      language: 'en',
+                      types: 'address',
+                      location: '41.895266,-87.639035',
+                      radius: 1000,
+                    }}
+                    styles={{
+                      textInputContainer: {
+                        width: '100%',
+                      },
+                      description: {
+                        fontWeight: 'bold',
+                      },
+                      predefinedPlacesDescription: {
+                        color: '#1faadb',
+                      },
+                    }}
+                    nearbyPlacesAPI="GoogleReverseGeocoding"
+                    debounce={200}
                   />
                 </Item>
                 <Button style={styles.button} primary onPress={this.handleNext}>
@@ -183,7 +285,7 @@ const mapStateToProps = state => {
   return {
     potholes: state.potholes.potholes,
     address: state.potholes.address,
-    userId: state.user.id,
+    userLatLon: state.potholes.userLatLon,
   };
 };
 
@@ -192,6 +294,10 @@ const mapDispatchToProps = dispatch => {
     getPotholes: (lat, lon) => dispatch(fetchPotholes(lat, lon)),
     getAddress: (lat, lon) => dispatch(getGeocodedAddress(lat, lon)),
     updateLocation: location => dispatch(createUpdateLocationAction(location)),
+    updateUserLatLon: address =>
+      dispatch(updateUserLatLonThunkCreator(address)),
+    updateAddress: address => dispatch(updateAddressActionCreator(address)),
+    updateUserLatLonDirect: latLon => dispatch(updateUserLatLonAction(latLon)),
   };
 };
 

@@ -11,7 +11,6 @@ class MyPotholes extends React.Component {
 
   render() {
     const navigate = this.props.navigate || this.props.navigation.navigate
-    console.log('this.props', this.props)
     const { user, openPotholes } = this.props;
     return (
       <View>
