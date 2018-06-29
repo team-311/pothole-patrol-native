@@ -38,7 +38,7 @@ const upvotePothole = upvotedPothole => {
   }
 }
 
-const updateUserLatLon = coordinates => {
+export const updateUserLatLonAction = coordinates => {
   return {
     type: UPDATE_USER_LAT_LON,
     coordinates
@@ -82,83 +82,24 @@ export const getGeocodedAddress = (lat, lon) => {
   };
 };
 
-// export const reverseGeocodeAddress = (address) => {
-//   const query = //fill this in
-//   return async dispatch => {
-//     const results = await axios(`https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyCDyhK7JGy-x8idR46N4pHd89LtxKzbuq8`)
-//   }
-// } put the location on state
-//this is actual regular geocodin
-
 export const updateUserLatLonThunkCreator = (address) => {
   const streetNum = address[0].long_name
   const streetName = address[1].long_name.split().join('+')
   const zip = address[7].long_name
   const query = `${streetNum}+${streetName},+Chicago,+IL,+${zip}`
-  console.log('query', query)
   return async dispatch => {
     const results = await axios(`https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=AIzaSyCDyhK7JGy-x8idR46N4pHd89LtxKzbuq8`)
-  console.log('results from reverse geocode', results.data.results[0].geometry.location.lat)
-  console.log('latitude:,', results.data.results[0].geometry.location.lat, 'longitude',results.data.results[0].geometry.location.lng)
-    //get coordinates
-    // dispatch(updateUserLatLon(coordinates))
+    dispatch(updateUserLatLonAction({latitude: results.data.results[0].geometry.location.lat, longitude: results.data.results[0].geometry.location.lng}))
   }
 }
 
-
-// results
-// :
-// Array(1)
-// 0
-// :
-// address_components
-// :
-// (8) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-// formatted_address
-// :
-// "5662 N Clark St, Chicago, IL 60660, USA"
-// geometry
-// :
-// location
-// :
-// {lat: 41.98513000000001, lng: -87.669434}
-// location_type
-// :
-// "ROOFTOP"
-
-
-// (8) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
-// 0
-// :
-// {long_name: "5662", short_name: "5662", types: Array(1)}
-// 1
-// :
-// {long_name: "North Clark Street", short_name: "N Clark St", types: Array(1)}
-// 2
-// :
-// {long_name: "Edgewater", short_name: "Edgewater", types: Array(2)}
-// 3
-// :
-// {long_name: "Chicago", short_name: "Chicago", types: Array(2)}
-// 4
-// :
-// {long_name: "Cook County", short_name: "Cook County", types: Array(2)}
-// 5
-// :
-// {long_name: "Illinois", short_name: "IL", types: Array(2)}
-// 6
-// :
-// {long_name: "United States", short_name: "US", types: Array(2)}
-// 7
-// :
-// {long_name: "60660", short_name: "60660", types: Array(1)}
 
 //Default state
 const defaultPotholes = {
   potholes: [],
   address: [],
   upvotes: [],
-  userLatLon: []
+  userLatLon: {latitude: 41.895266, longitude: -87.639035}
 };
 
 export const GET_SINGLE_POTHOLE = 'GET_SINGLE_POTHOLE';
@@ -193,7 +134,6 @@ export function potholesReducer(state = defaultPotholes, action) {
       return state;
   }
 }
-
 
 export function singlePotholeReducer(state = {}, action) {
   switch (action.type) {
