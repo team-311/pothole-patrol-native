@@ -26,9 +26,6 @@ const ReportStack = createStackNavigator(
     ReportDescription: {
       screen: ReportDescription,
     },
-    // LandingPage: {
-    //   screen: LandingPage,
-    // },
   },
   {
     initialRouteName: 'Location',

@@ -15,7 +15,6 @@ class HomeScreen extends React.Component {
     this.state = {
       isVisible: true
     }
-    //this.hideSplashScreen = this.hideSplashScreen.bind(this)
   }
 
   hideSplashScreen = () => {
