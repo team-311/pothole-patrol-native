@@ -78,7 +78,7 @@ class OrderDirections extends Component {
             provider={MapView.PROVIDER_GOOGLE}
           >
             <MapView.Marker
-              pinColor="red"
+              pinColor="green"
               coordinate={{
                 latitude: this.state.region.latitude,
                 longitude: this.state.region.longitude,
@@ -86,7 +86,7 @@ class OrderDirections extends Component {
               title="Start"
             />
             <MapView.Marker
-              pinColor="green"
+              pinColor="red"
               coordinate={{
                 latitude: Number(destLat),
                 longitude: Number(destLon),
@@ -106,16 +106,17 @@ class OrderDirections extends Component {
               <View style={{flex: 1}}>
                 <Icon name="directions-car" type="MaterialIcons" style={styles.directionsIcon}/>
               </View>
-              <Body style={{flex: 5}}>
+              <Body style={{flex: 6}}>
                 <Text style={styles.emphasis}>{`${this.state.directions.duration} (${this.state.directions.distance})`}</Text>
                 <Text note>{`from: ${this.state.directions.startAddress}`}</Text>
                 <Text note>{`to: ${this.state.directions.endAddress}`}</Text>
               </Body>
-              <View style={{flex: 3}}>
+              <View style={{flex: 2.5}}>
                 <Button small transparent
+                  style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}
                   onPress={() => Linking.openURL(googleMapsUrl)}
                 >
-                  <Text>Google Maps</Text>
+                  <Text style={{textAlign: 'center', fontSize: 12}}>Google Maps</Text>
                 </Button>
               </View>
             </ListItem>
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   directionsIcon: {
-    fontSize: 35,
+    fontSize: 30,
   }
 })
 
