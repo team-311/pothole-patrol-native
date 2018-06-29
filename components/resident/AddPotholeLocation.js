@@ -112,7 +112,6 @@ class AddPotholeLocation extends React.Component {
       latitude: this.state.initialRegion.latitude,
       longitude: this.state.initialRegion.longitude,
     };
-    console.log('location to send to next', location)
     this.props.updateLocation(location);
     this.props.navigation.navigate('Camera');
   };
