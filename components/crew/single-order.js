@@ -1,6 +1,6 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
-import { Container, Content, List, ListItem, CheckBox, Text, Body, Button, View } from 'native-base'
+import { StyleSheet, Linking } from 'react-native'
+import { Container, Content, List, ListItem, CheckBox, Text, Body, Button, View, Icon, Left, Right, Separator } from 'native-base'
 
 const SingleOrder = (props) => {
   const { order, navigate, crewId, region, completeJob } = props
@@ -8,9 +8,17 @@ const SingleOrder = (props) => {
   return (
     <Container style={styles.container}>
       <Content>
-      <View style={{flex: 1, justifyContent: 'space-between'}}>
-        <List>
-        {
+        <View style={{flex: 1, justifyContent: 'flex-end', flexDirection: 'column'}}>
+          <List>
+            <ListItem itemDivider>
+              <Body>
+                <Text style={styles.header}>Pothole(s)</Text>
+              </Body>
+              <Right>
+                <Text style={styles.header}>Done</Text>
+              </Right>
+            </ListItem>
+          {
           !!order.id && order.potholes.map(pothole => (
             <ListItem key={pothole.id}>
               <Body>
@@ -45,25 +53,39 @@ const SingleOrder = (props) => {
           ))
         }
         </List>
-          { isReadyForNext && (
-              <Button block warning
-                style={styles.button}
-                onPress={() => props.getNext(crewId, order.id, region.latitude, region.longitude)}
-              >
-                <Text style={styles.buttonText}>Request Next Pothole</Text>
-              </Button>
-          )}
-        </View>
         { isReadyForNext && (
-          <View style={styles.buttonContainer}>
+          <View style={styles.actions}>
+            <Button
+              iconLeft
+              style={styles.button}
+              onPress={() => props.getNext(crewId, order.id, region.latitude, region.longitude)}
+            >
+              <Icon name="shovel" type="MaterialCommunityIcons" />
+              <Text style={styles.buttonText}>Work on another pothole</Text>
+            </Button>
+            <Text style={styles.orText}>OR</Text>
             <Button block success
+              iconLeft
               style={styles.button}
               onPress={completeJob}
             >
-              <Text style={styles.buttonText}>Finish Work Order</Text>
+              <Icon name="clipboard-check" type="MaterialCommunityIcons" />
+              <Text style={styles.buttonText}>Finish today's assignment</Text>
             </Button>
           </View>
         )}
+        <View style={styles.contact}>
+          <Button
+            iconLeft
+            small
+            info
+            onPress={() => Linking.openURL(`tel:${order.contactNumber}`).catch(console.log)}
+            >
+            <Icon name="phone" type="FontAwesome" />
+            <Text>Contact CDOT</Text>
+          </Button>
+        </View>
+        </View>
       </Content>
     </Container>
   )
@@ -71,18 +93,33 @@ const SingleOrder = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
     backgroundColor: 'white',
   },
   buttonText: {
     fontWeight: 'bold',
-  },
-  buttonContainer: {
-    marginBottom: 50,
+    textAlign: 'center',
   },
   button: {
-    marginTop: 30
+    width: '80%',
+    alignSelf: 'center',
   },
+  contact: {
+    alignSelf: 'center',
+    marginTop: 40
+  },
+  orText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    alignSelf: 'center',
+    margin: 10
+  },
+  header: {
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  actions: {
+    marginTop: 30
+  }
 })
 
 export default SingleOrder
