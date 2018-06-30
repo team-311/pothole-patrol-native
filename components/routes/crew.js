@@ -29,6 +29,7 @@ const SingleOrderLinks = createStackNavigator({
   }
 }, {
   initialRouteName: 'Home',
+  headerMode: 'none'
 })
 
 const OrderHistoryLinks = createStackNavigator({
@@ -42,7 +43,8 @@ const OrderHistoryLinks = createStackNavigator({
     screen: IndividualPothole
   }
 }, {
-  initialRouteName: 'OrderHistory'
+  initialRouteName: 'OrderHistory',
+  headerMode: 'none'
 })
 
 const DrawerLinks = createDrawerNavigator({
@@ -76,6 +78,7 @@ const DrawerLinks = createDrawerNavigator({
 },
 {
   initialRouteName: 'SingleOrder',
+  headerMode: 'none'
 })
 
 export default createStackNavigator({
