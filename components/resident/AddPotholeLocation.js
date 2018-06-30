@@ -24,10 +24,10 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 
 const { Marker } = MapView;
 const defaultRegion = {
-  latitude: 41.895266,
-  longitude: -87.639035,
-  latitudeDelta: 0.005,
-  longitudeDelta: 0.005,
+  latitude: 41.8781,
+  longitude: -87.6298,
+  latitudeDelta: 0.01,
+  longitudeDelta: 0.01,
 }
 
 const ScreenHeight = Dimensions.get('window').height;
@@ -184,8 +184,7 @@ class AddPotholeLocation extends React.Component {
             provider={MapView.PROVIDER_GOOGLE}
             onRegionChangeComplete={(region) =>
               {
-              if (region.logitudeDelta > 1) this.setState({initialRegion: defaultRegion})
-                this.setState({initialRegion: region})}
+              if (region.logitudeDelta > 1) this._getLocationAsync()}
             }
           >
             {potholes.map(pothole => {
