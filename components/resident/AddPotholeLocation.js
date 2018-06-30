@@ -184,6 +184,7 @@ class AddPotholeLocation extends React.Component {
             provider={MapView.PROVIDER_GOOGLE}
             onRegionChangeComplete={(region) =>
               {
+              console.log('regionChangeComplete', region)
               if (region.logitudeDelta > 1) this._getLocationAsync()}
             }
           >

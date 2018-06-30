@@ -25,7 +25,6 @@ class MyPotholes extends React.Component {
     upvotedPotholes = upvotedPotholes.filter(pothole => {
       return !hashMap[pothole.id]
     })
-    console.log('upvotedPotholes', upvotedPotholes)
     return (
       <View style={styles.openPotholes}>
         <View>
