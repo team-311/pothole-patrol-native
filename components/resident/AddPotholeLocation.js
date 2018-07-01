@@ -219,16 +219,29 @@ class AddPotholeLocation extends React.Component {
                 title="Your current location"
               />
             </MapView>
-            <Card style={styles.card}>
+            <Card
+              style={styles.card}
+            >
               <CardItem>
-                <Icon type="Entypo" active name="traffic-cone" style={{
-                      color: 'orange',
-                    }}/>
-                <Text>These are potholes. If you see yours, you can click to view and upvote.</Text>
+                <Icon
+                  type="Entypo"
+                  active
+                  name="traffic-cone"
+                  style={{
+                    color: 'orange',
+                  }}
+                />
+                <Text>
+                  These are potholes. If you see yours, you can click to view
+                  and upvote.
+                </Text>
               </CardItem>
               <CardItem>
-                <Text style={{alignSelf: 'center'}}>If not, start a new report for the city by confirming the pothole address. </Text>
-                </CardItem>
+                <Text style={{ alignSelf: 'center' }}>
+                  If not, start a new report for the city by confirming the
+                  pothole address.
+                </Text>
+              </CardItem>
             </Card>
           </View>
           <Text style={styles.text}>Confirm Pothole Address</Text>

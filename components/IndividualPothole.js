@@ -55,7 +55,7 @@ class IndividualPothole extends React.Component {
       this.props.singlePothole.id,
       this.props.userId
     );
-    Alert.alert('Thanks for upvoting!')
+    Alert.alert('Thanks for upvoting!', null, [{text: 'View my potholes', onPress: () => this.props.navigation.navigate('MyPotholes')}, {text: 'Back to map', onPress: () => this.props.navigation.goBack()}])
     //reset state after upvoting
     this.props.getUserUpvotes(this.props.userId)
     this.setState({
