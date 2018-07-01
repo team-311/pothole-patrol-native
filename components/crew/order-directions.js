@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Dimensions } from 'react-native'
-import { Container, Content, Text, Spinner, List, ListItem, Body, Separator } from 'native-base'
+import { StyleSheet, View, Dimensions, Linking } from 'react-native'
+import { Container, Content, Text, Spinner, List, ListItem, Icon, Button, Body, Separator } from 'native-base'
 import { MapView } from 'expo'
 import axios from 'axios'
 
@@ -16,8 +16,14 @@ class OrderDirections extends Component {
         longitudeDelta: 0.005,
       },
       errorMsg: '',
-      coords: [],
-      steps: []
+      directions: {
+        coords: [],
+        steps: [],
+        startAddress: '',
+        endAddress: '',
+        distance: '',
+        duration: '',
+      }
     }
   }
 
@@ -35,7 +41,15 @@ class OrderDirections extends Component {
     }
     try {
       const { data } = await axios.post(`${process.env.SERVER_URL}/api/crews/directions`, routeOptions)
-      this.setState({ isFetching: false, coords: data.coords, steps: data.steps || [] })
+      const directions = {
+        coords: data.coords,
+        steps: data.steps || [],
+        startAddress: data.startAddress,
+        endAddress: data.endAddress,
+        distance: data.distance,
+        duration: data.duration,
+      }
+      this.setState({ isFetching: false, directions })
     } catch (error) {
       this.setState({isFetching: false, errorMsg: error.message})
     }
@@ -46,12 +60,14 @@ class OrderDirections extends Component {
     if (this.state.errorMsg) return <Text>{this.state.errorMsg}</Text>
 
     const { latitude: destLat, longitude: destLon } = this.props.navigation.state.params
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${this.state.region.latitude},${this.state.region.longitude}&destination=${destLat},${destLon}&travelmode=driving`
+
     return (
       <Container>
         <Content>
           <MapView style={styles.map}
             ref={(ref) => {this.mapRef = ref}}
-            onLayout={() => this.mapRef.fitToCoordinates(this.state.coords, {
+            onLayout={() => this.mapRef.fitToCoordinates(this.state.directions.coords, {
               edgePadding: {
                 left: 50,
                 right: 50,
@@ -62,6 +78,7 @@ class OrderDirections extends Component {
             provider={MapView.PROVIDER_GOOGLE}
           >
             <MapView.Marker
+              pinColor="green"
               coordinate={{
                 latitude: this.state.region.latitude,
                 longitude: this.state.region.longitude,
@@ -69,6 +86,7 @@ class OrderDirections extends Component {
               title="Start"
             />
             <MapView.Marker
+              pinColor="red"
               coordinate={{
                 latitude: Number(destLat),
                 longitude: Number(destLon),
@@ -76,23 +94,38 @@ class OrderDirections extends Component {
               title="Next Pothole"
             />
             <MapView.Polyline
-              coordinates={this.state.coords}
+              coordinates={this.state.directions.coords}
               strokeWidth={2}
               strokeColor="red" />
           </MapView>
           <List style={styles.list}>
             <Separator bordered>
-              <Text>Directions</Text>
+              <Text style={styles.directionsHeader}>Directions</Text>
             </Separator>
+            <ListItem>
+              <View style={{flex: 1}}>
+                <Icon name="directions-car" type="MaterialIcons" style={styles.directionsIcon}/>
+              </View>
+              <Body style={{flex: 6}}>
+                <Text style={styles.emphasis}>{`${this.state.directions.duration} (${this.state.directions.distance})`}</Text>
+                <Text note>{`from: ${this.state.directions.startAddress}`}</Text>
+                <Text note>{`to: ${this.state.directions.endAddress}`}</Text>
+              </Body>
+              <View style={{flex: 2.5}}>
+                <Button small transparent
+                  style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}
+                  onPress={() => Linking.openURL(googleMapsUrl)}
+                >
+                  <Text style={{textAlign: 'center', fontSize: 12}}>Google Maps</Text>
+                </Button>
+              </View>
+            </ListItem>
             {
-              (this.state.steps.length > 0) && this.state.steps.map(step => (
+              (this.state.directions.steps.length > 0) && this.state.directions.steps.map(step => (
                 <ListItem key={step.start_location.lat}>
                   <Body>
                     <Text>{step.instructions}</Text>
-                    <View style={styles.details}>
-                      <Text><Text style={styles.emphasis}>Distance:</Text> {step.distance.text}</Text>
-                      <Text><Text style={styles.emphasis}>Duration:</Text> {step.duration.text}</Text>
-                    </View>
+                    <Text note>{step.distance.text}</Text>
                   </Body>
                 </ListItem>
               ))
@@ -124,6 +157,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10,
     marginBottom: 5,
+  },
+  directionsHeader: {
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  directionsIcon: {
+    fontSize: 30,
   }
 })
 
