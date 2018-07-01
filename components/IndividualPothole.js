@@ -15,6 +15,7 @@ import {
   Card,
   CardItem,
   Body,
+  Separator,
 } from 'native-base';
 import { createGetCommentsThunk } from '../store/comments';
 
@@ -140,22 +141,26 @@ class IndividualPothole extends React.Component {
             >
               <Callout>
                 <View style={styles.container}>
-                  <Text>{`Pothole Status: ${pothole.status} \nAddress: ${
+                  {pothole.imageUrl && (
+                    <Image
+                      style={{ width: 90, height: 70 }}
+                      source={{
+                        uri: `${pothole.imageUrl}`,
+                      }}
+                    />
+                  )}
+                  <Text>{`\nPothole Status: ${pothole.status} \nAddress: ${
                     pothole.streetAddress
                   }`}</Text>
-                  {pothole.imageUrl && <Image
-                    style={{ width: 66, height: 58 }}
-                    source={{
-                      uri: `${pothole.imageUrl}`,
-                    }}
-                  />}
                 </View>
               </Callout>
             </Marker>
           </MapView>
         </Content>
         <Content>
-          <Text style={styles.potholeDetails}>Pothole Details</Text>
+          <Separator>
+            <Text style={styles.potholeDetails}>POTHOLE DETAILS</Text>
+          </Separator>
           <Card transparent>
             <CardItem>
               <Text>{`Upvotes: ${
@@ -167,10 +172,10 @@ class IndividualPothole extends React.Component {
               )}`}</Text>
             </CardItem>
           </Card>
+          <Separator>
+            <Text style={styles.cardHeader}>COMMENTS</Text>
+          </Separator>
           <Card transparent>
-            <CardItem>
-              <Text style={styles.cardHeader}>Comments</Text>
-            </CardItem>
             <CardItem>
               <Body>
                 <Text>{this.state.comments}</Text>
@@ -194,6 +199,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 5,
   },
   backgroundMap: {
     position: 'absolute',
