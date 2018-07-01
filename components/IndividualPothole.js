@@ -5,7 +5,7 @@ const { Marker, Callout } = MapView;
 import { connect } from 'react-redux';
 import { getSinglePotholeServer, upvotePotholeInDB } from '../store/potholes';
 import Comments from './comments';
-import moment from 'moment'
+import moment from 'moment';
 import {
   Container,
   Header,
@@ -26,13 +26,13 @@ class IndividualPothole extends React.Component {
     this.state = {
       upvotes: 0,
       disableUpvote: false,
-      comments: ''
+      comments: '',
     };
   }
 
   async componentDidMount() {
     await this.props.getSinglePothole(this._getId());
-    this._getComments(this.props.singlePothole.id)
+    this._getComments(this.props.singlePothole.id);
     this.setState({
       upvotes: this.props.singlePothole.upvoters.length,
       disableUpvote: !!this.props.upvoters.find(
@@ -41,7 +41,7 @@ class IndividualPothole extends React.Component {
     });
   }
 
-  _getComments = async (potholeId) => {
+  _getComments = async potholeId => {
     await this.props.getAllComments(potholeId);
     let commentString = '';
     if (this.props.allComments.length < 1) {
@@ -55,9 +55,9 @@ class IndividualPothole extends React.Component {
         '\n \n';
     }
     this.setState({
-      comments: commentString
-    })
-  }
+      comments: commentString,
+    });
+  };
 
   _getId = () => {
     let id = 1;
@@ -139,24 +139,32 @@ class IndividualPothole extends React.Component {
               image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
             >
               <Callout>
-                <View>
+                <View style={styles.container}>
                   <Text>{`Pothole Status: ${pothole.status} \nAddress: ${
                     pothole.streetAddress
                   }`}</Text>
+                  {pothole.imageUrl && <Image
+                    style={{ width: 66, height: 58 }}
+                    source={{
+                      uri: `${pothole.imageUrl}`,
+                    }}
+                  />}
                 </View>
               </Callout>
             </Marker>
           </MapView>
         </Content>
         <Content>
-        <Text style={styles.potholeDetails}>Pothole Details</Text>
+          <Text style={styles.potholeDetails}>Pothole Details</Text>
           <Card transparent>
             <CardItem>
               <Text>{`Upvotes: ${
                 this.props.singlePothole.upVotes
-              } \nService Number: ${pothole.serviceNumber}\nDate Created: ${
-                moment(pothole.createdAt).format('MM/DD/YY')
-              }`}</Text>
+              } \nService Number: ${
+                pothole.serviceNumber
+              }\nDate Created: ${moment(pothole.createdAt).format(
+                'MM/DD/YY'
+              )}`}</Text>
             </CardItem>
           </Card>
           <Card transparent>
@@ -169,7 +177,11 @@ class IndividualPothole extends React.Component {
               </Body>
             </CardItem>
           </Card>
-          <Comments user={this.props.user} pothole={this.props.singlePothole} getComments={this._getComments}/>
+          <Comments
+            user={this.props.user}
+            pothole={this.props.singlePothole}
+            getComments={this._getComments}
+          />
         </Content>
       </Container>
     );
@@ -190,7 +202,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     height: ScreenHeight * 0.4,
-    borderWidth: 1
+    borderWidth: 1,
   },
   text: {
     backgroundColor: '#fff',
@@ -209,8 +221,8 @@ const styles = StyleSheet.create({
   potholeDetails: {
     fontWeight: 'bold',
     paddingTop: 5,
-    paddingLeft: 5
-  }
+    paddingLeft: 5,
+  },
 });
 
 const mapState = state => {
