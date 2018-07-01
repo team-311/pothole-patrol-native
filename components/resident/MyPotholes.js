@@ -7,12 +7,13 @@ import {
   ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { createGetResidentReportsThunk } from '../../store/resident-reports';
+import { createGetResidentReportsThunk, getUserUpvotesThunkCreator } from '../../store/resident-reports';
 import { Container, ListItem, List, Text, Content, H3 } from 'native-base';
 
 class MyPotholes extends React.Component {
   componentDidMount() {
     this.props.getReports(this.props.user.id);
+    this.props.getUpvotes(this.props.user.id);
   }
 
   render() {
@@ -123,6 +124,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getReports: id => dispatch(createGetResidentReportsThunk(id)),
+    getUpvotes: (id) => dispatch(getUserUpvotesThunkCreator(id))
   };
 };
 

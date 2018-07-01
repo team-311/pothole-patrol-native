@@ -1,32 +1,17 @@
 import React from 'react';
-import { connect } from 'react-redux'
-import { createGetResidentReportsThunk, getUserUpvotesThunkCreator } from '../../store/resident-reports';
-import MyPotholes from './MyPotholes'
 import { StyleSheet, ImageBackground, Dimensions } from 'react-native'
-import { Container, View, Text, Button, Icon } from 'native-base'
+import {View, Text, Button} from 'native-base'
 
 
 const ScreenHeight = Dimensions.get('window').height;
 
 
-class HomeScreen extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      isVisible: true
-    }
-  }
+export default class HomeScreen extends React.Component {
 
   static navigationOptions = { title: 'HOME' }
 
-  componentDidMount() {
-    this.props.getReports(this.props.user.id)
-    this.props.getUpvotes(this.props.user.id)
-  }
-
   render() {
     const { navigate } = this.props.navigation
-    const { user, openPotholes } = this.props
     return (
       <View style={styles.container}>
         <ImageBackground source={require('../../customStyling/home.jpg')} style={styles.image}>
@@ -66,19 +51,3 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   }
 })
-
-const mapStateToProps = (state) => {
-  return {
-    openPotholes: state.residentReports.potholes.filter(report => report.status.toLowerCase() === 'open'),
-    user: state.user,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getReports: (id) => dispatch(createGetResidentReportsThunk(id)),
-    getUpvotes: (id) => dispatch(getUserUpvotesThunkCreator(id))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
