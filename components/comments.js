@@ -4,9 +4,6 @@ import { connect } from 'react-redux';
 import { createNewCommentThunk } from '../store/comments';
 import {
   Form,
-  Item,
-  Content,
-  Label,
   Button,
   Textarea,
   Text
@@ -28,6 +25,7 @@ class Comments extends React.Component {
       userId: this.props.user.id,
       potholeId: this.props.pothole.id
     }).then(() => {
+      this.props.getComments(this.props.pothole.id)
       this.setState({
         commentText: ''
       })

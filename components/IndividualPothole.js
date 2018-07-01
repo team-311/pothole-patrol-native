@@ -26,19 +26,37 @@ class IndividualPothole extends React.Component {
     this.state = {
       upvotes: 0,
       disableUpvote: false,
+      comments: ''
     };
   }
 
   async componentDidMount() {
     await this.props.getSinglePothole(this._getId());
-    await this.props.getAllComments(this.props.singlePothole.id);
-    // // //set # of upvoters on state
+    this._getComments(this.props.singlePothole.id)
     this.setState({
       upvotes: this.props.singlePothole.upvoters.length,
       disableUpvote: !!this.props.upvoters.find(
         upvoter => upvoter.id === this.props.userId
       ),
     });
+  }
+
+  _getComments = async (potholeId) => {
+    await this.props.getAllComments(potholeId);
+    let commentString = '';
+    if (this.props.allComments.length < 1) {
+      commentString = 'No Comments Yet';
+    }
+    for (let i = 0; i < this.props.allComments.length; i++) {
+      commentString +=
+        this.props.allComments[i].text +
+        '\nBy ' +
+        this.props.allComments[i].user.firstName +
+        '\n \n';
+    }
+    this.setState({
+      comments: commentString
+    })
   }
 
   _getId = () => {
@@ -72,18 +90,6 @@ class IndividualPothole extends React.Component {
     const pothole = this.props.singlePothole;
 
     if (!pothole) return <View />;
-
-    let commentString = '';
-    if (this.props.allComments.length < 1) {
-      commentString = 'No Comments Yet';
-    }
-    for (let i = 0; i < this.props.allComments.length; i++) {
-      commentString +=
-        this.props.allComments[i].text +
-        '\nBy ' +
-        this.props.allComments[i].user.firstName +
-        '\n \n';
-    }
 
     let region = {
       latitude: Number(pothole.latitude),
@@ -159,11 +165,11 @@ class IndividualPothole extends React.Component {
             </CardItem>
             <CardItem>
               <Body>
-                <Text>{`${commentString}`}</Text>
+                <Text>{this.state.comments}</Text>
               </Body>
             </CardItem>
           </Card>
-          <Comments user={this.props.user} pothole={this.props.singlePothole} />
+          <Comments user={this.props.user} pothole={this.props.singlePothole} getComments={this._getComments}/>
         </Content>
       </Container>
     );
@@ -213,7 +219,7 @@ const mapState = state => {
     userId: state.user.id,
     user: state.user,
     upvoters: state.singlePothole.upvoters,
-    allComments: state.comments,
+    allComments: state.comments.allComments,
   };
 };
 
