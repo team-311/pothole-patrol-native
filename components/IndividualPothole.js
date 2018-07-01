@@ -134,7 +134,7 @@ class IndividualPothole extends React.Component {
               }}
               title="dummymarker"
               description="dummymarker"
-              image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
+              image="https://s3.us-east-2.amazonaws.com/soundandcolor/traffic-cone+(2).png"
             />
           </MapView>
         </Content>
