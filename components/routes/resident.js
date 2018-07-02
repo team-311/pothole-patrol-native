@@ -72,6 +72,8 @@ DrawerNavigator.navigationOptions = ({ navigation }) => {
   const customRouteTitles = {
     Home: "Pothole Patrol",
     ReportPothole: "Report a Pothole",
+    MyPotholes: "My Potholes",
+    LandingPage: "Pothole Patrol"
   }
   if (customRouteTitles[routeName]) {
     if(routeName === 'ReportPothole') {
