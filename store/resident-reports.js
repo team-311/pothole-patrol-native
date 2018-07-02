@@ -4,13 +4,23 @@ const initialState = {
   total: 0,
   potholes: [],
   error: '',
+  upvotedPotholes: []
 };
 
 // action types
 const GOT_RESIDENT_REPORTS = 'GOT_RESIDENT_REPORTS'
 const GET_RESIDENT_REPORTS_ERROR = 'GET_RESIDENT_REPORTS_ERROR'
+const GET_USER_UPVOTES = 'GET_USER_UPVOTES'
 
 // action creators
+
+export const getUserUpvotesAction = upvotedPotholes => {
+  return {
+    type: GET_USER_UPVOTES,
+    upvotedPotholes
+  }
+}
+
 export const createGotResidentReportsAction = reports => {
   return {
     type: GOT_RESIDENT_REPORTS,
@@ -26,6 +36,18 @@ export const createGetResidentRequestsErrorAction = error => {
 }
 
 // thunk creators
+
+export const getUserUpvotesThunkCreator = (userId) => {
+  return async (dispatch) => {
+    try {
+      const {data: potholes } = await axios.get(`${process.env.SERVER_URL}/api/users/${userId}/upvoted`)
+      dispatch(getUserUpvotesAction(potholes))
+    } catch (error) {
+      dispatch(createGetResidentRequestsErrorAction(error.message))
+    }
+  }
+}
+
 export const createGetResidentReportsThunk = (userId) => {
   return async (dispatch) => {
     try {
@@ -47,6 +69,8 @@ export default function(state = initialState, action) {
       return {...state, total: action.reports.total, potholes: action.reports.potholes}
     case GET_RESIDENT_REPORTS_ERROR:
       return {...state, error: action.error}
+    case GET_USER_UPVOTES:
+      return {...state, upvotedPotholes: action.upvotedPotholes}
     default:
       return state;
   }

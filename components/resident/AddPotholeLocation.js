@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Platform, StyleSheet, Dimensions } from 'react-native';
+import { Platform, StyleSheet, Dimensions, View } from 'react-native';
 import { MapView, Constants, Location, Permissions } from 'expo';
 import {
   getGeocodedAddress,
@@ -15,14 +15,24 @@ import {
   Content,
   Text,
   Card,
+  CardItem,
+  Body,
   Form,
   Item,
+  Right,
+  Icon,
   Button,
 } from 'native-base';
 import UpvotePothole from './UpvotePothole.js';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 const { Marker } = MapView;
+const defaultRegion = {
+  latitude: 41.8781,
+  longitude: -87.6298,
+  latitudeDelta: 0.01,
+  longitudeDelta: 0.01,
+};
 
 const ScreenHeight = Dimensions.get('window').height;
 
@@ -32,12 +42,7 @@ class AddPotholeLocation extends React.Component {
     this.state = {
       streetAddress: '',
       zipcode: '',
-      initialRegion: {
-        latitude: 41.895266,
-        longitude: -87.639035,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
-      },
+      initialRegion: defaultRegion,
       userLocation: {
         latitude: 41.895266,
         longitude: -87.639035,
@@ -83,8 +88,8 @@ class AddPotholeLocation extends React.Component {
     //get geocoded address and fetch potholes
     this.setState({ initialRegion, userLocation }, async () => {
       this._getAddressAsync(userLocation.latitude, userLocation.longitude);
-      this._getPotholesAsync(latitude, longitude);
       this.props.updateUserLatLonDirect({ latitude, longitude });
+      this._getPotholesAsync(latitude, longitude);
     });
   };
 
@@ -117,8 +122,8 @@ class AddPotholeLocation extends React.Component {
   };
 
   _onUserDragEnd = event => {
-    const currentLatDelta = this.state.initialRegion.latitudeDelta
-    const currentLonDelta = this.state.initialRegion.longitudeDelta
+    const currentLatDelta = this.state.initialRegion.latitudeDelta;
+    const currentLonDelta = this.state.initialRegion.longitudeDelta;
     this.setState(
       {
         userLocation: {
@@ -176,89 +181,109 @@ class AddPotholeLocation extends React.Component {
     return (
       <Container>
         <Content>
-          <MapView
-            ref={map => (this.map = map)}
-            style={styles.map}
-            region={this.state.initialRegion}
-            provider={MapView.PROVIDER_GOOGLE}
-            onRegionChangeComplete={(region) => this.setState({initialRegion: region})}
-          >
-            {potholes.map(pothole => {
-              return (
-                <Marker
-                  key={pothole.id}
-                  coordinate={{
-                    latitude: Number(pothole.latitude),
-                    longitude: Number(pothole.longitude),
-                  }}
-                  title="Open pothole"
-                  image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
-                >
-                  <UpvotePothole
-                    potholeId={pothole.id}
-                    navigation={this.props.navigation}
-                  />
-                </Marker>
-              );
-            })}
-            <Marker
-              draggable
-              coordinate={{
-                latitude: this.state.userLocation.latitude,
-                longitude: this.state.userLocation.longitude,
+          <View style={styles.mapView}>
+            <MapView
+              ref={map => (this.map = map)}
+              style={styles.map}
+              region={this.state.initialRegion}
+              provider={MapView.PROVIDER_GOOGLE}
+              onRegionChangeComplete={region => {
+                if (region.logitudeDelta > 1) this._getLocationAsync();
               }}
-              onDragEnd={this._onUserDragEnd}
-              title="Your current location"
-            />
-          </MapView>
-          <Text style={styles.text}>Confirm Pothole Address</Text>
-          <Container>
-            <Card>
-              <Form>
-                <Item last>
-                  <GooglePlacesAutocomplete
-                    ref={instance => {
-                      this.locationRef = instance;
+            >
+              {potholes.map(pothole => {
+                return (
+                  <Marker
+                    key={pothole.id}
+                    coordinate={{
+                      latitude: Number(pothole.latitude),
+                      longitude: Number(pothole.longitude),
                     }}
-                    placeholder="Search"
-                    minLength={3}
-                    autoFocus={false}
-                    returnKeyType={'search'}
-                    listViewDisplayed="auto"
-                    fetchDetails={true}
-                    renderDescription={row => row.description}
-                    onPress={(data, details = null) => {
-                      this._handleLocationSearch(details);
-                    }}
-                    getDefaultValue={() => this.state.streetAddress}
-                    query={{
-                      key: 'AIzaSyCDyhK7JGy-x8idR46N4pHd89LtxKzbuq8',
-                      language: 'en',
-                      types: 'address',
-                      location: '41.895266,-87.639035',
-                      radius: 1000,
-                    }}
-                    styles={{
-                      textInputContainer: {
-                        width: '100%',
-                      },
-                      description: {
-                        fontWeight: 'bold',
-                      },
-                      predefinedPlacesDescription: {
-                        color: '#1faadb',
-                      },
-                    }}
-                    nearbyPlacesAPI="GoogleReverseGeocoding"
-                    debounce={200}
-                  />
-                </Item>
-                <Button style={styles.button} primary onPress={this.handleNext}>
-                  <Text>Next</Text>
-                </Button>
-              </Form>
+                    title="Open pothole"
+                    image="https://s3.us-east-2.amazonaws.com/soundandcolor/traffic-cone+(2).png"
+                  >
+                    <UpvotePothole
+                      potholeId={pothole.id}
+                      navigation={this.props.navigation}
+                    />
+                  </Marker>
+                );
+              })}
+              <Marker
+                draggable
+                coordinate={{
+                  latitude: this.state.userLocation.latitude,
+                  longitude: this.state.userLocation.longitude,
+                }}
+                onDragEnd={this._onUserDragEnd}
+                title="Your current location"
+              />
+            </MapView>
+            <Card
+              style={styles.card}
+            >
+              <CardItem>
+                <Icon
+                  type="Entypo"
+                  active
+                  name="traffic-cone"
+                  style={{
+                    color: 'orange',
+                  }}
+                />
+                <Text>
+                  These are potholes. If you see yours, you can click to view
+                  and upvote.
+                </Text>
+              </CardItem>
+              <CardItem>
+                <Text style={{ alignSelf: 'center' }}>
+                  If not, start a new report for the city by confirming the
+                  pothole address.
+                </Text>
+              </CardItem>
             </Card>
-          </Container>
+          </View>
+          <Text style={styles.text}>Confirm Pothole Address</Text>
+          <GooglePlacesAutocomplete
+            ref={instance => {
+              this.locationRef = instance;
+            }}
+            placeholder="Search"
+            minLength={3}
+            autoFocus={false}
+            returnKeyType={'search'}
+            listViewDisplayed="auto"
+            fetchDetails={true}
+            renderDescription={row => row.description}
+            onPress={(data, details = null) => {
+              this._handleLocationSearch(details);
+            }}
+            getDefaultValue={() => this.state.streetAddress}
+            query={{
+              key: 'AIzaSyCDyhK7JGy-x8idR46N4pHd89LtxKzbuq8',
+              language: 'en',
+              types: 'address',
+              location: '41.895266,-87.639035',
+              radius: 1000,
+            }}
+            styles={{
+              textInputContainer: {
+                width: '100%',
+              },
+              description: {
+                fontWeight: 'bold',
+              },
+              predefinedPlacesDescription: {
+                color: '#1faadb',
+              },
+            }}
+            nearbyPlacesAPI="GoogleReverseGeocoding"
+            debounce={200}
+          />
+          <Button block style={styles.button} primary onPress={this.handleNext}>
+            <Text>Next</Text>
+          </Button>
         </Content>
       </Container>
     );
@@ -266,18 +291,30 @@ class AddPotholeLocation extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  card: {
+    flex: 0,
+    height: 150,
+    width: '90%',
+    alignSelf: 'center',
+  },
+  mapView: {
+    height: ScreenHeight / 1.6,
+  },
   map: {
+    position: 'absolute',
     top: 0,
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight / 1.75,
+    height: ScreenHeight / 1.6,
   },
   text: {
     padding: 10,
   },
   button: {
-    left: 105,
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 10,
   },
 });
 
