@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Dimensions, Image, View, Alert } from 'react-native';
 import { MapView } from 'expo';
-const { Marker } = MapView;
+const { Marker, Callout } = MapView;
 import { connect } from 'react-redux';
 import {
   getSinglePotholeServer,
@@ -11,13 +11,17 @@ import {
   getUserUpvotesThunkCreator
 } from '../store/resident-reports'
 import Comments from './comments'
+import moment from 'moment';
 import {
   Container,
   Header,
   Content,
   Text,
   Button,
-  Accordion
+  Card,
+  CardItem,
+  Body,
+  Separator,
 } from 'native-base';
 import { createGetCommentsThunk } from '../store/comments';
 
@@ -27,19 +31,40 @@ class IndividualPothole extends React.Component {
   constructor() {
     super();
     this.state = {
-      upVotes: 0,
-      disableUpvote: false
+      upvotes: 0,
+      disableUpvote: false,
+      comments: '',
     };
   }
 
   async componentDidMount() {
     await this.props.getSinglePothole(this._getId());
-    await this.props.getAllComments(this.props.singlePothole.id);
+    this._getComments(this.props.singlePothole.id);
     this.setState({
-      upVotes: this.props.singlePothole.upVotes,
-      disableUpvote: !!(this.props.upvoters.find(upvoter => upvoter.id === this.props.userId))
+      upvotes: this.props.singlePothole.upvoters.length,
+      disableUpvote: !!this.props.upvoters.find(
+        upvoter => upvoter.id === this.props.userId
+      ),
     });
   }
+
+  _getComments = async potholeId => {
+    await this.props.getAllComments(potholeId);
+    let commentString = '';
+    if (this.props.allComments.length < 1) {
+      commentString = 'No Comments Yet';
+    }
+    for (let i = 0; i < this.props.allComments.length; i++) {
+      commentString +=
+        this.props.allComments[i].text +
+        '\nBy ' +
+        this.props.allComments[i].user.firstName +
+        '\n \n';
+    }
+    this.setState({
+      comments: commentString,
+    });
+  };
 
   _getId = () => {
     let id = 1;
@@ -47,10 +72,10 @@ class IndividualPothole extends React.Component {
       id = this.props.navigation.state.params.id;
     }
     return id;
-  }
+  };
 
   _handleUpvote = async () => {
-    this.setState({ disableUpvote: true })
+    this.setState({ disableUpvote: true });
     await this.props.upvotePothole(
       this.props.singlePothole.id,
       this.props.userId
@@ -64,7 +89,7 @@ class IndividualPothole extends React.Component {
   };
 
   _handleCancel = () => {
-    this.props.navigation.goBack(null)
+    this.props.navigation.goBack(null);
   };
 
   static navigationOptions = { title: 'SinglePothole' };
@@ -72,29 +97,16 @@ class IndividualPothole extends React.Component {
   render() {
     const pothole = this.props.singlePothole;
 
-    if (!pothole) return <View />
-
-    let commentString = ''
-    if (this.props.allComments.length < 1) {
-      commentString = 'No Comments -- Leave Yours Here!'
-    }
-    for (let i = 0; i < this.props.allComments.length; i++) {
-      commentString += this.props.allComments[i].text + '\nBy ' + this.props.allComments[i].user.firstName + '\n \n'
-    }
+    if (!pothole) return <View />;
 
     let region = {
       latitude: Number(pothole.latitude),
       longitude: Number(pothole.longitude),
-      latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
+      latitudeDelta: 0.0005,
+      longitudeDelta: 0.0,
     };
 
-    let dataArray = [
-      { title: "More Information", content: `ID: ${pothole.id} \nSTATUS: ${pothole.status} \nUPVOTES: ${this.state.upVotes} \nADDRESS: ${pothole.streetAddress} \nDESCRIPTION: ${pothole.description} \nSERVICE #: ${pothole.serviceNumber}` },
-      { title: "Comments", content: `${commentString}` }
-    ]
-
-    if (!pothole.id) return <View />
+    if (!pothole.id) return <View />;
     return (
       <Container>
         {this.props.navigation.state.params.canUpvote ? (
@@ -118,8 +130,8 @@ class IndividualPothole extends React.Component {
             </Button>
           </Header>
         ) : (
-            <Header />
-          )}
+          <Header />
+        )}
         <Content>
           <MapView
             style={styles.backgroundMap}
@@ -132,15 +144,56 @@ class IndividualPothole extends React.Component {
                 latitude: region.latitude,
                 longitude: region.longitude,
               }}
-              title="dummymarker"
-              description="dummymarker"
               image="https://s3.us-east-2.amazonaws.com/soundandcolor/traffic-cone+(2).png"
-            />
+            >
+              <Callout>
+                <View style={styles.container}>
+                  {pothole.imageUrl && (
+                    <Image
+                      style={{ width: 90, height: 70 }}
+                      source={{
+                        uri: `${pothole.imageUrl}`,
+                      }}
+                    />
+                  )}
+                  <Text>{`\nPothole Status: ${pothole.status} \nAddress: ${
+                    pothole.streetAddress
+                  }`}</Text>
+                </View>
+              </Callout>
+            </Marker>
           </MapView>
         </Content>
         <Content>
-          <Accordion dataArray={dataArray} />
-          <Comments user={this.props.user} pothole={this.props.singlePothole} />
+          <Separator>
+            <Text style={styles.potholeDetails}>POTHOLE DETAILS</Text>
+          </Separator>
+          <Card transparent>
+            <CardItem>
+              <Text>{`Upvotes: ${
+                this.props.singlePothole.upVotes
+              } \nService Number: ${
+                pothole.serviceNumber
+              }\nDate Created: ${moment(pothole.createdAt).format(
+                'MM/DD/YY'
+              )}`}</Text>
+            </CardItem>
+          </Card>
+          <Separator>
+            <Text style={styles.cardHeader}>COMMENTS</Text>
+          </Separator>
+          <Card transparent>
+            <CardItem>
+              <Body>
+                <Text>{this.state.comments}</Text>
+              </Body>
+            </CardItem>
+          </Card>
+          <Comments
+            user={this.props.user}
+            pothole={this.props.singlePothole}
+            getComments={this._getComments}
+          />
         </Content>
       </Container>
     );
@@ -153,6 +206,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 5,
   },
   backgroundMap: {
     position: 'absolute',
@@ -161,6 +215,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     height: ScreenHeight * 0.4,
+    borderWidth: 1,
   },
   text: {
     backgroundColor: '#fff',
@@ -173,6 +228,14 @@ const styles = StyleSheet.create({
     padding: 5,
     justifyContent: 'space-between',
   },
+  cardHeader: {
+    fontWeight: 'bold',
+  },
+  potholeDetails: {
+    fontWeight: 'bold',
+    paddingTop: 5,
+    paddingLeft: 5,
+  },
 });
 
 const mapState = state => {
@@ -181,7 +244,7 @@ const mapState = state => {
     userId: state.user.id,
     user: state.user,
     upvoters: state.singlePothole.upvoters,
-    allComments: state.comments
+    allComments: state.comments.allComments,
   };
 };
 
