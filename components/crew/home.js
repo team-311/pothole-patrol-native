@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Permissions, Location } from 'expo'
 import { Container, Content, Button, Text, Spinner } from 'native-base'
 import { connect } from 'react-redux'
-import { createGetTodaysOrderThunk, createUpdateSingleOrderPotholeThunk, createGetNextPotholeThunk, createUpdateStatusSingleOrderThunk } from '../../store';
+import { createGetTodaysOrderThunk, createUpdateSingleOrderPotholeThunk, createGetNextPotholeThunk, createUpdateStatusSingleOrderThunk, createCreateNewOrderThunk } from '../../store';
 import SingleOrder from './single-order'
 import RequestedSingleOrder from './requested-single-order'
 
@@ -80,6 +80,7 @@ class Home extends Component {
               block
               primary
               style={styles.button}
+              onPress={() => this.props.createNewOrder(this.props.crewId)}
             >
               <Text>Request Job</Text>
             </Button>
@@ -119,10 +120,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getTodaysOrder: (crewId, orderId) => dispatch(createGetTodaysOrderThunk(crewId, orderId)),
+    getTodaysOrder: (crewId) => dispatch(createGetTodaysOrderThunk(crewId)),
     completePothole: (crewId, potholeId) => dispatch(createUpdateSingleOrderPotholeThunk(crewId, potholeId)),
     getNext: (crewId, orderId, lat, lon) => dispatch(createGetNextPotholeThunk(crewId, orderId, lat, lon)),
-    updateStatus: (crewId, orderId, status) => dispatch(createUpdateStatusSingleOrderThunk(crewId, orderId, status))
+    updateStatus: (crewId, orderId, status) => dispatch(createUpdateStatusSingleOrderThunk(crewId, orderId, status)),
+    createNewOrder: (crewId) => dispatch(createCreateNewOrderThunk(crewId)),
   }
 }
 
