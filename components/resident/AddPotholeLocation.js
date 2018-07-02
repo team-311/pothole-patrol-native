@@ -40,6 +40,7 @@ class AddPotholeLocation extends React.Component {
   constructor() {
     super();
     this.state = {
+      showCallout: true,
       streetAddress: '',
       zipcode: '',
       initialRegion: defaultRegion,
@@ -219,30 +220,41 @@ class AddPotholeLocation extends React.Component {
                 title="Your current location"
               />
             </MapView>
-            <Card
-              style={styles.card}
-            >
-              <CardItem>
-                <Icon
-                  type="Entypo"
-                  active
-                  name="traffic-cone"
-                  style={{
-                    color: 'orange',
-                  }}
-                />
-                <Text>
-                  These are potholes. If you see yours, you can click to view
-                  and upvote.
-                </Text>
-              </CardItem>
-              <CardItem>
-                <Text style={{ alignSelf: 'center' }}>
-                  If not, start a new report for the city by confirming the
-                  pothole address.
-                </Text>
-              </CardItem>
-            </Card>
+            {this.state.showCallout && (
+              <Card style={styles.card}>
+                <CardItem>
+                  <Icon
+                    type="Entypo"
+                    active
+                    name="traffic-cone"
+                    style={{
+                      color: 'orange',
+                    }}
+                  />
+                  <Text>
+                    These are potholes. If you see yours, you can click to view
+                    and upvote.
+                  </Text>
+                </CardItem>
+                <CardItem>
+                  <Text style={{ alignSelf: 'center' }}>
+                    If not, you can start a new report by confirming its
+                    address.
+                  </Text>
+                </CardItem>
+                <Right style={{ alignSelf: 'flex-end' }}>
+                  <Button small bordered style={{margin: 3}}
+                    onPress={() =>
+                      this.setState({
+                        showCallout: false,
+                      })
+                    }
+                  >
+                    <Text>Got it!</Text>
+                  </Button>
+                </Right>
+              </Card>
+            )}
           </View>
           <Text style={styles.text}>Confirm Pothole Address</Text>
           <GooglePlacesAutocomplete
@@ -293,7 +305,7 @@ class AddPotholeLocation extends React.Component {
 const styles = StyleSheet.create({
   card: {
     flex: 0,
-    height: 150,
+    height: 175,
     width: '90%',
     alignSelf: 'center',
   },
