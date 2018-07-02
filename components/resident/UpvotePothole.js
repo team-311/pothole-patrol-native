@@ -14,7 +14,7 @@ import {
 
 const UpvotePothole = props => {
   viewPothole = () => {
-    props.navigation.navigate('ViewPothole', { id: props.potholeId, canUpvote: true })
+    props.navigation.navigate('ViewSinglePothole', { id: props.potholeId, canUpvote: true })
   };
 
   return (

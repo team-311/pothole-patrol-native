@@ -7,7 +7,11 @@ const Settings = (props) => {
   return (
     <Container>
       <Content style={{backgroundColor: 'white'}}>
-        <Button block danger style={{width: '80%', marginTop: 40, alignSelf: 'center'}}onPress={props.logout}>
+        <Button
+          block
+          style={{width: '80%', marginTop: 40, alignSelf: 'center', backgroundColor: '#36454f'}}
+          onPress={props.logout}
+        >
           <Text>Log out</Text>
         </Button>
       </Content>
