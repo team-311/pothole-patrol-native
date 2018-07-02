@@ -3,8 +3,14 @@ import { StyleSheet, Dimensions, Image, View, Alert } from 'react-native';
 import { MapView } from 'expo';
 const { Marker, Callout } = MapView;
 import { connect } from 'react-redux';
-import { getSinglePotholeServer, upvotePotholeInDB } from '../store/potholes';
-import Comments from './comments';
+import {
+  getSinglePotholeServer,
+  upvotePotholeInDB,
+} from '../store/potholes';
+import {
+  getUserUpvotesThunkCreator
+} from '../store/resident-reports'
+import Comments from './comments'
 import moment from 'moment';
 import {
   Container,
@@ -74,10 +80,11 @@ class IndividualPothole extends React.Component {
       this.props.singlePothole.id,
       this.props.userId
     );
-    Alert.alert('Thanks for upvoting!');
+    Alert.alert('Thanks for upvoting!', null, [{text: 'View my potholes', onPress: () => this.props.navigation.navigate('MyPotholes')}, {text: 'Back to map', onPress: () => this.props.navigation.goBack()}])
     //reset state after upvoting
+    this.props.getUserUpvotes(this.props.userId)
     this.setState({
-      upvotes: this.props.upvoters.length,
+      upVotes: this.props.singlePothole.upVotes,
     });
   };
 
@@ -116,10 +123,10 @@ class IndividualPothole extends React.Component {
             <Button
               style={styles.button}
               small
-              danger
+              warning
               onPress={this._handleCancel}
             >
-              <Text>Cancel</Text>
+              <Text>Back</Text>
             </Button>
           </Header>
         ) : (
@@ -137,7 +144,7 @@ class IndividualPothole extends React.Component {
                 latitude: region.latitude,
                 longitude: region.longitude,
               }}
-              image="https://s3.us-east-2.amazonaws.com/soundandcolor/button+(2).png"
+              image="https://s3.us-east-2.amazonaws.com/soundandcolor/traffic-cone+(2).png"
             >
               <Callout>
                 <View style={styles.container}>
@@ -247,6 +254,7 @@ const mapDispatch = dispatch => {
     upvotePothole: (potholeId, userId) =>
       dispatch(upvotePotholeInDB(potholeId, userId)),
     getAllComments: id => dispatch(createGetCommentsThunk(id)),
+    getUserUpvotes: userId => dispatch(getUserUpvotesThunkCreator(userId))
   };
 };
 
