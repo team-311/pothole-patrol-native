@@ -116,7 +116,7 @@ class OrderDirections extends Component {
                   style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap'}}
                   onPress={() => Linking.openURL(googleMapsUrl)}
                 >
-                  <Text style={{textAlign: 'center', fontSize: 12}}>Google Maps</Text>
+                  <Text style={{textAlign: 'center', fontSize: 12, color: "#FC4C02"}}>Google Maps</Text>
                 </Button>
               </View>
             </ListItem>

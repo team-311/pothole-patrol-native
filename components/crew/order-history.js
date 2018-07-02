@@ -15,7 +15,7 @@ class OrderHistory extends Component {
     if (this.props.error) return <View><Text>Something went wrong: {this.props.error}</Text></View>
     const { navigate } = this.props.navigation
     return (
-      <Container>
+      <Container style={{backgroundColor: 'white'}}>
         <Content>
           {this.props.orders.length > 0 ? (
             <List>
@@ -28,7 +28,7 @@ class OrderHistory extends Component {
                     {!!order.dateCompleted && <Text> on {moment(order.dateCompleted).format('MM/DD/YY')}</Text> }
                   </Left>
                   <Right>
-                    <Icon style={{color: "skyblue"}} name="arrow-forward" />
+                    <Icon style={{color: "#FC4C02"}} name="arrow-forward" />
                   </Right>
                 </ListItem>
               ))}
