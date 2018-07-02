@@ -31,11 +31,15 @@ export const createNewCommentThunk = comment => {
   };
 };
 
+const initialState = {
+  allComments: [],
+  comment: {}
+}
 //reducer
-export default function (state = [], action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case ALL_COMMENTS:
-      return action.allComments
+      return {...state, allComments: action.allComments}
     case NEW_COMMENT:
       return {
         ...state,
