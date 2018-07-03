@@ -90,8 +90,6 @@ class IndividualPothole extends React.Component {
     });
   };
 
-  static navigationOptions = { title: 'SinglePothole' };
-
   render() {
     const pothole = this.props.singlePothole;
 

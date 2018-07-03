@@ -32,7 +32,7 @@ const SingleOrder = (props) => {
                       canUpvote: false,
                     })}
                   >
-                    <Text>View Details</Text>
+                    <Text style={styles.actionText}>View Details</Text>
                   </Button>
                   <Button small transparent onPress={() => navigate('Directions', {
                     latitude: pothole.latitude,
@@ -40,11 +40,11 @@ const SingleOrder = (props) => {
                     currLatitude: region.latitude,
                     currLongitude: region.longitude,
                   })}>
-                    <Text>View Directions</Text>
+                    <Text style={styles.actionText}>View Directions</Text>
                   </Button>
                 </View>
               </Body>
-              <CheckBox large color="green"
+              <CheckBox large color="#FC4C02"
                 checked={!!pothole.completionDate}
                 disabled={!!pothole.completionDate}
                 onPress={() => props.completePothole(crewId, pothole.id)}
@@ -57,7 +57,7 @@ const SingleOrder = (props) => {
           <View style={styles.actions}>
             <Button
               iconLeft
-              style={styles.button}
+              style={styles.buttonPothole}
               onPress={() => props.getNext(crewId, order.id, region.latitude, region.longitude)}
             >
               <Icon name="shovel" type="MaterialCommunityIcons" />
@@ -85,7 +85,7 @@ const SingleOrder = (props) => {
           <Button
             iconLeft
             small
-            info
+            style={styles.buttonContact}
             onPress={() => Linking.openURL(`tel:${order.contactNumber}`).catch(console.log)}
             >
             <Icon name="phone" type="FontAwesome" />
@@ -107,8 +107,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   button: {
+    backgroundColor: "#36454f",
     width: '80%',
     alignSelf: 'center',
+  },
+  buttonPothole: {
+    backgroundColor: "#FC4C02",
+    width: '80%',
+    alignSelf: 'center',
+  },
+  buttonContact: {
+    backgroundColor: "rgba(54, 69, 69, 0.5)"
   },
   contact: {
     alignSelf: 'center',
@@ -126,6 +135,9 @@ const styles = StyleSheet.create({
   },
   actions: {
     marginTop: 30
+  },
+  actionText: {
+    color: "#FC4C02"
   }
 })
 
