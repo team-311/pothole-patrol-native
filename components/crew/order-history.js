@@ -40,7 +40,7 @@ class OrderHistory extends Component {
                     order,
                   })}>
                     <Left>
-                      {!!order.dateCompleted && <Text style={styles.orderText}>{moment(order.dateCompleted).format('MMM DD, YYYY')}</Text> }
+                      {!!order.dateCompleted && <Text style={styles.orderText}>{moment(order.dateCompleted).format('ddd')}</Text> }
                       <Text style={{marginLeft: 40, fontSize: 14}}>{order.potholes.length === 1 ? '1 pothole' : `${order.potholes.length} potholes`}</Text>
                     </Left>
                     <Right>
