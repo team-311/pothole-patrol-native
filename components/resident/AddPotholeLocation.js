@@ -20,6 +20,7 @@ import {
   Icon,
   Button,
 } from 'native-base';
+import { hideInfoCalloutAction } from '../../store/resident-reports';
 import UpvotePothole from './UpvotePothole.js';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
@@ -37,7 +38,6 @@ class AddPotholeLocation extends React.Component {
   constructor() {
     super();
     this.state = {
-      showCallout: true,
       streetAddress: '',
       zipcode: '',
       initialRegion: defaultRegion,
@@ -187,7 +187,7 @@ class AddPotholeLocation extends React.Component {
               provider={MapView.PROVIDER_GOOGLE}
               onRegionChangeComplete={region => {
                 if (region.logitudeDelta > 1) this._getLocationAsync();
-                this.setState({initialRegion: region})
+                this.setState({ initialRegion: region });
               }}
             >
               {potholes.map(pothole => {
@@ -218,7 +218,7 @@ class AddPotholeLocation extends React.Component {
                 title="Your current location"
               />
             </MapView>
-            {this.state.showCallout && (
+            {this.props.firstReport && (
               <Card style={styles.card}>
                 <CardItem>
                   <Icon
@@ -235,17 +235,16 @@ class AddPotholeLocation extends React.Component {
                 </CardItem>
                 <CardItem>
                   <Text style={styles.calloutText}>
-                    If not, you can start a new report by confirming the pothole's
-                    address.
+                    If not, you can start a new report by confirming the
+                    pothole's address.
                   </Text>
                 </CardItem>
                 <Right style={{ alignSelf: 'flex-end' }}>
-                  <Button small bordered style={{margin: 3}}
-                    onPress={() =>
-                      this.setState({
-                        showCallout: false,
-                      })
-                    }
+                  <Button
+                    small
+                    bordered
+                    style={{ margin: 3 }}
+                    onPress={() => this.props.hideCallout()}
                   >
                     <Text>Got it!</Text>
                   </Button>
@@ -328,8 +327,8 @@ const styles = StyleSheet.create({
   calloutText: {
     alignSelf: 'center',
     fontSize: 14,
-    padding: 1
-  }
+    padding: 1,
+  },
 });
 
 const mapStateToProps = state => {
@@ -337,6 +336,7 @@ const mapStateToProps = state => {
     potholes: state.potholes.potholes,
     address: state.potholes.address,
     userLatLon: state.potholes.userLatLon,
+    firstReport: state.residentReports.firstReport,
   };
 };
 
@@ -349,6 +349,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateUserLatLonThunkCreator(address)),
     updateAddress: address => dispatch(updateAddressActionCreator(address)),
     updateUserLatLonDirect: latLon => dispatch(updateUserLatLonAction(latLon)),
+    hideCallout: () => dispatch(hideInfoCalloutAction()),
   };
 };
 
