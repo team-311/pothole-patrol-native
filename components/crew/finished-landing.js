@@ -10,9 +10,9 @@ const FinishedLanding = (props) => {
       <View style={styles.flex}>
         <Icon type="Feather" name="check-circle" style={styles.icon}/>
         <H2>Thank you!</H2>
-        <Text style={styles.message}>Your work order has been successfully submitted. If you have any questions, please contact 555-123-5432.</Text>
-        <Button block danger style={styles.button} onPress={props.logout}>
-            <Text>Log out</Text>
+        <Text style={styles.message}>Your assignment details were successfully submitted. If you have any questions, please contact 555-123-5432.</Text>
+        <Button block style={styles.button} onPress={() => props.navigation.navigate('OrderHistory')}>
+            <Text style={styles.buttonText}>View All Assignments</Text>
         </Button>
       </View>
     </Container>
@@ -27,6 +27,10 @@ const styles = StyleSheet.create({
     width: '80%',
     marginTop: 40,
     alignSelf: 'center',
+    backgroundColor: "#FC4C02",
+  },
+  buttonText: {
+    fontWeight: 'bold',
   },
   flex: {
     flex: 1,
@@ -40,17 +44,9 @@ const styles = StyleSheet.create({
   },
   icon: {
     margin: 30,
-    color: 'green',
+    color: '#36454f',
     fontSize: 100,
   }
 })
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    logout() {
-      dispatch(logout())
-    }
-  }
-}
-
-export default connect(null, mapDispatchToProps)(FinishedLanding)
+export default FinishedLanding

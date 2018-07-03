@@ -20,7 +20,6 @@ const RequestedSingleOrder = (props) => {
           <View>
             <Button
               block
-              primary
               style={styles.button}
               onPress={startJob}
             >
@@ -38,7 +37,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   button: {
-    margin: 10
+    margin: 15,
+    backgroundColor: "#FC4C02",
   }
 })
 
