@@ -191,9 +191,9 @@ class AddPotholeLocation extends React.Component {
               initialRegion={defaultRegion}
               region={this.state.initialRegion}
               provider={MapView.PROVIDER_GOOGLE}
-              onRegionChangeComplete={region => {
-                if (!(region.longitudeDelta > 112 && region.latitudeDelta >88))  this.setState({ initialRegion: region });
-              }}
+              // onRegionChangeComplete={region => {
+              //   if (!(region.longitudeDelta > 112 && region.latitudeDelta >88))  this.setState({ initialRegion: region });
+              // }}
             >
               {potholes.map(pothole => {
                 return (
