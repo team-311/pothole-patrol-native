@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { Container, Content, Button, H2, List, ListItem, View, Text } from 'native-base'
+import { Container, Content, Button, List, ListItem, View, Text, Body } from 'native-base'
 
 const RequestedSingleOrder = (props) => {
   const { order, startJob} = props
@@ -12,7 +12,11 @@ const RequestedSingleOrder = (props) => {
             <List>
               {!!order.id && order.potholes.map(pothole => (
                 <ListItem key={pothole.id}>
-                    <Text>{pothole.streetAddress}</Text>
+                    {/* <Text>{pothole.streetAddress}</Text> */}
+                  <Body>
+                    <Text>#{pothole.serviceNumber}</Text>
+                    <Text note>{pothole.streetAddress} {pothole.zip}</Text>
+                  </Body>
                 </ListItem>
               ))}
             </List>
