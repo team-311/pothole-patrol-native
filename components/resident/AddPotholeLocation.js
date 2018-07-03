@@ -239,12 +239,11 @@ class AddPotholeLocation extends React.Component {
                 </CardItem>
                 <CardItem>
                   <Right style={{ alignSelf: 'flex-end' }}>
-                    <Button small bordered style={{ margin: 3 }}
-                      onPress={() =>
-                        this.setState({
-                          showCallout: false,
-                        })
-                      }
+                    <Button
+                      small
+                      bordered
+                      style={{ margin: 3 }}
+                      onPress={() => this.props.hideCallout()}
                     >
                       <Text>Got it!</Text>
                     </Button>
