@@ -4,15 +4,22 @@ const initialState = {
   total: 0,
   potholes: [],
   error: '',
-  upvotedPotholes: []
+  upvotedPotholes: [],
+  firstReport: true
 };
 
 // action types
 const GOT_RESIDENT_REPORTS = 'GOT_RESIDENT_REPORTS'
 const GET_RESIDENT_REPORTS_ERROR = 'GET_RESIDENT_REPORTS_ERROR'
 const GET_USER_UPVOTES = 'GET_USER_UPVOTES'
+const HIDE_INFO_CALLOUT = 'HIDE_INFO_CALLOUT'
 
 // action creators
+export const hideInfoCalloutAction = () => {
+  return {
+    type: 'HIDE_INFO_CALLOUT'
+  }
+}
 
 export const getUserUpvotesAction = upvotedPotholes => {
   return {
@@ -65,6 +72,8 @@ export const createGetResidentReportsThunk = (userId) => {
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case HIDE_INFO_CALLOUT:
+      return {...state, firstReport = !state.firstReport}
     case GOT_RESIDENT_REPORTS:
       return {...state, total: action.reports.total, potholes: action.reports.potholes}
     case GET_RESIDENT_REPORTS_ERROR:

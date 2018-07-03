@@ -9,7 +9,7 @@ import {
   updateAddressActionCreator,
   updateUserLatLonAction,
 } from '../../store/potholes';
-import { createUpdateLocationAction } from '../../store/report';
+import { createUpdateLocationAction, hideInfoCalloutAction } from '../../store/report';
 import {
   Container,
   Content,
@@ -37,7 +37,6 @@ class AddPotholeLocation extends React.Component {
   constructor() {
     super();
     this.state = {
-      showCallout: true,
       streetAddress: '',
       zipcode: '',
       initialRegion: defaultRegion,
@@ -218,7 +217,7 @@ class AddPotholeLocation extends React.Component {
                 title="Your current location"
               />
             </MapView>
-            {this.state.showCallout && (
+            {this.props.firstReport && (
               <Card style={styles.card}>
                 <CardItem>
                   <Icon
@@ -242,9 +241,7 @@ class AddPotholeLocation extends React.Component {
                 <Right style={{ alignSelf: 'flex-end' }}>
                   <Button small bordered style={{margin: 3}}
                     onPress={() =>
-                      this.setState({
-                        showCallout: false,
-                      })
+                      this.props.hideCallout()
                     }
                   >
                     <Text>Got it!</Text>
@@ -337,6 +334,7 @@ const mapStateToProps = state => {
     potholes: state.potholes.potholes,
     address: state.potholes.address,
     userLatLon: state.potholes.userLatLon,
+    firstReport: state.residentReports.firstReport
   };
 };
 
@@ -349,6 +347,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateUserLatLonThunkCreator(address)),
     updateAddress: address => dispatch(updateAddressActionCreator(address)),
     updateUserLatLonDirect: latLon => dispatch(updateUserLatLonAction(latLon)),
+    hideCallout: () => dispatch(hideInfoCalloutAction)
   };
 };
 
