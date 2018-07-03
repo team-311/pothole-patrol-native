@@ -1,9 +1,8 @@
 import React from 'react'
-import { Icon } from 'native-base'
+import { Icon, Text, View } from 'native-base'
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation'
 import Home from '../crew/home'
 import Settings from '../Settings'
-import SingleOrder from '../crew/single-order'
 import OrderDirections from '../crew/order-directions'
 import OrderHistory from '../crew/order-history'
 import SingleOrderHistory from '../crew/single-order-history'
@@ -11,58 +10,21 @@ import IndividualPothole from '../IndividualPothole'
 import FinishedLanding from '../crew/finished-landing'
 import Logout from '../logout'
 
-const SingleOrderLinks = createStackNavigator({
+const DrawerNavigator = createDrawerNavigator({
   Home: {
     screen: Home,
-    navigationOptions: () => ({
-      title: "Today's Work Order"
-    })
-  },
-  SingleOrder: {
-    screen: SingleOrder,
-  },
-  Directions: {
-    screen: OrderDirections,
-  },
-  IndividualPothole: {
-    screen: IndividualPothole,
-  }
-}, {
-  initialRouteName: 'Home',
-})
-
-const OrderHistoryLinks = createStackNavigator({
-  OrderHistory: {
-    screen: OrderHistory,
-  },
-  SingleOrderHistory: {
-    screen: SingleOrderHistory,
-  },
-  IndividualPothole: {
-    screen: IndividualPothole
-  }
-}, {
-  initialRouteName: 'OrderHistory'
-})
-
-const DrawerLinks = createDrawerNavigator({
-  SingleOrder: {
-    screen: SingleOrderLinks,
     navigationOptions: {
-      title: "Today's Work Order"
+      drawerLabel: "Today's Assignment",
     }
   },
   OrderHistory: {
-    screen: OrderHistoryLinks,
+    screen: OrderHistory,
     navigationOptions: {
-      drawerLabel: 'Work Order History'
+      drawerLabel: "Assignment History",
     }
   },
   Settings: {
     screen: Settings,
-    navigationOptions: {
-      title: 'Settings'
-    }
   },
   Logout: {
     screen: Logout,
@@ -75,19 +37,64 @@ const DrawerLinks = createDrawerNavigator({
   }
 },
 {
-  initialRouteName: 'SingleOrder',
+  initialRouteName: 'Home',
+  contentOptions: {
+    activeTintColor: "#FC4C02"
+  }
 })
+
+DrawerNavigator.navigationOptions = ({ navigation }) => {
+  let { routeName } = navigation.state.routes[navigation.state.index];
+  // Add any title here that does NOT match the route name verbatim
+  const customRouteTitles = {
+    Home: "Today's Assignment",
+    OrderHistory: "Assignment History",
+    Finished: "Pothole Patrol"
+  }
+  if (customRouteTitles[routeName]) {
+    return {
+      headerTitle: customRouteTitles[routeName]
+    }
+  } else {
+    return {
+      headerTitle: routeName
+    }
+  }
+}
+
+const createBackButton = (navigation) => <Icon name="ios-arrow-back" type="Ionicons" style={{marginLeft: 15, color: 'white'}} onPress={() => navigation.goBack()} />
 
 export default createStackNavigator({
   Base: {
-    screen: DrawerLinks,
+    screen: DrawerNavigator,
+  },
+  Directions: {
+    screen: OrderDirections,
+    navigationOptions: ({navigation}) => ({
+      headerLeft: createBackButton(navigation),
+      title: 'Directions'
+    })
+  },
+  IndividualPothole: {
+    screen: IndividualPothole,
+    navigationOptions: ({navigation}) => ({
+      headerLeft: createBackButton(navigation),
+      title: 'Individual Pothole'
+    })
+  },
+  SingleOrderHistory: {
+    screen: SingleOrderHistory,
+    navigationOptions: ({navigation}) => ({
+      headerLeft: createBackButton(navigation),
+      title: 'Individual Assignment'
+    })
   },
 }, {
     headerMode: 'float',
     navigationOptions: ({ navigation }) => ({
-      headerStyle: { backgroundColor: '#B3DDF2' },
-      headerTintColor: '#FF0000',
+      headerStyle: { backgroundColor: '#FC4C02' },
+      headerTintColor: '#FFFFFF',
       title: 'Pothole Patrol',
-      headerLeft: <Icon name="menu" style={{marginLeft: 15}} onPress={() => navigation.toggleDrawer()} />
+      headerLeft: <Icon name="menu" style={{marginLeft: 15, color: '#FFFFFF'}} onPress={() => navigation.toggleDrawer()} />
     })
 })

@@ -3,14 +3,9 @@ import { StyleSheet, Dimensions, Image, View, Alert } from 'react-native';
 import { MapView } from 'expo';
 const { Marker, Callout } = MapView;
 import { connect } from 'react-redux';
-import {
-  getSinglePotholeServer,
-  upvotePotholeInDB,
-} from '../store/potholes';
-import {
-  getUserUpvotesThunkCreator
-} from '../store/resident-reports'
-import Comments from './comments'
+import { getSinglePotholeServer, upvotePotholeInDB } from '../store/potholes';
+import { getUserUpvotesThunkCreator } from '../store/resident-reports';
+import Comments from './comments';
 import moment from 'moment';
 import {
   Container,
@@ -22,6 +17,7 @@ import {
   CardItem,
   Body,
   Separator,
+  ListItem,
 } from 'native-base';
 import { createGetCommentsThunk } from '../store/comments';
 
@@ -80,19 +76,19 @@ class IndividualPothole extends React.Component {
       this.props.singlePothole.id,
       this.props.userId
     );
-    Alert.alert('Thanks for upvoting!', null, [{text: 'View my potholes', onPress: () => this.props.navigation.navigate('MyPotholes')}, {text: 'Back to map', onPress: () => this.props.navigation.goBack()}])
+    Alert.alert('Thanks for upvoting!', null, [
+      {
+        text: 'View my potholes',
+        onPress: () => this.props.navigation.navigate('MyPotholes'),
+      },
+      { text: 'Back to map', onPress: () => this.props.navigation.goBack() },
+    ]);
     //reset state after upvoting
-    this.props.getUserUpvotes(this.props.userId)
+    this.props.getUserUpvotes(this.props.userId);
     this.setState({
       upVotes: this.props.singlePothole.upVotes,
     });
   };
-
-  _handleCancel = () => {
-    this.props.navigation.goBack(null);
-  };
-
-  static navigationOptions = { title: 'SinglePothole' };
 
   render() {
     const pothole = this.props.singlePothole;
@@ -109,68 +105,60 @@ class IndividualPothole extends React.Component {
     if (!pothole.id) return <View />;
     return (
       <Container>
-        {this.props.navigation.state.params.canUpvote ? (
-          <Header>
-            <Button
-              style={styles.button}
-              small
-              success
-              onPress={this._handleUpvote}
-              disabled={this.state.disableUpvote}
-            >
-              <Text>Upvote</Text>
-            </Button>
-            <Button
-              style={styles.button}
-              small
-              warning
-              onPress={this._handleCancel}
-            >
-              <Text>Back</Text>
-            </Button>
-          </Header>
-        ) : (
-          <Header />
-        )}
         <Content>
-          <MapView
-            style={styles.backgroundMap}
-            region={region}
-            provider={MapView.PROVIDER_GOOGLE}
-          >
-            <Marker
-              key={pothole.id}
-              coordinate={{
-                latitude: region.latitude,
-                longitude: region.longitude,
-              }}
-              image="https://s3.us-east-2.amazonaws.com/soundandcolor/traffic-cone+(2).png"
+          <View>
+            <MapView
+              style={styles.backgroundMap}
+              region={region}
+              provider={MapView.PROVIDER_GOOGLE}
             >
-              <Callout>
-                <View style={styles.container}>
-                  {pothole.imageUrl && (
-                    <Image
-                      style={{ width: 90, height: 70 }}
-                      source={{
-                        uri: `${pothole.imageUrl}`,
-                      }}
-                    />
-                  )}
-                  <Text>{`\nPothole Status: ${pothole.status} \nAddress: ${
-                    pothole.streetAddress
-                  }`}</Text>
-                </View>
-              </Callout>
-            </Marker>
-          </MapView>
+              <Marker
+                key={pothole.id}
+                coordinate={{
+                  latitude: region.latitude,
+                  longitude: region.longitude,
+                }}
+                image="https://s3.us-east-2.amazonaws.com/soundandcolor/traffic-cone+(2).png"
+              >
+                <Callout>
+                  <View style={styles.container}>
+                    {pothole.imageUrl && (
+                      <Image
+                        style={{ width: 90, height: 70 }}
+                        source={{
+                          uri: `${pothole.imageUrl}`,
+                        }}
+                      />
+                    )}
+                    <Text style={{fontSize: 14}}>{`\nStatus: ${pothole.status} \nAddress: ${
+                      pothole.streetAddress
+                    }`}</Text>
+                  </View>
+                </Callout>
+              </Marker>
+            </MapView>
+            {this.props.navigation.state.params.canUpvote ? (
+              <View style={styles.buttonCard}>
+                <Button
+                  success
+                  onPress={this._handleUpvote}
+                  disabled={this.state.disableUpvote}
+                >
+                  <Text>Upvote</Text>
+                </Button>
+              </View>
+            ) : (
+              <View />
+            )}
+          </View>
         </Content>
-        <Content>
-          <Separator>
-            <Text style={styles.potholeDetails}>POTHOLE DETAILS</Text>
-          </Separator>
+        <Content style={styles.detailsCard}>
           <Card transparent>
+            <CardItem bordered>
+              <Text style={styles.potholeDetails}>Pothole Details</Text>
+            </CardItem>
             <CardItem>
-              <Text>{`Upvotes: ${
+              <Text style={{fontSize: 14}}>{`Upvotes: ${
                 this.props.singlePothole.upVotes
               } \nService Number: ${
                 pothole.serviceNumber
@@ -179,14 +167,12 @@ class IndividualPothole extends React.Component {
               )}`}</Text>
             </CardItem>
           </Card>
-          <Separator>
-            <Text style={styles.cardHeader}>COMMENTS</Text>
-          </Separator>
           <Card transparent>
+            <CardItem bordered>
+              <Text style={styles.potholeDetails}>Comments</Text>
+            </CardItem>
             <CardItem>
-              <Body>
-                <Text>{this.state.comments}</Text>
-              </Body>
+              <Text style={{fontSize: 14}}>{this.state.comments}</Text>
             </CardItem>
           </Card>
           <Comments
@@ -202,11 +188,9 @@ class IndividualPothole extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 5,
   },
   backgroundMap: {
     position: 'absolute',
@@ -214,8 +198,8 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight * 0.4,
-    borderWidth: 1,
+    height: ScreenHeight * 0.5,
+    paddingBottom: 4
   },
   text: {
     backgroundColor: '#fff',
@@ -236,6 +220,18 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingLeft: 5,
   },
+  buttonCard: {
+    flex: 1,
+    width: '93%',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 3
+  },
+  detailsCard: {
+    width: '95%',
+    alignSelf: 'center',
+  }
 });
 
 const mapState = state => {
@@ -254,7 +250,7 @@ const mapDispatch = dispatch => {
     upvotePothole: (potholeId, userId) =>
       dispatch(upvotePotholeInDB(potholeId, userId)),
     getAllComments: id => dispatch(createGetCommentsThunk(id)),
-    getUserUpvotes: userId => dispatch(getUserUpvotesThunkCreator(userId))
+    getUserUpvotes: userId => dispatch(getUserUpvotesThunkCreator(userId)),
   };
 };
 

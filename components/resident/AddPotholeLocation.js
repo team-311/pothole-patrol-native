@@ -16,13 +16,11 @@ import {
   Text,
   Card,
   CardItem,
-  Body,
-  Form,
-  Item,
   Right,
   Icon,
   Button,
 } from 'native-base';
+import { hideInfoCalloutAction } from '../../store/resident-reports';
 import UpvotePothole from './UpvotePothole.js';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
@@ -40,7 +38,6 @@ class AddPotholeLocation extends React.Component {
   constructor() {
     super();
     this.state = {
-      showCallout: true,
       streetAddress: '',
       zipcode: '',
       initialRegion: defaultRegion,
@@ -190,6 +187,7 @@ class AddPotholeLocation extends React.Component {
               provider={MapView.PROVIDER_GOOGLE}
               onRegionChangeComplete={region => {
                 if (region.logitudeDelta > 1) this._getLocationAsync();
+                this.setState({ initialRegion: region });
               }}
             >
               {potholes.map(pothole => {
@@ -220,7 +218,7 @@ class AddPotholeLocation extends React.Component {
                 title="Your current location"
               />
             </MapView>
-            {this.state.showCallout && (
+            {this.props.firstReport && (
               <Card style={styles.card}>
                 <CardItem>
                   <Text>
@@ -304,8 +302,8 @@ class AddPotholeLocation extends React.Component {
 const styles = StyleSheet.create({
   card: {
     flex: 0,
-    height: 175,
-    width: '90%',
+    height: 150,
+    width: '93%',
     alignSelf: 'center',
   },
   mapView: {
@@ -337,6 +335,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#FC4C02'
   },
+  calloutText: {
+    alignSelf: 'center',
+    fontSize: 14,
+    padding: 1,
+  },
 });
 
 const mapStateToProps = state => {
@@ -344,6 +347,7 @@ const mapStateToProps = state => {
     potholes: state.potholes.potholes,
     address: state.potholes.address,
     userLatLon: state.potholes.userLatLon,
+    firstReport: state.residentReports.firstReport,
   };
 };
 
@@ -356,6 +360,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateUserLatLonThunkCreator(address)),
     updateAddress: address => dispatch(updateAddressActionCreator(address)),
     updateUserLatLonDirect: latLon => dispatch(updateUserLatLonAction(latLon)),
+    hideCallout: () => dispatch(hideInfoCalloutAction()),
   };
 };
 
