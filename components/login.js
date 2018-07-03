@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, ImageBackground, View, Image, StyleSheet, Dimensions } from 'react-native'
+import { Text, ImageBackground, View, Image, StyleSheet, Dimensions, KeyboardAvoidingView } from 'react-native'
 import { Container, Header, Content, Form, Item, Input, Label, Button } from 'native-base'
 import { auth } from '../store'
 import { connect } from 'react-redux'
@@ -19,6 +19,7 @@ class Login extends Component {
   render() {
     return (
       <Container style={{ backgroundColor: "white" }}>
+      <Content>
         <Image source={require('../customStyling/logo5.jpg')} style={styles.image} />
         <View style={styles.form}>
           <Form>
@@ -52,6 +53,7 @@ class Login extends Component {
             </Button>
           </Form>
         </View>
+        </Content>
       </Container>
     )
   }
