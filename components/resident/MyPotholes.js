@@ -45,7 +45,8 @@ class MyPotholes extends React.Component {
         ? ''
         : `Let's get patrolling!...`;
     const hashMap = openPotholes.reduce((acc, curr) => {
-      return { [curr.id]: 1 };
+      acc[curr.id] = 1
+      return acc ;
     }, {});
     upvotedPotholes = upvotedPotholes.filter(pothole => {
       return !hashMap[pothole.id];
