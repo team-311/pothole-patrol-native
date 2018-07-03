@@ -1,4 +1,3 @@
-console.log("IM here1")
 import React from 'react';
 import * as Expo from 'expo'
 import { Provider } from 'react-redux';
@@ -17,7 +16,6 @@ export default class App extends React.Component {
   }
 
   componentWillMount() {
-    console.log("IM here2")
     this.loadFonts();
   }
 
@@ -33,9 +31,7 @@ export default class App extends React.Component {
 
   render() {
     const { isReady } = this.state
-    console.log("IM here3")
     if (!isReady) return <View />
-    console.log("IM here4 ")
     return (
       <Provider store={store}>
         <Main />

@@ -25,7 +25,6 @@ export const auth = (email, password, method) => {
     axios.post(`${process.env.SERVER_URL}/auth/${method}`, { email, password })
       .then(res => {
         dispatch(createGetUserAction(res.data))
-        console.log("IM here6")
         return res.data
       }, authError => { // rare example: a good use case for parallel (non-catch) error handler
         debugger

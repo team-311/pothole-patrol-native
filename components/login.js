@@ -13,30 +13,10 @@ class Login extends Component {
       username: '',
       password: '',
       error: '',
-      isVisible: true
     }
   }
 
-  // hideSplashScreen = () => {
-  //   this.setState({
-  //     isVisible: false
-  //   })
-  // }
-
-  // componentDidMount() {
-  //   var that = this
-  //   setTimeout(function () {
-  //     that.hideSplashScreen()
-  //   }, 3000)
-  // }
-
   render() {
-    // let splashScreen = (
-    //   <View>
-    //     <ImageBackground source={require('../customStyling/splash-screen.jpg')} style={styles.image}>
-    //     </ImageBackground>
-    //   </View>
-    // )
     return (
       <Container style={{ backgroundColor: "white" }}>
         <Content style={styles.container}>
