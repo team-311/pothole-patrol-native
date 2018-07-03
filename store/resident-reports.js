@@ -17,7 +17,7 @@ const HIDE_INFO_CALLOUT = 'HIDE_INFO_CALLOUT'
 // action creators
 export const hideInfoCalloutAction = () => {
   return {
-    type: 'HIDE_INFO_CALLOUT'
+    type: HIDE_INFO_CALLOUT
   }
 }
 
@@ -73,7 +73,7 @@ export const createGetResidentReportsThunk = (userId) => {
 export default function(state = initialState, action) {
   switch (action.type) {
     case HIDE_INFO_CALLOUT:
-      return {...state, firstReport = !state.firstReport}
+      return {...state, firstReport: !state.firstReport}
     case GOT_RESIDENT_REPORTS:
       return {...state, total: action.reports.total, potholes: action.reports.potholes}
     case GET_RESIDENT_REPORTS_ERROR:

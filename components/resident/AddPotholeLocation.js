@@ -9,7 +9,7 @@ import {
   updateAddressActionCreator,
   updateUserLatLonAction,
 } from '../../store/potholes';
-import { createUpdateLocationAction, hideInfoCalloutAction } from '../../store/report';
+import { createUpdateLocationAction } from '../../store/report';
 import {
   Container,
   Content,
@@ -20,6 +20,7 @@ import {
   Icon,
   Button,
 } from 'native-base';
+import { hideInfoCalloutAction } from '../../store/resident-reports';
 import UpvotePothole from './UpvotePothole.js';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
@@ -186,7 +187,7 @@ class AddPotholeLocation extends React.Component {
               provider={MapView.PROVIDER_GOOGLE}
               onRegionChangeComplete={region => {
                 if (region.logitudeDelta > 1) this._getLocationAsync();
-                this.setState({initialRegion: region})
+                this.setState({ initialRegion: region });
               }}
             >
               {potholes.map(pothole => {
@@ -234,15 +235,16 @@ class AddPotholeLocation extends React.Component {
                 </CardItem>
                 <CardItem>
                   <Text style={styles.calloutText}>
-                    If not, you can start a new report by confirming the pothole's
-                    address.
+                    If not, you can start a new report by confirming the
+                    pothole's address.
                   </Text>
                 </CardItem>
                 <Right style={{ alignSelf: 'flex-end' }}>
-                  <Button small bordered style={{margin: 3}}
-                    onPress={() =>
-                      this.props.hideCallout()
-                    }
+                  <Button
+                    small
+                    bordered
+                    style={{ margin: 3 }}
+                    onPress={() => this.props.hideCallout()}
                   >
                     <Text>Got it!</Text>
                   </Button>
@@ -325,8 +327,8 @@ const styles = StyleSheet.create({
   calloutText: {
     alignSelf: 'center',
     fontSize: 14,
-    padding: 1
-  }
+    padding: 1,
+  },
 });
 
 const mapStateToProps = state => {
@@ -334,7 +336,7 @@ const mapStateToProps = state => {
     potholes: state.potholes.potholes,
     address: state.potholes.address,
     userLatLon: state.potholes.userLatLon,
-    firstReport: state.residentReports.firstReport
+    firstReport: state.residentReports.firstReport,
   };
 };
 
@@ -347,7 +349,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(updateUserLatLonThunkCreator(address)),
     updateAddress: address => dispatch(updateAddressActionCreator(address)),
     updateUserLatLonDirect: latLon => dispatch(updateUserLatLonAction(latLon)),
-    hideCallout: () => dispatch(hideInfoCalloutAction)
+    hideCallout: () => dispatch(hideInfoCalloutAction()),
   };
 };
 
