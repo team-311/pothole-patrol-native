@@ -37,7 +37,10 @@ const DrawerNavigator = createDrawerNavigator({
   }
 },
 {
-  initialRouteName: 'Home'
+  initialRouteName: 'Home',
+  contentOptions: {
+    activeTintColor: "#FC4C02"
+  }
 })
 
 DrawerNavigator.navigationOptions = ({ navigation }) => {

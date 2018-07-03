@@ -45,6 +45,9 @@ const DrawerNavigator = createDrawerNavigator({
 },
 {
   initialRouteName: 'Home',
+  contentOptions: {
+    activeTintColor: "#FC4C02"
+  }
 })
 
 const createBackButton = (navigation) => <Icon name="ios-arrow-back" type="Ionicons" style={{marginLeft: 15, color: 'white'}} onPress={() => navigation.goBack()} />
