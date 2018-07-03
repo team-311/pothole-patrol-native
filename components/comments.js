@@ -41,7 +41,7 @@ class Comments extends React.Component {
             value={this.state.commentText}
           />
         </Form>
-        <Button block onPress={this.handleSubmit}><Text>Submit</Text></Button>
+        <Button style={{width: '90%', alignSelf: 'center'}} block onPress={this.handleSubmit}><Text>Submit</Text></Button>
       </KeyboardAvoidingView>
     );
   }
