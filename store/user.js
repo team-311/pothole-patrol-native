@@ -8,27 +8,33 @@ const REMOVE_USER = 'REMOVE_USER'
 const defaultUser = {}
 
 // action creators
-const createGetUserAction = (user) => ({type: GET_USER, user})
-const createRemoveUserAction = () => ({type: REMOVE_USER})
+const createGetUserAction = (user) => ({ type: GET_USER, user })
+const createRemoveUserAction = () => ({ type: REMOVE_USER })
 
 // thunk creators
-export const me = () =>
-  dispatch =>
+export const me = () => {
+  return (dispatch =>
     axios.get(`${process.env.SERVER_URL}/auth/me`)
       .then(res =>
         dispatch(createGetUserAction(res.data || defaultUser)))
-      .catch(err => console.log(err))
+      .catch(err => console.log(err)))
+}
 
-export const auth = (email, password, method) =>
-  dispatch =>
+export const auth = (email, password, method) => {
+  return (dispatch =>
     axios.post(`${process.env.SERVER_URL}/auth/${method}`, { email, password })
       .then(res => {
         dispatch(createGetUserAction(res.data))
+        console.log("IM here6")
         return res.data
       }, authError => { // rare example: a good use case for parallel (non-catch) error handler
+        debugger
         return { error: authError.message }
       })
       .catch(dispatchOrHistoryErr => console.error(dispatchOrHistoryErr))
+  )
+
+}
 
 export const logout = () =>
   dispatch =>

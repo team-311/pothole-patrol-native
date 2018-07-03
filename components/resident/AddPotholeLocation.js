@@ -223,36 +223,35 @@ class AddPotholeLocation extends React.Component {
             {this.state.showCallout && (
               <Card style={styles.card}>
                 <CardItem>
-                  <Icon
-                    type="Entypo"
-                    active
-                    name="traffic-cone"
-                    style={{
-                      color: 'orange',
-                    }}
-                  />
                   <Text>
-                    These are potholes. If you see yours, you can click to view
-                    and upvote.
+                    <Icon
+                      type="Entypo"
+                      active
+                      name="traffic-cone"
+                      style={{
+                        color: '#FC4C02',
+                      }}
+                    /> These are potholes. If you see yours, you can click to view and upvote.
                   </Text>
                 </CardItem>
                 <CardItem>
                   <Text style={{ alignSelf: 'center' }}>
-                    If not, you can start a new report by confirming its
-                    address.
+                    If not, you can start a new report by confirming its address.
                   </Text>
                 </CardItem>
-                <Right style={{ alignSelf: 'flex-end' }}>
-                  <Button small bordered style={{margin: 3}}
-                    onPress={() =>
-                      this.setState({
-                        showCallout: false,
-                      })
-                    }
-                  >
-                    <Text>Got it!</Text>
-                  </Button>
-                </Right>
+                <CardItem>
+                  <Right style={{ alignSelf: 'flex-end' }}>
+                    <Button small bordered style={{ margin: 3 }}
+                      onPress={() =>
+                        this.setState({
+                          showCallout: false,
+                        })
+                      }
+                    >
+                      <Text>Got it!</Text>
+                    </Button>
+                  </Right>
+                </CardItem>
               </Card>
             )}
           </View>
@@ -314,19 +313,29 @@ const styles = StyleSheet.create({
   },
   map: {
     position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
+    top: 5,
+    right: 5,
+    bottom: 5,
+    left: 5,
     height: ScreenHeight / 1.6,
   },
   text: {
-    padding: 10,
+    padding: 20,
+    backgroundColor: '#36454F',
+    color: 'white',
+    //alignSelf: 'center',
+    //width: '95%',
+    //height: 25,
+    borderRadius: 10
+    // borderWidth: 1,
+    // borderColor: 'white',
+
   },
   button: {
-    marginLeft: 10,
-    marginRight: 10,
     marginTop: 10,
+    width: '80%',
+    alignSelf: 'center',
+    backgroundColor: '#FC4C02'
   },
 });
 

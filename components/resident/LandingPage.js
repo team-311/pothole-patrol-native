@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { logout } from '../../store'
-import { StyleSheet, ImageBackground, Dimensions } from 'react-native'
+import { StyleSheet, ImageBackground, Image, Dimensions } from 'react-native'
 import { Container, View, Text, Button, Icon } from 'native-base'
 
 
@@ -11,8 +11,8 @@ export const LandingPage = (props) => {
   return (
     <Container >
       <View >
-        <ImageBackground source={require('../../customStyling/landing-page.jpg')} style={styles.image}>
-          <Button block rounded style={styles.button} onPress={() => props.navigation.navigate('Home')}>
+        <ImageBackground source={require('../../customStyling/landing-page2.jpg')} style={styles.image}>
+          <Button block style={styles.button} onPress={() => props.navigation.navigate('Home')}>
             <Text>Home</Text>
           </Button>
         </ImageBackground>
@@ -27,8 +27,9 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '80%',
-    marginTop: 250,
+    marginTop: 350,
     alignSelf: 'center',
+    backgroundColor: '#FC4C02'
   },
   flex: {
     flex: 1,

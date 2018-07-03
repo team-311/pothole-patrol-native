@@ -86,9 +86,9 @@ export default createStackNavigator({
 }, {
     headerMode: 'float',
     navigationOptions: ({ navigation }) => ({
-      headerStyle: { backgroundColor: 'grey' },
+      headerStyle: { backgroundColor: '#FC4C02' },
       headerTintColor: 'white',
       title: 'Pothole Patrol',
-      headerLeft: <Icon name="menu" style={{ marginLeft: 15 }} onPress={() => navigation.toggleDrawer()} />
+      headerLeft: <Icon name="menu" style={{ marginLeft: 15, color: "white" }} onPress={() => navigation.toggleDrawer()} />
     })
   })
