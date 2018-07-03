@@ -22,7 +22,8 @@ const SingleOrder = (props) => {
           !!order.id && order.potholes.map(pothole => (
             <ListItem key={pothole.id}>
               <Body>
-                <Text>{pothole.streetAddress}</Text>
+                <Text>#{pothole.serviceNumber}</Text>
+                <Text note>{pothole.streetAddress}</Text>
                 <View style={{flexDirection: 'row'}}>
                   <Button
                     small
