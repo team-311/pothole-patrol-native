@@ -16,9 +16,6 @@ import {
   Text,
   Card,
   CardItem,
-  Body,
-  Form,
-  Item,
   Right,
   Icon,
   Button,
@@ -190,6 +187,7 @@ class AddPotholeLocation extends React.Component {
               provider={MapView.PROVIDER_GOOGLE}
               onRegionChangeComplete={region => {
                 if (region.logitudeDelta > 1) this._getLocationAsync();
+                this.setState({initialRegion: region})
               }}
             >
               {potholes.map(pothole => {
@@ -231,14 +229,13 @@ class AddPotholeLocation extends React.Component {
                       color: 'orange',
                     }}
                   />
-                  <Text>
-                    These are potholes. If you see yours, you can click to view
-                    and upvote.
+                  <Text style={styles.calloutText}>
+                    {`These are potholes. If you see yours,\n you can click to view and upvote.`}
                   </Text>
                 </CardItem>
                 <CardItem>
-                  <Text style={{ alignSelf: 'center' }}>
-                    If not, you can start a new report by confirming its
+                  <Text style={styles.calloutText}>
+                    If not, you can start a new report by confirming the pothole's
                     address.
                   </Text>
                 </CardItem>
@@ -305,8 +302,8 @@ class AddPotholeLocation extends React.Component {
 const styles = StyleSheet.create({
   card: {
     flex: 0,
-    height: 175,
-    width: '90%',
+    height: 150,
+    width: '93%',
     alignSelf: 'center',
   },
   mapView: {
@@ -328,6 +325,11 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 10,
   },
+  calloutText: {
+    alignSelf: 'center',
+    fontSize: 14,
+    padding: 1
+  }
 });
 
 const mapStateToProps = state => {
