@@ -7,8 +7,22 @@ import {
   ScrollView,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { createGetResidentReportsThunk, getUserUpvotesThunkCreator } from '../../store/resident-reports';
-import { Container, ListItem, List, Text, Content, H3 } from 'native-base';
+import {
+  createGetResidentReportsThunk,
+  getUserUpvotesThunkCreator,
+} from '../../store/resident-reports';
+import {
+  Container,
+  ListItem,
+  List,
+  Text,
+  Content,
+  H3,
+  Card,
+  Separator,
+  CardItem
+} from 'native-base';
+import PotholeListItem from './PotholeListItem';
 
 class MyPotholes extends React.Component {
   componentDidMount() {
@@ -16,80 +30,82 @@ class MyPotholes extends React.Component {
     this.props.getUpvotes(this.props.user.id);
   }
 
+  _handlePress = (potholeId, navigationFunc) => {
+    navigationFunc('ViewSinglePothole', {
+      id: potholeId,
+      canUpvote: false,
+    });
+  };
+
   render() {
     const navigate = this.props.navigate || this.props.navigation.navigate;
     let { user, openPotholes, upvotedPotholes } = this.props;
-    const text = openPotholes.length || upvotedPotholes.length ? '' : `Let's get patrolling!...`
+    const text =
+      openPotholes.length || upvotedPotholes.length
+        ? ''
+        : `Let's get patrolling!...`;
     const hashMap = openPotholes.reduce((acc, curr) => {
-      return {[curr.id]: 1}
-    }, {})
+      return { [curr.id]: 1 };
+    }, {});
     upvotedPotholes = upvotedPotholes.filter(pothole => {
-      return !hashMap[pothole.id]
-    })
+      return !hashMap[pothole.id];
+    });
+
     return (
-      <View style={styles.openPotholes}>
-        <View>
-          {openPotholes && openPotholes.length > 0 ? (
-            <View>
-              <H3>Your Reported Potholes:</H3>
-              <List>
-                {openPotholes.map(pothole => (
-                  <ListItem key={pothole.id}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigate('ViewSinglePothole', {
-                          id: pothole.id,
-                          canUpvote: false,
-                        })
-                      }
-                    >
-                      <Text>
-                        {pothole.streetAddress} -- {pothole.status}
-                      </Text>
-                    </TouchableOpacity>
-                  </ListItem>
-                ))}
-              </List>
-            </View>
-          ) : (
-            <Text>{text}</Text>
-          )}
+      <Container style={styles.container}>
+        <Content>
           <View>
-            {upvotedPotholes && upvotedPotholes.length > 0 && (
+            <View>
+              {openPotholes && openPotholes.length > 0 ? (
+                <View>
+                  <List>
+                  <ListItem itemDivider>
+                        <Text style={{fontWeight: 'bold'}}>Potholes You Reported</Text>
+                        </ListItem>
+                    {openPotholes.map(pothole => (
+                      <PotholeListItem
+                        key={pothole.id}
+                        pothole={pothole}
+                        handlePress={this._handlePress}
+                        navigation={navigate}
+                      />
+                    ))}
+                  </List>
+                </View>
+              ) : (
+                <Text>{text}</Text>
+              )}
               <View>
-                <H3>Your Upvoted Potholes:</H3>
-                <List>
-                  {upvotedPotholes.map(pothole => (
-                    <ListItem key={pothole.id}>
-                      <TouchableOpacity
-                        onPress={() =>
-                          navigate('ViewSinglePothole', {
-                            id: pothole.id,
-                            canUpvote: false,
-                          })
-                        }
-                      >
-                        <Text>
-                          {pothole.streetAddress} -- {pothole.status}
-                        </Text>
-                      </TouchableOpacity>
-                    </ListItem>
-                  ))}
-                </List>
+                {upvotedPotholes &&
+                  upvotedPotholes.length > 0 && (
+                    <View>
+                      <List>
+                        <ListItem itemDivider>
+                        <Text style={{fontWeight: 'bold'}}>Potholes You Upvoted</Text>
+                        </ListItem>
+                        {upvotedPotholes.map(pothole => (
+                          <PotholeListItem
+                            key={pothole.id}
+                            pothole={pothole}
+                            handlePress={this._handlePress}
+                            navigation={navigate}
+                          />
+                        ))}
+                      </List>
+                    </View>
+                  )}
               </View>
-            )}
+            </View>
           </View>
-        </View>
-      </View>
+        </Content>
+      </Container>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#ffffff'
   },
   button: {
     backgroundColor: '#B3DDF2',
@@ -124,7 +140,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getReports: id => dispatch(createGetResidentReportsThunk(id)),
-    getUpvotes: (id) => dispatch(getUserUpvotesThunkCreator(id))
+    getUpvotes: id => dispatch(getUserUpvotesThunkCreator(id)),
   };
 };
 
