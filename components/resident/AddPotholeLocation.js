@@ -90,7 +90,7 @@ class AddPotholeLocation extends React.Component {
       await this._getAddressAsync(userLocation.latitude, userLocation.longitude);
       await this.props.updateUserLatLonDirect({ latitude, longitude });
       await this._getPotholesAsync(latitude, longitude);
-      this.setState({ready: true})
+      this.setState({ ready: true })
     });
   };
 
@@ -179,7 +179,7 @@ class AddPotholeLocation extends React.Component {
   render() {
     const potholes = this.props.potholes ? this.props.potholes : [];
 
-    if (!this.state.ready) return <Spinner color='#FC4C02'/>
+    if (!this.state.ready) return <Spinner color='#FC4C02' />
 
     return (
       <Container>
@@ -192,7 +192,7 @@ class AddPotholeLocation extends React.Component {
               region={this.state.initialRegion}
               provider={MapView.PROVIDER_GOOGLE}
               onRegionChangeComplete={region => {
-                if (!(region.longitudeDelta > 112 && region.latitudeDelta >88))  this.setState({ initialRegion: region });
+                if (!(region.longitudeDelta > 112 && region.latitudeDelta > 88)) this.setState({ initialRegion: region });
               }}
             >
               {potholes.map(pothole => {
