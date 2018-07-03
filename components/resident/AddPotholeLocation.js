@@ -19,6 +19,7 @@ import {
   Right,
   Icon,
   Button,
+  Spinner
 } from 'native-base';
 import { hideInfoCalloutAction } from '../../store/resident-reports';
 import UpvotePothole from './UpvotePothole.js';
@@ -38,6 +39,7 @@ class AddPotholeLocation extends React.Component {
   constructor() {
     super();
     this.state = {
+      ready: false,
       streetAddress: '',
       zipcode: '',
       initialRegion: defaultRegion,
@@ -85,9 +87,10 @@ class AddPotholeLocation extends React.Component {
 
     //get geocoded address and fetch potholes
     this.setState({ initialRegion, userLocation }, async () => {
-      this._getAddressAsync(userLocation.latitude, userLocation.longitude);
-      this.props.updateUserLatLonDirect({ latitude, longitude });
-      this._getPotholesAsync(latitude, longitude);
+      await this._getAddressAsync(userLocation.latitude, userLocation.longitude);
+      await this.props.updateUserLatLonDirect({ latitude, longitude });
+      await this._getPotholesAsync(latitude, longitude);
+      this.setState({ready: true})
     });
   };
 
@@ -99,7 +102,7 @@ class AddPotholeLocation extends React.Component {
         zipcode: address[2],
       },
       () => {
-        this.locationRef.setAddressText(this.state.streetAddress);
+        if (this.state.ready) this.locationRef.setAddressText(this.state.streetAddress);
       }
     );
   };
@@ -176,18 +179,20 @@ class AddPotholeLocation extends React.Component {
   render() {
     const potholes = this.props.potholes ? this.props.potholes : [];
 
+    if (!this.state.ready) return <Spinner color='#FC4C02'/>
+
     return (
       <Container>
         <Content>
           <View style={styles.mapView}>
-            <MapView
+            {this.state.ready && <MapView
               ref={map => (this.map = map)}
               style={styles.map}
+              initialRegion={defaultRegion}
               region={this.state.initialRegion}
               provider={MapView.PROVIDER_GOOGLE}
               onRegionChangeComplete={region => {
-                if (region.logitudeDelta > 1) this._getLocationAsync();
-                this.setState({ initialRegion: region });
+                if (!(region.longitudeDelta > 112 && region.latitudeDelta >88))  this.setState({ initialRegion: region });
               }}
             >
               {potholes.map(pothole => {
@@ -217,7 +222,7 @@ class AddPotholeLocation extends React.Component {
                 onDragEnd={this._onUserDragEnd}
                 title="Your current location"
               />
-            </MapView>
+            </MapView>}
             {this.props.firstReport && (
               <Card style={styles.card}>
                 <CardItem>
