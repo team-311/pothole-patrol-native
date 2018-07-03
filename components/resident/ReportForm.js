@@ -87,6 +87,9 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
+    backgroundColor: '#FC4C02',
+    width: "90%",
+    alignSelf: 'center'
   },
   formGroup: {
     marginBottom: 20,
@@ -95,4 +98,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  text: {
+    padding: 20,
+    backgroundColor: '#36454F',
+    color: 'white',
+    //alignSelf: 'center',
+    //width: '100%',
+    //height: 25,
+    borderRadius: 10
+    // borderWidth: 1,
+    // borderColor: 'white',
+
+  }
 })

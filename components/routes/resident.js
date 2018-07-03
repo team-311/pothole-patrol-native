@@ -43,19 +43,19 @@ const DrawerNavigator = createDrawerNavigator({
     screen: Logout,
   }
 },
-{
-  initialRouteName: 'Home',
-  contentOptions: {
-    activeTintColor: "#FC4C02"
-  }
-})
+  {
+    initialRouteName: 'Home',
+    contentOptions: {
+      activeTintColor: "#FC4C02"
+    }
+  })
 
-const createBackButton = (navigation) => <Icon name="ios-arrow-back" type="Ionicons" style={{marginLeft: 15, color: 'white'}} onPress={() => navigation.goBack()} />
+const createBackButton = (navigation) => <Icon name="ios-arrow-back" type="Ionicons" style={{ marginLeft: 15, color: 'white' }} onPress={() => navigation.goBack()} />
 const createCancelButton = (navigation) => {
   const action = StackActions.reset({
     index: 0,
     key: null, // black magic
-    actions: [NavigationActions.navigate({routeName: 'Base'})]
+    actions: [NavigationActions.navigate({ routeName: 'Base' })]
   })
 
   return (
@@ -63,9 +63,11 @@ const createCancelButton = (navigation) => {
       small
       transparent
       onPress={() => navigation.dispatch(action)}
-      style={{alignSelf: 'center'}}
-    ><Text style={{textDecorationLine: 'underline',
-    color: 'white',}}>Cancel</Text></Button>
+      style={{ alignSelf: 'center' }}
+    ><Text style={{
+      textDecorationLine: 'underline',
+      color: 'white',
+    }}>Cancel</Text></Button>
   )
 }
 
@@ -79,16 +81,16 @@ DrawerNavigator.navigationOptions = ({ navigation }) => {
     LandingPage: "Pothole Patrol"
   }
   if (customRouteTitles[routeName]) {
-    if(routeName === 'ReportPothole') {
+    if (routeName === 'ReportPothole') {
       return {
         headerTitle: customRouteTitles[routeName],
         headerRight: createCancelButton(navigation)
       }
-     } else {
-        return {
-          headerTitle: customRouteTitles[routeName]
-        }
+    } else {
+      return {
+        headerTitle: customRouteTitles[routeName]
       }
+    }
   } else {
     return {
       headerTitle: routeName
@@ -102,14 +104,14 @@ export default createStackNavigator({
   },
   ViewSinglePothole: {
     screen: IndividualPothole,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerLeft: createBackButton(navigation),
       title: 'Individual Pothole'
     })
   },
   Camera: {
     screen: ReportPhoto,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerLeft: createBackButton(navigation),
       headerRight: createCancelButton(navigation),
       title: 'Take a Photo (optional)'
@@ -117,7 +119,7 @@ export default createStackNavigator({
   },
   ReportDescription: {
     screen: ReportDescription,
-    navigationOptions: ({navigation}) => ({
+    navigationOptions: ({ navigation }) => ({
       headerLeft: createBackButton(navigation),
       headerRight: createCancelButton(navigation),
       title: 'Add Details'
@@ -129,6 +131,6 @@ export default createStackNavigator({
       headerStyle: { backgroundColor: '#FC4C02' },
       headerTintColor: '#FFFFFF',
       title: 'Pothole Patrol',
-      headerLeft: <Icon name="menu" style={{marginLeft: 15, color: '#FFFFFF'}} onPress={() => navigation.toggleDrawer()} />
+      headerLeft: <Icon name="menu" style={{ marginLeft: 15, color: '#FFFFFF' }} onPress={() => navigation.toggleDrawer()} />
     })
   })

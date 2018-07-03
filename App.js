@@ -32,7 +32,6 @@ export default class App extends React.Component {
   render() {
     const { isReady } = this.state
     if (!isReady) return <View />
-
     return (
       <Provider store={store}>
         <Main />
