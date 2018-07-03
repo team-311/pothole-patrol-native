@@ -75,14 +75,13 @@ class Home extends Component {
       return (
         <Container>
           <Content contentContainerStyle={styles.container}>
-            <Text style={styles.text}>No open orders found</Text>
+            <Text style={styles.text}>No open assignments found</Text>
             <Button
               block
-              primary
               style={styles.button}
               onPress={() => this.props.createNewOrder(this.props.crewId)}
             >
-              <Text>Request Job</Text>
+              <Text>Request Assignment</Text>
             </Button>
           </Content>
         </Container>
@@ -103,9 +102,10 @@ const styles = StyleSheet.create({
     marginTop: 40
   },
   button: {
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 30
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 30,
+    backgroundColor: "#FC4C02"
   }
 })
 

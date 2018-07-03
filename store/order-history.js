@@ -1,40 +1,44 @@
 import axios from 'axios'
 
 // action types
-const GET_ORDERS = 'GET_ORDERS'
-const GET_ORDERS_ERROR = 'GET_ORDERS_ERROR'
-const GOT_ORDERS = 'GOT_ORDERS'
+const GET_COMPLETED_ORDERS = 'GET_COMPLETED_ORDERS'
+const GET_COMPLETED_ORDERS_ERROR = 'GET_COMPLETED_ORDERS_ERROR'
+const GOT_COMPLETED_ORDERS = 'GOT_COMPLETED_ORDERS'
 
 // initial state
 const initialState = {
-  orders: [],
-  count: 0,
-  currentPage: 1,
-  lastPage: 1,
+  previousOrders: [],
+  totalPotholesPrevious: 0,
+  thisWeeksOrders: [],
+  totalPotholesThisWeek: 0,
+  total: 0,
   error: '',
   isFetching: true,
+  crew: '',
 }
 
 // action creators
-const createGetOrdersAction = () => ({ type: GET_ORDERS })
-const createGetOrdersErrorAction = (error) => ({ type: GET_ORDERS_ERROR, error })
-const createGotOrdersAction = (ordersInfo) => ({ type: GOT_ORDERS, ordersInfo })
+const createGetCompletedOrdersAction = () => ({ type: GET_COMPLETED_ORDERS })
+const createGetCompletedOrdersErrorAction = (error) => ({ type: GET_COMPLETED_ORDERS_ERROR, error })
+const createGotCompletedOrdersAction = (ordersInfo) => ({ type: GOT_COMPLETED_ORDERS, ordersInfo })
 
 // thunk creators
-export const createGetOrdersThunk = (crewId) => {
+export const createGetCompletedOrdersThunk = (crewId) => {
   return async (dispatch) => {
     try {
-      dispatch(createGetOrdersAction())
-      const { data: response } = await axios.get(`${process.env.SERVER_URL}/api/crews/${crewId}/orders`)
+      dispatch(createGetCompletedOrdersAction())
+      const { data: response } = await axios.get(`${process.env.SERVER_URL}/api/crews/${crewId}/orders/completed`)
       const newState = {
-        orders: response.orders,
-        count: response.count,
-        currentPage: response.currentPage,
-        lastPage: response.lastPage,
+        previousOrders: response.previousOrders,
+        thisWeeksOrders: response.thisWeeksOrders,
+        total: response.total,
+        crew: response.crew,
+        totalPotholesPrevious: response.totalPotholesPrevious,
+        totalPotholesThisWeek: response.totalPotholesThisWeek,
       }
-      dispatch(createGotOrdersAction(newState))
+      dispatch(createGotCompletedOrdersAction(newState))
     } catch (error) {
-      dispatch(createGetOrdersErrorAction(error.message))
+      dispatch(createGetCompletedOrdersErrorAction(error.message))
     }
   }
 }
@@ -42,19 +46,21 @@ export const createGetOrdersThunk = (crewId) => {
 // reducer
 export default function (state = initialState, action) {
   switch (action.type) {
-    case GET_ORDERS:
+    case GET_COMPLETED_ORDERS:
       return { ...state, isFetching: true }
-    case GET_ORDERS_ERROR:
+    case GET_COMPLETED_ORDERS_ERROR:
       return { ...state, isFetching: false, error: action.error }
-    case GOT_ORDERS:
+    case GOT_COMPLETED_ORDERS:
       return {
         ...state,
         isFetching: false,
         error: '',
-        orders: action.ordersInfo.orders,
-        count: action.ordersInfo.count,
-        currentPage: action.ordersInfo.currentPage,
-        lastPage: action.ordersInfo.lastPage
+        previousOrders: action.ordersInfo.previousOrders,
+        thisWeeksOrders: action.ordersInfo.thisWeeksOrders,
+        total: action.ordersInfo.total,
+        crew: action.ordersInfo.crew,
+        totalPotholesPrevious: action.ordersInfo.totalPotholesPrevious,
+        totalPotholesThisWeek: action.ordersInfo.totalPotholesThisWeek,
       }
     default:
       return state

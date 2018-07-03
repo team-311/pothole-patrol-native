@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { Container, Content, H1, H3, List, ListItem, Left, Right, Text, Icon } from 'native-base'
+import { Container, Content, List, ListItem, Body, Right, Text, Icon, Separator, View } from 'native-base'
 import moment from 'moment'
 
 const SingleOrderHistory = (props) => {
@@ -9,21 +9,31 @@ const SingleOrderHistory = (props) => {
 
   return (
     <Container style={styles.container}>
-      <H1>Work Order: {''+order.id}</H1>
-      <H3>Potholes Filled: {''+order.potholes.length}</H3>
       <Content>
-        {!!order.dateCompleted && <Text>Date Completed: {moment(order.dateCompleted).format('MM/DD/YY')}</Text>}
+        <View style={styles.headerContainer}>
+          <View style={styles.headerFlex}>
+            <Text style={styles.header}>Date Completed:</Text>
+            <Text style={styles.header}>{moment(order.dateCompleted).format('ddd, MMM Do YYYY')}</Text>
+          </View>
+        </View>
+        <Separator bordered style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={{fontWeight: 'bold'}}>Potholes</Text>
+          <Text style={{marginRight: 10, fontWeight: 'bold'}}>{order.potholes.length}</Text>
+        </Separator>
         <List>
         { !!order.id && order.potholes.map(pothole => (
-          <ListItem key={pothole.id} onPress={() => navigate('IndividualPothole', {
-            id: pothole.id,
-            canUpvote: false,
+          <ListItem
+            key={pothole.id}
+            onPress={() => navigate('IndividualPothole', {
+              id: pothole.id,
+              canUpvote: false,
           })}>
-            <Left>
-              <Text>{pothole.streetAddress}</Text>
-            </Left>
+            <Body>
+              <Text>#{pothole.serviceNumber}</Text>
+              <Text note>{pothole.streetAddress} {pothole.zip}</Text>
+            </Body>
             <Right>
-              <Icon style={{color: "skyblue"}} name="arrow-forward" />
+              <Icon style={{color: "#FC4C02"}} name="arrow-forward" />
             </Right>
           </ListItem>
         ))}
@@ -36,6 +46,20 @@ const SingleOrderHistory = (props) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
+  },
+  header: {
+    margin: 5,
+    color: "#36454f",
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  headerFlex: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  headerContainer: {
+    marginTop: 10,
+    marginBottom: 10,
   }
 })
 

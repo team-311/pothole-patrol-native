@@ -108,8 +108,8 @@ class OrderDirections extends Component {
               </View>
               <Body style={{flex: 6}}>
                 <Text style={styles.emphasis}>{`${this.state.directions.duration} (${this.state.directions.distance})`}</Text>
-                <Text note>{`from: ${this.state.directions.startAddress}`}</Text>
-                <Text note>{`to: ${this.state.directions.endAddress}`}</Text>
+                <Text note>{`From: ${this.state.directions.startAddress}`}</Text>
+                <Text note>{`To: ${this.state.directions.endAddress}`}</Text>
               </Body>
               <View style={{flex: 2.5}}>
                 <Button small transparent

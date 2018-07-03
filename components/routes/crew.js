@@ -49,6 +49,7 @@ DrawerNavigator.navigationOptions = ({ navigation }) => {
   const customRouteTitles = {
     Home: "Today's Assignment",
     OrderHistory: "Assignment History",
+    Finished: "Pothole Patrol"
   }
   if (customRouteTitles[routeName]) {
     return {
