@@ -143,6 +143,7 @@ class IndividualPothole extends React.Component {
                   success
                   onPress={this._handleUpvote}
                   disabled={this.state.disableUpvote}
+                  style={{backgroundColor: '#FC4C02', alignSelf: 'flex-end', left: 15, top: 200}}
                 >
                   <Text>Upvote</Text>
                 </Button>
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    height: ScreenHeight * 0.5,
+    height: ScreenHeight * 0.7,
     paddingBottom: 4
   },
   text: {
@@ -223,9 +224,8 @@ const styles = StyleSheet.create({
   buttonCard: {
     flex: 1,
     width: '93%',
-    alignSelf: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     padding: 3
   },
   detailsCard: {
