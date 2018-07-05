@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { logout } from '../../store'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Linking } from 'react-native'
 import { Container, View, Text, Button, H2, Icon } from 'native-base'
 
 const FinishedLanding = (props) => {
@@ -10,7 +10,7 @@ const FinishedLanding = (props) => {
       <View style={styles.flex}>
         <Icon type="Feather" name="check-circle" style={styles.icon}/>
         <H2>Thank you!</H2>
-        <Text style={styles.message}>Your assignment details were successfully submitted. If you have any questions, please contact 555-123-5432.</Text>
+        <Text style={styles.message}>Your assignment details were successfully submitted. If you have any questions, please contact <Text style={styles.phone} onPress={() => Linking.openURL(`tel:555-123-5432`).catch(console.log)}>CDOT</Text>.</Text>
         <Button block style={styles.button} onPress={() => props.navigation.navigate('OrderHistory')}>
             <Text style={styles.buttonText}>View All Assignments</Text>
         </Button>
@@ -46,6 +46,10 @@ const styles = StyleSheet.create({
     margin: 30,
     color: '#36454f',
     fontSize: 100,
+  },
+  phone: {
+    color: '#36454f',
+    textDecorationLine: 'underline',
   }
 })
 
