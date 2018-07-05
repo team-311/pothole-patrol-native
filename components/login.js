@@ -19,41 +19,39 @@ class Login extends Component {
   render() {
     return (
       <Container style={{ backgroundColor: "white" }}>
-        <Content style={styles.container}>
-          <Image source={require('../customStyling/logo5.jpg')} style={styles.image} />
-          <View >
-            <Form>
-              <Item stackedLabel>
-                <Label>Username</Label>
-                <Input
-                  autoFocus
-                  autoCapitalize='none'
-                  value={this.state.username}
-                  onChangeText={(text) => this.setState({ username: text })} />
+        <Image source={require('../customStyling/logo5.jpg')} style={styles.image} />
+        <View style={styles.form}>
+          <Form>
+            <Item stackedLabel>
+              <Label>Username</Label>
+              <Input
+                autoFocus
+                autoCapitalize='none'
+                value={this.state.username}
+                onChangeText={(text) => this.setState({ username: text })} />
+            </Item>
+            <Item stackedLabel>
+              <Label>Password</Label>
+              <Input
+                secureTextEntry
+                value={this.state.password}
+                onChangeText={(text) => this.setState({ password: text })} />
+            </Item>
+            {!!this.state.error &&
+              <Item>
+                <Text style={styles.error}>Incorrect username or password</Text>
               </Item>
-              <Item stackedLabel>
-                <Label>Password</Label>
-                <Input
-                  secureTextEntry
-                  value={this.state.password}
-                  onChangeText={(text) => this.setState({ password: text })} />
-              </Item>
-              {!!this.state.error &&
-                <Item>
-                  <Text style={styles.error}>Incorrect username or password</Text>
-                </Item>
-              }
-              <Button primary block style={styles.button} onPress={() => {
-                this.props.handleSubmit(this.state.username, this.state.password, 'login')
-                  .then((res) => {
-                    if (res.error) this.setState({ error: res.error })
-                  }).catch((error) => console.error(error))
-              }}>
-                <Text style={styles.text}>Login</Text>
-              </Button>
-            </Form>
-          </View>
-        </Content>
+            }
+            <Button primary block style={styles.button} onPress={() => {
+              this.props.handleSubmit(this.state.username, this.state.password, 'login')
+                .then((res) => {
+                  if (res.error) this.setState({ error: res.error })
+                }).catch((error) => console.error(error))
+            }}>
+              <Text style={styles.text}>Login</Text>
+            </Button>
+          </Form>
+        </View>
       </Container>
     )
   }
@@ -92,6 +90,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white'
+  },
+  form: {
+    marginTop: 20,
   }
 })
 
