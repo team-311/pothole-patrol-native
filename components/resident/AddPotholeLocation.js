@@ -87,9 +87,9 @@ class AddPotholeLocation extends React.Component {
 
     //get geocoded address and fetch potholes
     this.setState({ initialRegion, userLocation }, async () => {
-      await this._getAddressAsync(userLocation.latitude, userLocation.longitude);
-      await this.props.updateUserLatLonDirect({ latitude, longitude });
-      await this._getPotholesAsync(latitude, longitude);
+      this._getAddressAsync(userLocation.latitude, userLocation.longitude);
+      this.props.updateUserLatLonDirect({ latitude, longitude });
+      this._getPotholesAsync(latitude, longitude);
       this.setState({ready: true})
     });
   };
@@ -102,7 +102,8 @@ class AddPotholeLocation extends React.Component {
         zipcode: address[2],
       },
       () => {
-        if (this.state.ready) this.locationRef.setAddressText(this.state.streetAddress);
+        // if (this.locationRef) this.locationRef.setAddressText(this.state.streetAddress);
+        this.locationRef.setAddressText(this.state.streetAddress);
       }
     );
   };
