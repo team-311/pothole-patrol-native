@@ -49,5 +49,5 @@ At any time, they can view their completed work orders and their details.
 
 ![Crew view individual pothole](https://media.giphy.com/media/Ta1Rt7mjIhoSSTnzQR/giphy.gif)
 ![Crew view individual pothole](https://media.giphy.com/media/Ta1Rt7mjIhoSSTnzQR/giphy.gif)
-![Crew view individual pothole](https://media.giphy.com/media/3o85xkQpyMlnBkpB9C/giphy.gif)
+![Crew view individual pothole](https://media.giphy.com/media/Ta1Rt7mjIhoSSTnzQR/giphy.gif)
 ![Alt Text](http://www.sheawong.com/wp-content/uploads/2013/08/keephatin.gif)
