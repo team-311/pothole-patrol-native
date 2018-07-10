@@ -47,4 +47,7 @@ They can request the next pothole, which will be assigned to them based on its p
 At the end of the day, they can close out their work order. 
 At any time, they can view their completed work orders and their details. 
 
-![Alt Text](https://media.giphy.com/media/Ta1Rt7mjIhoSSTnzQR/giphy.gif)
+![Crew view individual pothole](https://media.giphy.com/media/Ta1Rt7mjIhoSSTnzQR/giphy.gif)
+![Crew view individual pothole](https://media.giphy.com/media/Ta1Rt7mjIhoSSTnzQR/giphy.gif)
+![Crew view individual pothole](https://giphy.com/gifs/Ta1Rt7mjIhoSSTnzQR/html5)
+![Alt Text](http://www.sheawong.com/wp-content/uploads/2013/08/keephatin.gif)
