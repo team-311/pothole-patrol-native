@@ -47,4 +47,4 @@ They can request the next pothole, which will be assigned to them based on its p
 At the end of the day, they can close out their work order. 
 At any time, they can view their completed work orders and their details. 
 
-<iframe src="https://giphy.com/embed/Ta1Rt7mjIhoSSTnzQR" width="268" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/Ta1Rt7mjIhoSSTnzQR">via GIPHY</a></p>
+![Alt Text](https://media.giphy.com/media/Ta1Rt7mjIhoSSTnzQR/giphy.gif)
