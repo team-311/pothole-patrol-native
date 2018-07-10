@@ -46,3 +46,5 @@ They can view directions to the pothole, see its details, and mark it as complet
 They can request the next pothole, which will be assigned to them based on its priority level. 
 At the end of the day, they can close out their work order. 
 At any time, they can view their completed work orders and their details. 
+
+<iframe src="https://giphy.com/embed/Ta1Rt7mjIhoSSTnzQR" width="268" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/Ta1Rt7mjIhoSSTnzQR">via GIPHY</a></p>
