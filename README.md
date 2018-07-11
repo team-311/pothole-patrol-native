@@ -35,10 +35,13 @@ Pothole Patrol was created by four city of Chicago residents as their capstone p
 
 #### For residents 
 
-* Using our app, residents can both report new potholes or upvote potholes that already exist.
+* Using our app, residents can report new potholes.
 
-![Submit pothole](https://media.giphy.com/media/8wfogB7dvAEoLKfO62/giphy.gif)  ![Resident upvote pothole](https://media.giphy.com/media/1xVbZLOuN0cytDtM6O/giphy.gif)
+![Submit pothole](https://media.giphy.com/media/8wfogB7dvAEoLKfO62/giphy.gif)
 
+* Or upvote potholes that already exist. 
+
+![Resident upvote pothole](https://media.giphy.com/media/1xVbZLOuN0cytDtM6O/giphy.gif)
 
 * They can also view potholes that they've already reported or upvoted to keep track of their status. 
 
