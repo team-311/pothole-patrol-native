@@ -9,6 +9,11 @@ Pothole Patrol is a comprehensive pothole management system for Chicago, built u
 
 Pothole Patrol was created by four city of Chicago residents as their capstone project at FullStack Academy. As city residents, they were all too familiar with the condition of Chicago's asphalt-patchworked streets and were excited to develop a tool that could be used to address the issue. 
 
+
+## Getting started
+For our web repo, download the code, run `npm install` and `npm run start-dev`. 
+For our native repo, you will need to download the Expo app for your phone or the Expo XDE. Run `npm install`, and `npm start`, and follow the instructions from there. 
+
 ## Unique Features 
 
 * Users have the chance to upvote potholes that already exist in the city of Chicago's database, which helps provide visibility into which ones are the most urgent. 
