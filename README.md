@@ -70,3 +70,5 @@ They can view directions to the pothole, see its details, and mark it as complet
 They can request the next pothole, which will be assigned to them based on its priority level. At the end of the day, they can close out their work order. At any time, they can view their completed work orders and their details. 
 
 ![View previous orders](https://media.giphy.com/media/YX62QTQz7tlLlu8aqm/giphy.gif)
+
+Thanks for checking out pothole patrol! Keep on patrolling! 
