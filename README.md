@@ -32,6 +32,8 @@ Pothole Patrol was created by four city of Chicago residents as their capstone p
 
 * Using our app, residents can both report new potholes or upvote potholes that already exist.
 ![Submit pothole](https://media.giphy.com/media/8wfogB7dvAEoLKfO62/giphy.gif)  ![Resident upvote pothole](https://media.giphy.com/media/1xVbZLOuN0cytDtM6O/giphy.gif)
+
+
 * They can also view potholes that they've already reported or upvoted to keep track of their status. 
 
 ![View orders](https://media.giphy.com/media/WvkS0ZrnKQkMO8Fsrw/giphy.gif)
@@ -40,18 +42,19 @@ Pothole Patrol was created by four city of Chicago residents as their capstone p
 
 City admins can view high-level analytics regarding potholes in Chicago. 
 
-![View orders](https://media.giphy.com/media/13QenvhyjNytbYQOS0/giphy.gif)
+   ![View orders](https://media.giphy.com/media/13QenvhyjNytbYQOS0/giphy.gif)
+
 They can also navigate to view individual potholes and check and update their status or view orders for pothole repair and contact the crews assigned.
 
-![View orders](https://media.giphy.com/media/vguSSk1pxCOTvY1J5B/giphy.gif)
+   ![View orders](https://media.giphy.com/media/vguSSk1pxCOTvY1J5B/giphy.gif)
 
 #### For city crew members 
 
 Crew members can view their orders assignments for the day and the first pothole they have been assigned. 
-![View crew order](https://media.giphy.com/media/7TewpuNRRm5FneKmh6/giphy.gif)
+             ![View crew order](https://media.giphy.com/media/7TewpuNRRm5FneKmh6/giphy.gif)
 
 They can view directions to the pothole, see its details, and mark it as completed when it is done. 
-![Crew view directions](https://media.giphy.com/media/cCam8kx0dVCSnSw8Fj/giphy.gif)
+             ![Crew view directions](https://media.giphy.com/media/cCam8kx0dVCSnSw8Fj/giphy.gif)
 
 They can request the next pothole, which will be assigned to them based on its priority level. At the end of the day, they can close out their work order. At any time, they can view their completed work orders and their details. 
-![View previous orders](https://media.giphy.com/media/YX62QTQz7tlLlu8aqm/giphy.gif)
+             ![View previous orders](https://media.giphy.com/media/YX62QTQz7tlLlu8aqm/giphy.gif)
