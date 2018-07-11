@@ -11,6 +11,7 @@ Pothole Patrol was created by four city of Chicago residents as their capstone p
 
 
 ## Getting started
+
 * For our web repo, download the code, run `npm install` and `npm run start-dev`. 
 * For our native repo, you will need to download the Expo app for your phone or the Expo XDE. Run `npm install`, and `npm start`, and follow the instructions from there. 
 
